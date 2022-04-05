@@ -63,17 +63,24 @@ the **numerical** and **text** data visualization with **corelation analysis**.
 crypto-currencies. Users can easily get the latest price and capacity values. However, it
 does not integrate the news data for analysis.
 
+![Coin360](images/Coin360.png)
+
 - CoinDesk([https://www.coindesk.com/](https://www.coindesk.com/)) : A website focusing on crypto-currency news.
 It provides articles all about crypto-currencies. However, it does not have further text
 analysis and interaction between the price and the news.
+
+![CoinDesk](images/CoinDesk.png)
 
 - BitNodes([https://bitnodes.io/](https://bitnodes.io/)) : A website visualizing the estimated distribution of
 BitCoin nodes in the world. However, it does not provide information for other crypto-
 currencies and the method may not apply to others.
 
-- TxStreet([https://txstreet.com/v/eth-btc](https://txstreet.com/v/eth-btc)) : A website displaying information of de-
-centralized Apps with interesting visualization and interface. However, it does not fit
+![BitNodes](images/BitNodes.png)
+
+- TxStreet([https://txstreet.com/v/eth-btc](https://txstreet.com/v/eth-btc)) : A website displaying information of decentralized Apps with interesting visualization and interface. However, it does not fit
 into our main purpose.
+
+![TxStreet](images/TxStreet.png)
 
 ## References
 
