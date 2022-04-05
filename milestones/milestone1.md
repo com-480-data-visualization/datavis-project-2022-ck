@@ -2,8 +2,7 @@
 
 ## Dataset
 
-In the project, we use the data source *cryptocompare* [1](https://www.cryptocompare.com/), which provides various infor-
-mation related to crypto-currency and several free APIs to access the data. The main reason
+In the project, we use the data source *cryptocompare* [1](https://www.cryptocompare.com/), which provides various information related to crypto-currency and several free APIs to access the data. The main reason
 of using this data source is its high quality: most **numeric** data are cleaned and there is no
 need to pre-process the dataset for data like price. They also provide daily **news** data which
 our text analysis are based on.
@@ -14,7 +13,9 @@ The detail of our source data is as follows:
 annd close*, for major crypto-currencies from 2010 to 2022.
 - **News data** contains the up-to-date news article information, including *date,
 title, body, and image*, from 2013 to 2022. We aggregate the articles by time and by
-coin
+coin.
+
+You may find our raw data and cleaned data in [raw_data](../raw_data/) and [cleaned_data](../cleaned_data/).
 
 ## Problematic
 
