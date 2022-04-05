@@ -4,7 +4,7 @@
 | -------------- | ------ |
 | Guochao Xie | 338082 |
 | Xiaotian Su | 337742 |
-|  |  |
+| Jisu Yim    | 350619 |
 
 [Milestone 1](#milestone-1) • [Milestone 2](#milestone-2) • [Milestone 3](#milestone-3)
 
