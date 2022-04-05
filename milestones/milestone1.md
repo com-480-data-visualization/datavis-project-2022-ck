@@ -2,14 +2,12 @@
 
 ## Dataset
 
-In the project, we use the data source *cryptocompare* [1](https://www.cryptocompare.com/), which provides various information related to crypto-currency and several free APIs to access the data. The main reason
-of using this data source is its high quality: most **numeric** data are cleaned and there is no
-need to pre-process the dataset for data like price. They also provide daily **news** data which
+In the project, we use the data source *cryptocompare* [1](https://www.cryptocompare.com/), which provides various information related to crypto-currency and several free APIs to access the data. The main reason of using this data source is its high quality: most **numeric** data are cleaned and there is no need to pre-process the dataset for data like price. They also provide daily **news** data which
 our text analysis are based on.
 
 The detail of our source data is as follows:
 
-- **Price data** contains the daily price data, including *high, low, open, volumefrom, volumeto,
+- **Price data** contains the daily price data for 30 different cryptocurrencies, including features *high, low, open, volumefrom, volumeto,
 annd close*, for major crypto-currencies from 2010 to 2022.
 - **News data** contains the up-to-date news article information, including *date,
 title, body, and image*, from 2013 to 2022. We aggregate the articles by time and by
@@ -27,10 +25,12 @@ websites online only contain the information of the price, there lacks an in-dep
 website aims to bridge this gap by including related news information. We hope an intuitive
 visualization together with updated new could give a better guidance to novices in this field.
 
-The web application we plan to build is called **_Cryptogram_**. It will visualize useful price
-information about cryptocurrency and filter informative news related to that. We also provide
-functions that users can compare different cryptocurrencies and show the correlations in their
-prices.
+The web application we plan to build is called **_Cryptogram_**. It will visualize:
+- useful price information about cryptocurrency
+- filte informative news related to certain cryptocurrency
+- display related news for price fluctuations
+- enable users to compare different kinds of cryptocurrencies (foundation year, trade volume, ranking in the market etc.)
+- show the correlation of the prices (using Pearson correlation and heatmap)
 
 ## Exploratory Data Analysis
 
