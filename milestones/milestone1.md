@@ -16,6 +16,7 @@ title, body, and image*, from 2013 to 2022. We aggregate the articles by time an
 coin.
 
 You may find our raw data and cleaned data in [raw_data](../raw_data/) and [cleaned_data](../cleaned_data/).
+The scripts for data cleaning and pre-processing are in [scripts](../scripts/).
 
 ## Problematic
 
