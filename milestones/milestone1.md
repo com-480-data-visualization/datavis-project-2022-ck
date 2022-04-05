@@ -7,7 +7,7 @@ our text analysis are based on.
 
 The detail of our source data is as follows:
 
-- **Price data** contains the daily price data for 30 different cryptocurrencies, including features *high, low, open, volumefrom, volumeto,
+- **Price data** contains the daily price data for 30 different cryptocurrencies traded in 6 different currencies, including features *high, low, open, volumefrom, volumeto,
 annd close*, for major crypto-currencies from 2010 to 2022.
 - **News data** contains the up-to-date news article information, including *date,
 title, body, and image*, from 2013 to 2022. We aggregate the articles by time and by
@@ -20,10 +20,7 @@ The scripts for data cleaning and pre-processing are in [scripts](../scripts/).
 
 Digitised assets and innovative financial channels are emerging in recent years. The tendency
 of the number of financial institutions to include cryptocurrencies in their portfolios has
-accelerated [2]. Although many traders and scholars want to know more in this area, the
-websites online only contain the information of the price, there lacks an in-dept analysis. Our
-website aims to bridge this gap by including related news information. We hope an intuitive
-visualization together with updated new could give a better guidance to novices in this field.
+accelerated [2](https://jfin-swufe.springeropen.com/articles/10.1186/s40854-021-00321-6). Although many traders and scholars want to know more in this area, the websites online only contain the information of the price, there lacks an in-dept analysis. Our website aims to bridge this gap by including related news information. We hope an intuitive visualization together with updated new could give a better guidance to novices in this field.
 
 The web application we plan to build is called **_Cryptogram_**. It will visualize:
 - useful price information about cryptocurrency
@@ -60,21 +57,16 @@ extract meaningful keywords.
 There are other websites showing crypto-currency data, but we are the first one to **integrate**
 the **numerical** and **text** data visualization with **corelation analysis**.
 
-- Coin360([https://coin360.com/](https://coin360.com/)) : A website with nice numerical data visualization on
-crypto-currencies. Users can easily get the latest price and capacity values. However, it
-does not integrate the news data for analysis.
+- Coin360([https://coin360.com/](https://coin360.com/)) : A website with nice numerical data visualization on crypto-currencies. Users can easily get the latest price and capacity values. However, it does not integrate the news data for analysis.
 
 ![Coin360](images/Coin360.png)
 
 - CoinDesk([https://www.coindesk.com/](https://www.coindesk.com/)) : A website focusing on crypto-currency news.
-It provides articles all about crypto-currencies. However, it does not have further text
-analysis and interaction between the price and the news.
+It provides articles all about crypto-currencies. However, it does not have further text analysis and interaction between the price and the news.
 
 ![CoinDesk](images/CoinDesk.png)
 
-- BitNodes([https://bitnodes.io/](https://bitnodes.io/)) : A website visualizing the estimated distribution of
-BitCoin nodes in the world. However, it does not provide information for other crypto-
-currencies and the method may not apply to others.
+- BitNodes([https://bitnodes.io/](https://bitnodes.io/)) : A website visualizing the estimated distribution of BitCoin nodes in the world. However, it does not provide information for other crypto-currencies and the method may not apply to others.
 
 ![BitNodes](images/BitNodes.png)
 
