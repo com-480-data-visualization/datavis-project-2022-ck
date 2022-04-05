@@ -2,7 +2,7 @@
 
 ## Dataset
 
-In the project, we use the data source *cryptocompare* [1], which provides various infor-
+In the project, we use the data source *cryptocompare* [1](https://www.cryptocompare.com/), which provides various infor-
 mation related to crypto-currency and several free APIs to access the data. The main reason
 of using this data source is its high quality: most **numeric** data are cleaned and there is no
 need to pre-process the dataset for data like price. They also provide daily **news** data which
@@ -76,6 +76,6 @@ into our main purpose.
 
 ## References
 
-1. *Cryptocompare*:
+1. *Cryptocompare*: [https://www.cryptocompare.com/](https://www.cryptocompare.com/)
 2. Fan Fang et al. *Cryptocurrency trading: a comprehensive survey*. In: Financial Innovation 8.1 (2022),
 pp. 1–59.
