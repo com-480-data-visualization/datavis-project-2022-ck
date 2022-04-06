@@ -23,34 +23,71 @@ of the number of financial institutions to include cryptocurrencies in their por
 accelerated [2](https://jfin-swufe.springeropen.com/articles/10.1186/s40854-021-00321-6). Although many traders and scholars want to know more in this area, the websites online only contain the information of the price, there lacks an in-dept analysis. Our website aims to bridge this gap by including related news information. We hope an intuitive visualization together with updated new could give a better guidance to novices in this field.
 
 The web application we plan to build is called **_Cryptogram_**. It will visualize:
-- useful price information about cryptocurrency
-- filte informative news related to certain cryptocurrency
-- display related news for price fluctuations
-- enable users to compare different kinds of cryptocurrencies (foundation year, trade volume, ranking in the market etc.)
-- show the correlation of the prices (using Pearson correlation and heatmap)
+- Useful price information about cryptocurrency
+- Filter informative news related to certain cryptocurrency
+- Display related news for price fluctuations
+- Enable users to compare different kinds of cryptocurrencies (foundation year, trade volume, ranking in the market etc.)
+- Show the correlation of the prices (using Pearson correlation and heatmap)
 
 ## Exploratory Data Analysis
 
 ### Price
 
-We have **30** different kinds of cryptocurrencies in total, and the trading information of each
-of them in **6** different currencies.
+We have 30 different kinds of cryptocurrencies in total, and the trading information of each
+of them in 6 different currencies.
 
 For each currency, we have details about *date, highest price, lowest price, open price, close
-price, trading volume*. The longest trading history dates back to **2010**, we have the newest
-data till **March in 2022**.
+price, trading volume*. The longest trading history dates back to 2010, we have the newest
+data till March in 2022.
 
 ### News
 
-The API contains news articles from **2013** to **2022** with **28** categories. There are lots of recent
-articles, but there are lack of articles data from 2013 to 2015.
+The API contains news articles from 2013 to 2022 with 28 categories. 
 
-We extracted the most common keyword from the body paragraph article for each day.
-Some contains the country name such as *’russia’, ’ukraine’, ’japanese’* which can be used to
-predict the relationship between the price and political issue. However, some keywords are
-not valuable. Keywords such as *’crypto’, ’price’* are obvious or numbers like *’8750’* will be
-represented at price data. We will manually remove too obvious or repeated keywords, to
-extract meaningful keywords.
+
+#### Number of news article
+
+| Year | # of news article | per day |
+| ---- | ------| ---- |
+| 2013 | 28    |≈ 0|
+| 2014 | 1     |≈ 0|
+| 2015 | 0     |0  |
+| 2016 | 20    |≈ 0|
+| 2017 | 5002  | 14|
+| 2018 | 18238 | 50|
+| 2019 | 18250 | 50|
+| 2020 | 18300 | 50|
+| 2021 | 18250 | 50|
+| 2022 | 4700  | 50|
+
+
+From year 2018 to 2022, there are  approximately 50 articles per day. However there are lack of articles data from 2013 to 2016, which does not have even 1 news article per day in average.
+
+Each news article are categorized among 28 different categories such as type of cryptcurrency like 'BTC', 'BCH', 'ETH', or common news category related with economy like 'Trading', 'Technology', Asia'. An article can have multiple category.
+
+![](https://i.imgur.com/HtkbmEr.png)
+
+For all of the news article, the most popular category overall is 'BTC' which is Bitcoin. Categories such as 'Trading', 'Market' are also popular. 
+
+![](https://i.imgur.com/961Et34.png)
+
+We also analyzed 15 categories which its name is the type of coins. We can assume the people are interested in BTC, ETH compared with other cryptocurrencies. 
+
+Please see [News Basic Statistics](../scripts/news-basic-statistics.ipynb) for the above data analysis.
+
+
+
+#### Keyword of news article
+We extracted the most common keyword from the body paragraph article for certain timeperiod.
+
+For example, the above image is the word cloud that contains all of the body text at January and February 2022, respectively. We removed common stop word, special symbols, and numbers.
+
+![January 2022](../cleaned_data/news/wordcloud/wordcloud_2022-1-01_2022-2-01.png)
+![February](../cleaned_data/news/wordcloud/wordcloud_2022-2-01_2022-3-01.png)
+
+You can see that there are too obvious keywords such as Bitoin, Crypto, Ethereum. We will manually remove such meaningless keywords and try to extract meaningful keywords that could be distinguishable among different days.
+
+Please see [News Keyword Analysis](../scripts/news-keyword-analysis.ipynb) for the above data analysis.
 
 ## Related Works
 
