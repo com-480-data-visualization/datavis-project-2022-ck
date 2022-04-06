@@ -81,15 +81,15 @@ Please see [News Basic Statistics](../scripts/news-basic-statistics.ipynb) for t
 We extracted the most common keyword from the body paragraph article for certain timeperiod.
 
 
-![January 2022](../cleaned_data/news/wordcloud/wordcloud_2022-1-1_2022-2-1.png)
-![February 2022](../cleaned_data/news/wordcloud/wordcloud_2022-2-1_2022-3-1.png)
+![January 2022](../cleaned_data/news/wordcloud/wordcloud_2022-1-1_2022-1-31.png)
+![February 2022](../cleaned_data/news/wordcloud/wordcloud_2022-2-1_2022-2-28.png)
 
 For example, the above image is the word cloud that contains all of the body text at January and February 2022, respectively. We removed common stop word, special symbols, and numbers.
 
 You can see that there are too obvious keywords such as Bitoin, Crypto, Ethereum. We will manually remove such meaningless keywords and try to extract meaningful keywords that could be distinguishable among different days. The below images are the wordcloud result of January and February 2022, respectively, after removing obvious keywords 'bitcoin', 'crypto', 'ethereum', 'price'.
 
-![January Clean 2022](../cleaned_data/news/wordcloud/wordcloud_clean_2022-1-1_2022-2-1.png)
-![February Clean 2022](../cleaned_data/news/wordcloud/wordcloud_clean_2022-2-1_2022-3-1.png)
+![January Clean 2022](../cleaned_data/news/wordcloud/wordcloud_clean_2022-1-1_2022-1-31.png)
+![February Clean 2022](../cleaned_data/news/wordcloud/wordcloud_clean_2022-2-1_2022-2-28.png)
 
 Please see [News Keyword Analysis](../scripts/news-keyword-analysis.ipynb) for the above data analysis.
 
