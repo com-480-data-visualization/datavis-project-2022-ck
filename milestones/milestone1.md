@@ -40,6 +40,23 @@ For each currency, we have details about *date, highest price, lowest price, ope
 price, trading volume*. The longest trading history dates back to 2010, we have the newest
 data till March in 2022.
 
+In [price-analysis](../scripts/price-analysis.ipynb), we provide the scripts to load and alalysis the price data. More specifically, we calculate the monthly stats of _open, close, difference, and percentage of difference_. The example results include:
+
+![BTC](images/btc-price-analysis.png)
+
+![ETH](images/eth-price-analysis.png)
+
+![LUNA](images/luna-price-analysis.png)
+
+![SHIB](images/shib-price-analysis.png)
+
+Here are some insights:
+
+1. Most successful crypto-currencies experience high increase at the **initial** release.
+2. Most successful crypto-currencies have certain months with **dramatic** increase, when their news is valuable to discover.
+3. Except the certain months with dramatic increase, most prices have limited fluctuation.
+
+
 ### News
 
 The API contains news articles from 2013 to 2022 with 28 categories. 
