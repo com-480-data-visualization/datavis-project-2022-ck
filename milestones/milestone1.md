@@ -42,13 +42,13 @@ data till March in 2022.
 
 In [price-analysis](../scripts/price-analysis.ipynb), we provide the scripts to load and alalysis the price data. More specifically, we calculate the monthly stats of _open, close, difference, and percentage of difference_. The example results include:
 
-![BTC](images/btc-price-analysis.png)
+![BTC](images/BTC-price-analysis.png)
 
-![ETH](images/eth-price-analysis.png)
+![ETH](images/ETH-price-analysis.png)
 
-![LUNA](images/luna-price-analysis.png)
+![LUNA](images/LUNA-price-analysis.png)
 
-![SHIB](images/shib-price-analysis.png)
+![SHIB](images/SHIB-price-analysis.png)
 
 Here are some insights:
 
