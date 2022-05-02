@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <link rel="stylesheet" href="./app.css" />
-    <script src="./leftTab.js"></script>
+
+    <script src="./coinSelection/coinSelection.js"></script>
+    <link rel="stylesheet" href="./coinSelection/coinSelection.css" />
     <title>Cryptogram</title>
   </head>
 
@@ -14,7 +16,10 @@
     <header>
       <h1>Cryptogram</h1>
     </header>
-    <div class="tab"></div>
+    <div class="tab">
+      <h3>Which coins do you want to know?</h3>
+      <div class="selection"></div>
+    </div>
     <div class="content">
       <div id="news"></div>
       <div id="today"></div>
