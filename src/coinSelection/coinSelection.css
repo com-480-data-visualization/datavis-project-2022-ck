@@ -1,0 +1,23 @@
+.tab {
+  position: fixed;
+  height: 100%;
+  width: 20%;
+  margin-top: 5px;
+  border-right: 1px rgba(150, 150, 150, 0.5) solid;
+}
+
+.selection {
+  width: 90%;
+  margin-top: 10px;
+  margin-right: auto;
+  margin-left: auto;
+  min-height: 200px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 1px 1px 1px 1px rgb(190, 190, 190);
+}
+
+h3 {
+  text-align: center;
+  font-weight: 200;
+}
