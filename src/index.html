@@ -4,10 +4,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <link rel="stylesheet" href="./app.css" />
 
-    <script src="./coinSelection/coinSelection.js"></script>
+    <link rel="stylesheet" href="./app.css" />
     <link rel="stylesheet" href="./coinSelection/coinSelection.css" />
     <title>Cryptogram</title>
   </head>
@@ -18,12 +16,21 @@
     </header>
     <div class="tab">
       <h3>Which coins do you want to know?</h3>
-      <div class="selection"></div>
+      <div class="selectionBox">
+        <div class="selectedCoins" id="selectedCoins"></div>
+        <button>Submit</button>
+        <div class="multiselect">
+          <div id="checkboxes"></div>
+        </div>
+      </div>
     </div>
     <div class="content">
       <div id="news"></div>
       <div id="today"></div>
       <div id="figure"></div>
     </div>
+
+    <script src="app.js"></script>
+    <script src="./coinSelection/coinSelection.js"></script>
   </body>
 </html>
