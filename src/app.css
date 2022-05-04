@@ -1,32 +1,31 @@
 @font-face {
-  font-family: "Rockwell";
-  src: url("src/Rockwell-Font/rockb.ttf");
+    font-family: "Rockwell";
+    src: url("src/Rockwell-Font/rockb.ttf");
 }
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
 
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
 html,
 body {
-  margin: 0;
-  height: 100%;
-  background-color: whitesmoke;
-  font-family: "Roboto", sans-serif;
+    margin: 0;
+    height: 100%;
+    background-color: whitesmoke;
+    font-family: "Roboto", sans-serif;
 }
 
 header {
-  font-family: "Rockwell";
-  height: 80px;
-  width: 100%;
-  background-color: rgb(68, 68, 68);
-  box-shadow: 1px 1px 3px 3px rgb(46, 46, 46);
+    font-family: "Rockwell";
+    height: 80px;
+    width: 100%;
+    background-color: rgb(68, 68, 68);
+    box-shadow: 1px 1px 3px 3px rgb(46, 46, 46);
 }
 
-header > h1 {
-  margin: 0px;
-  padding-top: 10px;
-  color: white;
-  font-weight: bolder;
-  text-align: center;
-  font-size: 45px;
-
-  text-shadow: 2px 2px gray;
+header>h1 {
+    margin: 0px;
+    padding-top: 10px;
+    color: white;
+    font-weight: bolder;
+    text-align: center;
+    font-size: 45px;
+    text-shadow: 2px 2px gray;
 }
