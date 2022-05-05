@@ -29,7 +29,8 @@ function parse_price_data(data) {
  */
 function range_filter(start_date, end_date) {
     return (data) => {
-        return data.date >= start_date && data.date < end_date;
+        const date = new Date(data.date);
+        return date >= start_date && date < end_date;
     };
 }
 
@@ -40,7 +41,7 @@ function range_filter(start_date, end_date) {
  * @param {function object => object} mapper
  * Mapper should produce the following values: date, open, high, low, close. 
  */
-function MultiCandlestick(datas, mapper, width, height, xDomain, yDomain, xTicks, xPadding = 0.2) {
+function MultiCandlestick(datas, mapper, width, height, xDomain, yDomain, xTicks, xPadding = 70, opacityTransition = 100, opacityLow = 0.3, legend_line_width = 50) {
     let data = datas.map(mapper);
     console.log(data);
     const X = d3.map(data, d => d.date);
@@ -53,24 +54,29 @@ function MultiCandlestick(datas, mapper, width, height, xDomain, yDomain, xTicks
     const marginRight = 30; // right margin, in pixels
     const marginBottom = 30; // bottom margin, in pixels
     const marginLeft = 40; // left margin, in pixels
-    const xRange = [0, width];
-    const yRange = [0, height];
+    const xRange = [marginLeft, width - marginRight];
+    const yRange = [height - marginTop, 0];
     const yType = d3.scaleLinear;
     const xFormat = "%b %-d"; // a format specifier for the date on the x-axis
     const yFormat = "~f"; // a format specifier for the value on the y-axis
     const stroke = "currentColor"; // stroke color for the daily rule
     const strokeLinecap = "round"; // stroke line cap for the rules
-    const colors = ["#4daf4a", "#999999", "#e41a1c"]; //
+    const colors = ["#00008B", "#4169E1", "#ADD8E6"]; //
     const yLabel = "price ($)";
 
-    const weeks = (start, stop, stride) => d3.utcMonday.every(stride).range(start, +stop + 1);
-    const weekdays = (start, stop) => d3.utcDays(start, +stop + 1).filter(d => d.getUTCDay() !== 0 && d.getUTCDay() !== 6);
+    const weeks = (start, stop, stride) => {
+        return d3.utcDays(start, stop.setDate(stop.getDate() + 1), stride);
+    };
 
-    if (xDomain === undefined) xDomain = weekdays(d3.min(X), d3.max(X));
-    if (yDomain === undefined) yDomain = [d3.min(Yl), d3.max(Yh)];
-    if (xTicks === undefined) xTicks = weeks(d3.min(xDomain), d3.max(xDomain), 2);
+    const xScale = d3.scaleTime()
+        .domain([d3.min(X), d3.max(X)]) // values between for month of january
+        .range([xPadding, width - xPadding]);
+    console.log(xScale(X[0]))
+    if (xDomain === undefined) xDomain = [d3.min(X), d3.max(X)];
+    if (yDomain === undefined) yDomain = [d3.min(Yl) * 0.9, d3.max(Yh)];
+    if (xTicks === undefined) xTicks = weeks(d3.min(xDomain), d3.max(xDomain), 7);
+    console.log(xTicks);
 
-    const xScale = d3.scaleBand(xDomain, xRange).padding(xPadding);
     const yScale = yType(yDomain, yRange);
     const xAxis = d3.axisBottom(xScale).tickFormat(d3.utcFormat(xFormat)).tickValues(xTicks);
     const yAxis = d3.axisLeft(yScale).ticks(height / 40, yFormat);
@@ -88,40 +94,146 @@ function MultiCandlestick(datas, mapper, width, height, xDomain, yDomain, xTicks
         .call(xAxis)
         .call(g => g.select(".domain").remove());
 
-    // svg.append("g")
-    //     .attr("transform", `translate(${marginLeft},0)`)
-    //     .call(yAxis)
-    //     .call(g => g.select(".domain").remove())
-    //     .call(g => g.selectAll(".tick line").clone()
-    //         .attr("stroke-opacity", 0.2)
-    //         .attr("x2", width - marginLeft - marginRight))
-    //     .call(g => g.append("text")
-    //         .attr("x", -marginLeft)
-    //         .attr("y", 10)
-    //         .attr("fill", "currentColor")
-    //         .attr("text-anchor", "start")
-    //         .text(yLabel));
+    svg.append("g")
+        .attr("transform", `translate(${marginLeft},0)`)
+        .call(yAxis)
+        .call(g => g.select(".domain").remove())
+        .call(g => g.selectAll(".tick line").clone()
+            .attr("stroke-opacity", 0.2)
+            .attr("x2", width - marginLeft - marginRight))
+        .call(g => g.append("text")
+            .attr("x", -marginLeft)
+            .attr("y", marginTop)
+            .attr("fill", "currentColor")
+            .attr("text-anchor", "start")
+            .text(yLabel));
 
-    // const g = svg.append("g")
-    //     .attr("stroke", stroke)
-    //     .attr("stroke-linecap", strokeLinecap)
-    //     .selectAll("g")
-    //     .data(I)
-    //     .join("g")
-    //     .attr("transform", i => `translate(${xScale(X[i])},0)`);
+    // legend
+    const legendData = [{
+        coin: "BTC",
+        colors: ["#00008B", "#4169E1", "#ADD8E6"]
+    }];
 
-    // g.append("line")
-    //     .attr("y1", i => yScale(Yl[i]))
-    //     .attr("y2", i => yScale(Yh[i]));
 
-    // g.append("line")
-    //     .attr("y1", i => yScale(Yo[i]))
-    //     .attr("y2", i => yScale(Yc[i]))
-    //     .attr("stroke-width", xScale.bandwidth())
-    //     .attr("stroke", i => colors[1 + Math.sign(Yo[i] - Yc[i])]);
+    const legend = svg.append("g")
+        .attr("transform", `translate(0, ${marginTop})`)
+        .data(legendData)
 
-    // if (title) g.append("title")
-    // .text(title);
+    legendData.forEach(data => {
+        let coin = data.coin;
+        let colors = data.colors;
+        legend.append("line")
+            .classed("legend-" + coin, true)
+            .attr("x1", width - xPadding - legend_line_width)
+            .attr("x2", width - xPadding)
+            .attr("stroke-width", 5)
+            .style("opacity", 0)
+            .attr("stroke", coin => {
+                return colors[0];
+            })
+
+        legend.append("line")
+            .classed("legend-" + coin, true)
+            .attr("x1", width - xPadding - legend_line_width)
+            .attr("x2", width - xPadding)
+            .attr("stroke-width", 5)
+            .style("opacity", 0)
+            .attr("transform", i => `translate(0,10)`)
+            .attr("stroke", coin => {
+                return colors[1];
+            })
+
+        legend.append("line")
+            .classed("legend-" + coin, true)
+            .attr("x1", width - xPadding - legend_line_width)
+            .attr("x2", width - xPadding)
+            .attr("stroke-width", 5)
+            .style("opacity", 0)
+            .attr("transform", i => `translate(0,20)`)
+            .attr("stroke", coin => {
+                return colors[2];
+            })
+
+        legend.append("text")
+            .classed("legend-" + coin, true)
+            .attr("x", width - xPadding + 5)
+            .attr("y", 5)
+            .style("opacity", 0)
+            .style("font-size", "7pt")
+            .text(coin + " ↑")
+
+        legend.append("text")
+            .classed("legend-" + coin, true)
+            .attr("x", width - xPadding + 5)
+            .attr("y", 15)
+            .style("opacity", 0)
+            .style("font-size", "7pt")
+            .text(coin + " =")
+
+        legend.append("text")
+            .classed("legend-" + coin, true)
+            .attr("x", width - xPadding + 5)
+            .attr("y", 25)
+            .style("opacity", 0)
+            .style("font-size", "7pt")
+            .text(coin + " ↓")
+
+    })
+
+    const g = svg.append("g")
+        .attr("stroke", stroke)
+        .attr("stroke-linecap", strokeLinecap)
+        .selectAll("g")
+        .data(I)
+        .join("g")
+        .attr("transform", i => `translate(${xScale(X[i])},0)`);
+
+    g.append("line")
+        .attr("y1", i => yScale(Yl[i]))
+        .attr("y2", i => yScale(Yh[i]));
+
+    g.append("line")
+        .attr("y1", i => yScale(Yo[i]))
+        .attr("y2", i => yScale(Yc[i]))
+        .attr("stroke-width", 5)
+        .attr("stroke", i => colors[1 + Math.sign(Yo[i] - Yc[i])])
+        .attr("data-coin", (i) => "BTC")
+        .attr("data-date", (i) => X[i])
+        .style("opacity", opacityLow)
+        .classed("coin-" + "BTC", true)
+        .on("mouseover", function(d, i) {
+            let coin = d3.select(this).attr("data-coin");
+            d3.selectAll(".coin-" + coin)
+                .transition()
+                .duration(opacityTransition)
+                .ease(d3.easeLinear)
+                .style("opacity", 1.0);
+            d3.selectAll(".legend-" + coin)
+                .transition()
+                .duration(opacityTransition)
+                .ease(d3.easeLinear)
+                .style("opacity", 1.0);
+        })
+        .on("mouseout", function(d, i) {
+            let coin = d3.select(this).attr("data-coin");
+            d3.selectAll(".coin-" + coin)
+                .transition()
+                .duration(opacityTransition)
+                .ease(d3.easeLinear)
+                .style("opacity", opacityLow);
+            d3.selectAll(".legend-" + coin)
+                .transition()
+                .duration(opacityTransition)
+                .ease(d3.easeLinear)
+                .style("opacity", 0);
+        })
+        .on("click", function(d, i) {
+            console.log(d3.select(this))
+            console.log(d3.select(this).attr("data-date"));
+        })
+
+    if (title) g.append("title")
+        .text(title);
 
     return svg.node();
 }
@@ -131,7 +243,7 @@ function plot_price(id) {
         console.log(data);
         let node = MultiCandlestick(data, v => v, width, height);
         console.log(node);
-        let block = d3.select("#" + id).append(() => node);
+        d3.select("#" + id).append(() => node);
     }
 }
 
@@ -141,7 +253,6 @@ function collect(total, callback) {
     return (elem) => {
         data.push(elem);
         count += 1;
-        console.log(count, total);
         if (count == total) callback(data);
     }
 }
