@@ -8,6 +8,7 @@
 
     <link rel="stylesheet" href="./app.css" />
     <link rel="stylesheet" href="./coinSelection/coinSelection.css" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <title>Cryptogram</title>
 </head>
 
@@ -25,15 +26,23 @@
             </div>
         </div>
     </div>
-    <div class="content">
-        <div id="news"></div>
-        <div id="today"></div>
-        <div id="figure"></div>
-    </div>
+    <main id="main">
+        <div id="content">
+            <div id="news"></div>
+            <div id="today"></div>
+            <div id="figure"></div>
+        </div>
+        <div id="price-news">
+            <div id="price"></div>
+        </div>
+        <div id="comparison">
+        </div>
+    </main>
 
     <script src="app.js"></script>
     <script src="compare.js"></script>
     <script src="./coinSelection/coinSelection.js"></script>
+    <script src="./price-news.js"></script>
 </body>
 
 </html>
