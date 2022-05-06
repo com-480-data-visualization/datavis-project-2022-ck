@@ -41,7 +41,7 @@ function range_filter(start_date, end_date) {
  * @param {function object => object} mapper
  * Mapper should produce the following values: date, open, high, low, close. 
  */
-function MultiCandlestick(datas, mapper, width, height, xDomain, yDomain, xTicks, xPadding = 70, opacityTransition = 100, opacityLow = 0.3, legend_line_width = 50) {
+function MultiCandlestick(datas, mapper, width, height, xDomain, yDomain, xTicks, xPadding = 70, opacityTransitionIn = 100, opacityTransitionOut = 500, opacityLow = 0.3, legend_line_width = 50) {
     let data = datas.map(mapper);
     console.log(data);
     const X = d3.map(data, d => d.date);
@@ -54,7 +54,7 @@ function MultiCandlestick(datas, mapper, width, height, xDomain, yDomain, xTicks
     const marginRight = 30; // right margin, in pixels
     const marginBottom = 30; // bottom margin, in pixels
     const marginLeft = 40; // left margin, in pixels
-    const xRange = [marginLeft, width - marginRight];
+    const xRange = [marginLeft, width - marginRight - marginLeft];
     const yRange = [height - marginTop, 0];
     const yType = d3.scaleLinear;
     const xFormat = "%b %-d"; // a format specifier for the date on the x-axis
@@ -70,8 +70,7 @@ function MultiCandlestick(datas, mapper, width, height, xDomain, yDomain, xTicks
 
     const xScale = d3.scaleTime()
         .domain([d3.min(X), d3.max(X)]) // values between for month of january
-        .range([xPadding, width - xPadding]);
-    console.log(xScale(X[0]))
+        .range([xPadding, width - xPadding * 2]);
     if (xDomain === undefined) xDomain = [d3.min(X), d3.max(X)];
     if (yDomain === undefined) yDomain = [d3.min(Yl) * 0.9, d3.max(Yh)];
     if (xTicks === undefined) xTicks = weeks(d3.min(xDomain), d3.max(xDomain), 7);
@@ -80,6 +79,34 @@ function MultiCandlestick(datas, mapper, width, height, xDomain, yDomain, xTicks
     const yScale = yType(yDomain, yRange);
     const xAxis = d3.axisBottom(xScale).tickFormat(d3.utcFormat(xFormat)).tickValues(xTicks);
     const yAxis = d3.axisLeft(yScale).ticks(height / 40, yFormat);
+
+    function onClickDate(d, i) {
+        console.log(d3.select(this))
+        console.log(d3.select(this).attr("data-date"));
+    }
+
+    function onMouseOver(i) {
+        let coin = d3.select(this).attr("data-coin");
+        d3.selectAll(`.coin-${coin},.legend-${coin},.coinopen-${coin}`)
+            .transition()
+            .duration(opacityTransitionIn)
+            .ease(d3.easeLinear)
+            .style("opacity", 1.0);
+    }
+
+    function onMouseOut(i) {
+        let coin = d3.select(this).attr("data-coin");
+        d3.selectAll(`.coin-${coin},.legend-${coin}`)
+            .transition()
+            .duration(opacityTransitionOut)
+            .ease(d3.easeLinear)
+            .style("opacity", 0);
+        d3.selectAll(`.coinopen-${coin}`)
+            .transition()
+            .duration(opacityTransitionOut)
+            .ease(d3.easeLinear)
+            .style("opacity", opacityLow);
+    }
 
     const title = "hello-world";
 
@@ -178,6 +205,17 @@ function MultiCandlestick(datas, mapper, width, height, xDomain, yDomain, xTicks
             .style("font-size", "7pt")
             .text(coin + " ↓")
 
+        // right tag
+        svg.append("text")
+            .attr("x", width - xPadding + 5)
+            .attr("y", yScale(Yo[0]))
+            .style("opacity", 1)
+            .style("font-size", "10pt")
+            .style("fill", colors[1])
+            .text(coin)
+            .attr("data-coin", (i) => coin)
+            .on("mouseover", onMouseOver)
+            .on("mouseout", onMouseOut)
     })
 
     const g = svg.append("g")
@@ -189,6 +227,8 @@ function MultiCandlestick(datas, mapper, width, height, xDomain, yDomain, xTicks
         .attr("transform", i => `translate(${xScale(X[i])},0)`);
 
     g.append("line")
+        .classed("coin-" + "BTC", true)
+        .style("opacity", 0)
         .attr("y1", i => yScale(Yl[i]))
         .attr("y2", i => yScale(Yh[i]));
 
@@ -199,38 +239,41 @@ function MultiCandlestick(datas, mapper, width, height, xDomain, yDomain, xTicks
         .attr("stroke", i => colors[1 + Math.sign(Yo[i] - Yc[i])])
         .attr("data-coin", (i) => "BTC")
         .attr("data-date", (i) => X[i])
-        .style("opacity", opacityLow)
+        .style("opacity", 0)
         .classed("coin-" + "BTC", true)
-        .on("mouseover", function(d, i) {
-            let coin = d3.select(this).attr("data-coin");
-            d3.selectAll(".coin-" + coin)
-                .transition()
-                .duration(opacityTransition)
-                .ease(d3.easeLinear)
-                .style("opacity", 1.0);
-            d3.selectAll(".legend-" + coin)
-                .transition()
-                .duration(opacityTransition)
-                .ease(d3.easeLinear)
-                .style("opacity", 1.0);
-        })
-        .on("mouseout", function(d, i) {
-            let coin = d3.select(this).attr("data-coin");
-            d3.selectAll(".coin-" + coin)
-                .transition()
-                .duration(opacityTransition)
-                .ease(d3.easeLinear)
-                .style("opacity", opacityLow);
-            d3.selectAll(".legend-" + coin)
-                .transition()
-                .duration(opacityTransition)
-                .ease(d3.easeLinear)
-                .style("opacity", 0);
-        })
-        .on("click", function(d, i) {
-            console.log(d3.select(this))
-            console.log(d3.select(this).attr("data-date"));
-        })
+        .on("mouseover", onMouseOver)
+        .on("mouseout", onMouseOut)
+        .on("click", onClickDate)
+
+    const line_gen = d3.line()
+        .x(function(i) { return xScale(X[i]) })
+        .y(function(i) { return yScale(Yo[i]) });
+    svg.append("path")
+        .attr("class", "line")
+        .classed("coinopen-" + "BTC", true)
+        .attr("fill", "none")
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 1.5)
+        .attr("opacity", opacityLow)
+        .attr("d", line_gen(I))
+        .attr("data-coin", "BTC")
+        .on("mouseover", onMouseOver)
+        .on("mouseout", onMouseOut)
+
+    // circles
+    svg.selectAll("circles")
+        .data(I)
+        .enter()
+        .append("circle")
+        .attr("fill", colors[1])
+        .attr("stroke", "none")
+        .attr("cx", function(i) { return xScale(X[i]); })
+        .attr("cy", function(i) { return yScale(Yo[i]); })
+        .attr("r", 3)
+        .attr("data-coin", (i) => "BTC")
+        .attr("data-date", (i) => X[i])
+        .on("click", onClickDate)
+
 
     if (title) g.append("title")
         .text(title);
