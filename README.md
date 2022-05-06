@@ -8,7 +8,7 @@
 
 [Milestone 1](#milestone-1) • [Milestone 2](#milestone-2) • [Milestone 3](#milestone-3)
 
-Online webpage: [https://com-480-data-visualization.github.io/datavis-project-2022-ck/src/index.html](GitHub Page Link)
+Online webpage: [GitHub Page Link]([link](https://com-480-data-visualization.github.io/datavis-project-2022-ck/src/index.html))
 
 ## Milestone 1 (8th April, 5pm)
 
