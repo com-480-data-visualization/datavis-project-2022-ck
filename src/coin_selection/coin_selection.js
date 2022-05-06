@@ -62,7 +62,7 @@ class CoinSelection {
 
     this.selectedCoins.forEach((value) => {
       var img = document.createElement("img");
-      img.src = "./coinIcons/" + value + ".svg";
+      img.src = "./coin_icons/" + value + ".svg";
       div.appendChild(img);
     });
   }
@@ -77,7 +77,7 @@ class CoinSelection {
       label.appendChild(input);
 
       const img = document.createElement("img");
-      img.src = "./coinIcons/" + value + ".svg";
+      img.src = "./coin_icons/" + value + ".svg";
       label.appendChild(img);
 
       const div = document.createElement("div");
