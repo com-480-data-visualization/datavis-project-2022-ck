@@ -6,8 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="./app.css" />
-    <link rel="stylesheet" href="./coinSelection/coinSelection.css" />
+    <link rel="stylesheet" href="app.css" />
+    <link rel="stylesheet" href="coinComparison/coinComparison.css" />
+    <link rel="stylesheet" href="coinSelection/coinSelection.css" />
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
     <title>Cryptogram</title>
@@ -38,13 +39,21 @@
         </div>
         <div id="comparison">
             <canvas id="timeline" height="28"></canvas>
+            <table id="coinTable">
+                <tr>
+                    <th onclick="sortTable(0)">Coin type</th>
+                    <th onclick="sortTable(1)">Price</th>
+                    <th onclick="sortTable(0)">Ranking</th>
+                    <th onclick="sortTable(1)">Position</th>
+                    <th onclick="sortTable(1)">Key words</th>
+                </tr>
         </div>
     </main>
 
     <script src="app.js"></script>
-    <script src="compare.js"></script>
-    <script src="./coinSelection/coinSelection.js"></script>
-    <script src="./price-news.js"></script>
+    <script src="coinComparison/coinComparison.js"></script>
+    <script src="coinSelection/coinSelection.js"></script>
+    <script src="price-news.js"></script>
 </body>
 
 </html>
