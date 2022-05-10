@@ -68,6 +68,9 @@ var myChart = new Chart(ctx, {
 // table
 var coinTable = document.getElementById('coinTable');
 
+const sum = arr => arr.reduce((a,b) => a + b, 0);
+const average = arr =>(sum(arr) / arr.length).toFixed(2);
+
 document.getElementById('selectionButton').onclick = function() {
   let selectedCoins = [];
   let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
@@ -85,6 +88,10 @@ function deleteTBody() {
   }
 }
 
+let default_month = 0
+let default_year = 2022
+let default_date = new Date("2022-01-01");
+
 function updateTable(coins) { 
   coins.forEach(e => {
     let newRow = coinTable.insertRow(-1);
@@ -96,18 +103,23 @@ function updateTable(coins) {
     let img = new Image();
     img.src = 'coinIcons/' + e.toLowerCase() +'.svg';
     let newT = document.createTextNode(e);
-    let newP = document.createTextNode(e);
     newType.appendChild(img, newT);
-    readFile("../cleaned_data/" + e + "_USD.csv")
-  })
-}
-
-function readFile(url) {
-  d3.csv(url,
-    data => {
-      for (var i = 0; i < data.length; i++) {
-        console.log(data[i].close);
-        console.log(data[i].volumeto);
+    let url = '../cleaned_data/' + e + '_USD.csv';
+    console.log(url)
+    d3.csv(url).then(function(data) {
+      var closeP = [];
+      var volumeS = [];
+      for (i = 0; i < data.length; i++) {
+        let date = new Date(data[i].date);
+        if (date.getMonth() == default_month && date.getFullYear() == default_year) {
+          closeP.push(parseFloat(data[i].close));
+          volumeS.push(parseInt(data[i].volumefrom) + parseInt(data[i].volumeto));
+        }
       }
+      let newP = document.createTextNode(average(closeP));
+      let newV = document.createTextNode(sum(volumeS));
+      newPrice.appendChild(newP);
+      newVolume.appendChild(newV);
     })
+  })
 }
