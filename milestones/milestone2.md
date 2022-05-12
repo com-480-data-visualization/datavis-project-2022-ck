@@ -1,5 +1,7 @@
 # Milestone 2
 
+Online webpage: [GitHub Page Link](https://com-480-data-visualization.github.io/datavis-project-2022-ck/src/index.html)
+
 ## Visualization Description
 
 ### Overall Layout

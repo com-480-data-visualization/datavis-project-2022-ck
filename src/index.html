@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link rel="stylesheet" href="./app.css" />
-    <link rel="stylesheet" href="./coin_selection/coin_selection.css" />
     <script
       src="https://kit.fontawesome.com/ec4fe2e77f.js"
       crossorigin="anonymous"
     ></script>
+    <link rel="stylesheet" href="app.css" />
+    <link rel="stylesheet" href="./coinSelection/coinSelection.css" />
+    <link rel="stylesheet" href="./coinComparison/coinComparison.css" />
+    <link rel="stylesheet" href="price-news.css" />
+    
     <title>Cryptogram</title>
-  </head>
+</head>
 
-  <body>
+<body>
     <header>
-      <h1>Cryptogram</h1>
+        <h1>Cryptogram</h1>
     </header>
     <div class="tab">
       <h3>Which coins do you want to know?</h3>
@@ -26,15 +29,37 @@
         <div class="multiselect">
           <div id="checkboxes"></div>
         </div>
-      </div>
+        </div>
     </div>
-    <div class="content">
-      <div id="news"></div>
-      <div id="today"></div>
-      <div id="figure"></div>
-    </div>
+    <main id="main">
+        <div id="content">
+            <div id="news"></div>
+            <div id="today"></div>
+            <div id="figure"></div>
+        </div>
+        <div id="price-news">
+            <div id="price"></div>
+        </div>
+        <div id="comparison">
+            <canvas id="timeline" height="28"></canvas>
+            <table id="coinTable">
+                <tr>
+                    <th onclick="sortTable(0)">Coin type</th>
+                    <th onclick="sortTable(1)">Price</th>
+                    <th onclick="sortTable(1)">Volume</th>
+                    <th onclick="sortTable(0)">Ranking</th>
+                    <th onclick="sortTable(1)">Position</th>
+                    <!-- <th onclick="sortTable(1)">Key words</th> -->
+                </tr>
+        </div>
+    </main>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
 
     <script src="app.js"></script>
-    <script src="./coin_selection/coin_selection.js"></script>
+    <script src="./coinSelection/coinSelection.js"></script>
+    <script src="coinComparison/coinComparison.js"></script>
+    <script src="price-news.js"></script>
   </body>
 </html>
