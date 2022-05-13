@@ -31,7 +31,7 @@ function range_filter(start_date, end_date) {
   };
 }
 
-let cloud_width = 600,
+let cloud_width = 1000,
   cloud_height = 300,
   max_font_size = 40;
 
