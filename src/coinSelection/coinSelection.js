@@ -1,14 +1,3 @@
-function getSelectedOption(sel) {
-  var opts = [];
-  for (var i = 0, len = sel.children.length; i < len; i++) {
-    var opt = sel.children[i];
-    if (opt.getElementsByTagName("input")[0].checked === true) {
-      opts.push(opt.className);
-    }
-  }
-  return opts;
-}
-
 function whenDocumentLoaded(action) {
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", action);
@@ -52,19 +41,45 @@ class CoinSelection {
     ];
     this.selectedCoins = [];
     this.expanded = false;
+    this.showSelectedCoins = this.showSelectedCoins.bind(this);
+  }
+
+  getSelectedOption(sel) {
+    var opts = [];
+    for (var i = 0, len = sel.children.length; i < len; i++) {
+      var opt = sel.children[i];
+      if (opt.getElementsByTagName("input")[0].checked === true) {
+        opts.push(opt.className);
+      }
+    }
+    return opts;
+  }
+
+  disableCheck(disable, sel) {
+    for (var i = 0, len = sel.children.length; i < len; i++) {
+      var opt = sel.children[i];
+      if (!this.selectedCoins.includes(opt.className))
+        opt.getElementsByTagName("input")[0].disabled = disable;
+    }
   }
   showSelectedCoins() {
     let div = document.getElementById("selectedCoins");
     div.innerHTML = "";
 
     let checkboxes = document.getElementById("checkboxes");
-    this.selectedCoins = getSelectedOption(checkboxes);
+    this.selectedCoins = this.getSelectedOption(checkboxes);
 
     this.selectedCoins.forEach((value) => {
       var img = document.createElement("img");
       img.src = "./coinIcons/" + value.toLowerCase() + ".svg";
       div.appendChild(img);
     });
+
+    if (this.selectedCoins.length == 4) {
+      this.disableCheck(true, checkboxes);
+    } else {
+      this.disableCheck(false, checkboxes);
+    }
   }
   showMultiSelection(checkboxes) {
     this.coins.forEach((value, index) => {
@@ -96,6 +111,14 @@ class CoinSelection {
       checkboxes.appendChild(label);
     });
   }
+  tabVisible() {
+    let tab = document.getElementById("tab");
+    if (tab.className == "m-fadeIn" || tab.className == "") {
+      tab.classList.toggle("m-fadeOut");
+    } else {
+      tab.classList.toggle("m-fadeIn");
+    }
+  }
 }
 
 whenDocumentLoaded(() => {
@@ -105,4 +128,10 @@ whenDocumentLoaded(() => {
   let checkboxes = document.getElementById("checkboxes");
   cs.showMultiSelection(checkboxes);
   checkboxes.addEventListener("click", cs.showSelectedCoins);
+
+  let submitBtn = document.getElementById("selectionButton");
+  submitBtn.addEventListener("click", cs.tabVisible);
+
+  let showBtn = document.getElementById("tabShowBtn");
+  showBtn.addEventListener("click", cs.tabVisible);
 });

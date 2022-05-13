@@ -1,13 +1,26 @@
 #tab {
   position: fixed;
+  top: 80px;
+  left: 0;
+  margin: 0px;
+  z-index: 0;
   height: 100%;
-  width: 20%;
-  top: 100px;
-  padding: 10px;
-  padding-top: 0px;
+  width: 350px;
+  margin: 0px;
   border-right: 1px rgba(150, 150, 150, 0.5) solid;
+  background-color: rgba(50, 50, 50, 0.9);
+  transition: all 0.5s ease;
 }
-
+.m-fadeOut {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s linear 300ms, opacity 300ms;
+}
+.m-fadeIn {
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0s linear 0s, opacity 300ms;
+}
 #selectionBox {
   position: relative;
   display: block;
@@ -25,17 +38,21 @@
 h3 {
   text-align: center;
   font-weight: bolder;
+  color: white;
 }
 
 #selectedCoins {
-  width: calc(100% - 10px);
+  position: absolute;
+  top: 18px;
+  left: 40px;
+  width: 150px;
   display: block;
   justify-content: space-around;
   margin-left: auto;
   margin-right: auto;
-  border: 1px solid #dadada;
   border-radius: 10px;
   padding: 5px;
+  z-index: 50;
 }
 
 #selectedCoins > img {
@@ -71,14 +88,20 @@ h3 {
 
 #checkboxes {
   border: 1px #dadada solid;
-  height: 300px;
-  overflow-y: scroll;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 #checkboxes label {
   display: flex;
   border-bottom: 1px #dadada solid;
   padding: 5px;
+  width: 46.4%;
+}
+
+#checkboxes img {
+  height: 50px;
 }
 
 #checkboxes label p,
@@ -109,4 +132,14 @@ button {
   font-family: "Roboto", sans-serif;
   margin-top: 5px;
   margin-bottom: 10px;
+}
+
+#tabShowBtn {
+  position: fixed;
+  font-size: 25px;
+
+  color: #dadada;
+  margin: 10px;
+  margin-top: 25px;
+  width: 10px;
 }
