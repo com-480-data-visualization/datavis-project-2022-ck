@@ -1,4 +1,4 @@
-.tab {
+#tab {
   position: fixed;
   height: 100%;
   width: 20%;
@@ -8,7 +8,7 @@
   border-right: 1px rgba(150, 150, 150, 0.5) solid;
 }
 
-.selectionBox {
+#selectionBox {
   position: relative;
   display: block;
   width: 80%;
@@ -27,7 +27,7 @@ h3 {
   font-weight: bolder;
 }
 
-.selectedCoins {
+#selectedCoins {
   width: calc(100% - 10px);
   display: block;
   justify-content: space-around;
@@ -38,7 +38,7 @@ h3 {
   padding: 5px;
 }
 
-.selectedCoins > img {
+#selectedCoins > img {
   margin-left: 5px;
 }
 
@@ -48,20 +48,20 @@ h3 {
   font-family: "Roboto", sans-serif;
 } */
 
-.multiselect {
+#multiselect {
   width: 100%;
 }
 
-.selectBox {
+#selectBox {
   position: relative;
 }
 
-.selectBox select {
+#selectBox select {
   width: 100%;
   font-weight: bold;
 }
 
-.overSelect {
+#overSelect {
   position: absolute;
   left: 0;
   right: 0;
@@ -88,15 +88,15 @@ h4 {
   text-align: center;
 }
 
-.labelText {
+#labelText {
   width: 100%;
 }
 
-.labelText h4 {
+#labelText h4 {
   font-size: 15px;
 }
 
-.labelText p {
+#labelText p {
   font-size: 12px;
 }
 

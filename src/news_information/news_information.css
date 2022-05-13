@@ -1,0 +1,13 @@
+#content {
+  min-height: 500px;
+}
+
+#news {
+  min-height: 200px;
+}
+
+#flex {
+  display: flex;
+  min-height: 200px;
+  border-top: 1px rgb(190, 190, 190) solid;
+}

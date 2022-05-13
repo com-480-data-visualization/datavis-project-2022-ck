@@ -54,7 +54,7 @@ function MultiCandlestick(
   legend_line_width = 50
 ) {
   let data = datas.map(mapper);
-  console.log(data);
+
   const X = d3.map(data, (d) => d.date);
   const Yo = d3.map(data, (d) => d.open);
   const Yc = d3.map(data, (d) => d.close);
@@ -86,7 +86,6 @@ function MultiCandlestick(
   if (xDomain === undefined) xDomain = [d3.min(X), d3.max(X)];
   if (yDomain === undefined) yDomain = [d3.min(Yl) * 0.9, d3.max(Yh)];
   if (xTicks === undefined) xTicks = weeks(d3.min(xDomain), d3.max(xDomain), 7);
-  console.log(xTicks);
 
   const yScale = yType(yDomain, yRange);
   const xAxis = d3
@@ -327,9 +326,7 @@ function MultiCandlestick(
 
 function plot_price(id) {
   return (data) => {
-    console.log(data);
     let node = MultiCandlestick(data, (v) => v, width, height);
-    console.log(node);
     d3.select("#" + id).append(() => node);
   };
 }
@@ -347,14 +344,11 @@ function collect(total, callback) {
 let default_start_date = new Date("2022-01-01");
 let default_end_date = new Date("2022-01-31");
 
-whenDocumentLoaded(() => {
-  refresh_price_plot_url(
-    "../cleaned_data/BTC_USD.csv",
-    parse_price_data,
-    range_filter(default_start_date, default_end_date),
-    collect(30, plot_price("price"))
-  );
-  console.log("loaded");
-});
+refresh_price_plot_url(
+  "../cleaned_data/BTC_USD_4242.csv",
+  parse_price_data,
+  range_filter(default_start_date, default_end_date),
+  collect(30, plot_price("price"))
+);
 
 /* reference: https://observablehq.com/@d3/candlestick-chart */

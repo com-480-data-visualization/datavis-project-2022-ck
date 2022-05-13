@@ -41,11 +41,6 @@ header > h1 {
   overflow: hidden;
 }
 
-#content {
-  min-height: 500px;
-  background-color: lightcoral;
-}
-
 #price-news {
   margin-top: 20px;
   min-height: 500px;

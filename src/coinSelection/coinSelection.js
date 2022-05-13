@@ -81,7 +81,7 @@ class CoinSelection {
       label.appendChild(img);
 
       const div = document.createElement("div");
-      div.className = "labelText";
+      div.id = "labelText";
 
       const h4 = document.createElement("h4");
       h4.textContent = value;
