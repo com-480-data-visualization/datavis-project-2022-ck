@@ -1,47 +1,46 @@
-.tab {
-    position: fixed;
-    height: 100%;
-    width: 20%;
-    top: 100px;
-    padding: 10px;
-    padding-top: 0px;
-    border-right: 1px rgba(150, 150, 150, 0.5) solid;
+#tab {
+  position: fixed;
+  height: 100%;
+  width: 20%;
+  top: 100px;
+  padding: 10px;
+  padding-top: 0px;
+  border-right: 1px rgba(150, 150, 150, 0.5) solid;
 }
 
-.selectionBox {
-    position: relative;
-    display: block;
-    width: 80%;
-    margin-right: auto;
-    margin-left: auto;
-    padding: 10px;
-    min-height: 200px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 1px 1px 1px 1px rgb(190, 190, 190);
-    text-align: center;
+#selectionBox {
+  position: relative;
+  display: block;
+  width: 80%;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 10px;
+  min-height: 200px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 1px 1px 1px 1px rgb(190, 190, 190);
+  text-align: center;
 }
 
 h3 {
-    text-align: center;
-    font-weight: bolder;
+  text-align: center;
+  font-weight: bolder;
 }
 
-.selectedCoins {
-    width: calc(100% - 10px);
-    display: block;
-    justify-content: space-around;
-    margin-left: auto;
-    margin-right: auto;
-    border: 1px solid #dadada;
-    border-radius: 10px;
-    padding: 5px;
+#selectedCoins {
+  width: calc(100% - 10px);
+  display: block;
+  justify-content: space-around;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #dadada;
+  border-radius: 10px;
+  padding: 5px;
 }
 
-.selectedCoins>img {
-    margin-left: 5px;
+#selectedCoins > img {
+  margin-left: 5px;
 }
-
 
 /* select {
   width: 100%;
@@ -49,65 +48,65 @@ h3 {
   font-family: "Roboto", sans-serif;
 } */
 
-.multiselect {
-    width: 100%;
+#multiselect {
+  width: 100%;
 }
 
-.selectBox {
-    position: relative;
+#selectBox {
+  position: relative;
 }
 
-.selectBox select {
-    width: 100%;
-    font-weight: bold;
+#selectBox select {
+  width: 100%;
+  font-weight: bold;
 }
 
-.overSelect {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
+#overSelect {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }
 
 #checkboxes {
-    border: 1px #dadada solid;
-    height: 300px;
-    overflow-y: scroll;
+  border: 1px #dadada solid;
+  height: 300px;
+  overflow-y: scroll;
 }
 
 #checkboxes label {
-    display: flex;
-    border-bottom: 1px #dadada solid;
-    padding: 5px;
+  display: flex;
+  border-bottom: 1px #dadada solid;
+  padding: 5px;
 }
 
 #checkboxes label p,
 h4 {
-    margin: 0px;
-    font-family: "Roboto", sans-serif;
-    text-align: center;
+  margin: 0px;
+  font-family: "Roboto", sans-serif;
+  text-align: center;
 }
 
-.labelText {
-    width: 100%;
+#labelText {
+  width: 100%;
 }
 
-.labelText h4 {
-    font-size: 15px;
+#labelText h4 {
+  font-size: 15px;
 }
 
-.labelText p {
-    font-size: 12px;
+#labelText p {
+  font-size: 12px;
 }
 
 #checkboxes label:hover {
-    background-color: #6fb7ff;
-    cursor: pointer;
+  background-color: #6fb7ff;
+  cursor: pointer;
 }
 
 button {
-    font-family: "Roboto", sans-serif;
-    margin-top: 5px;
-    margin-bottom: 10px;
+  font-family: "Roboto", sans-serif;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }

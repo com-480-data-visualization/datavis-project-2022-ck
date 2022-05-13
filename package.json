@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "cerebrum.js": "^1.0.4",
+    "d3": "^7.4.4",
+    "d3-cloud": "^1.2.5",
+    "d3.layout.cloud": "^1.2.0",
+    "natural": "^5.2.2"
+  }
+}
