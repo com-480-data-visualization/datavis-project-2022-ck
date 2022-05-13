@@ -26,18 +26,18 @@ class CoinSelection {
     ];
     this.coinsDescription = [
       "Bitcoin",
-      "ETH",
-      "XRP",
+      "Ethereum",
+      "Ripple",
       "Litecoin",
-      "ADA",
-      "BCH",
-      "USDT",
-      "XMR",
-      "TRX",
-      "ETC",
-      "DASH",
-      "ZEC",
-      "XTZ",
+      "Cardano",
+      "Bitcoin Cash",
+      "Tether",
+      "Monero",
+      "Tron",
+      "Ethereum Classic",
+      "Dash",
+      "Zcash",
+      "Tezos",
     ];
     this.selectedCoins = [];
     this.expanded = false;
