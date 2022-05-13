@@ -118,7 +118,7 @@ function freqDict(data) {
   });
   var words = [];
   Object.entries(counter).forEach(([key, value]) => {
-    words.push({ text: key, size: 10 + value * 20 });
+    words.push({ text: key, size: 10 + value * 10 });
   });
   return words;
 }
