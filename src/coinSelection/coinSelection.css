@@ -1,16 +1,25 @@
 #tab {
+  display: block;
   position: fixed;
   top: 80px;
   left: 0;
   margin: 0px;
   z-index: 0;
-  height: 100%;
-  width: 350px;
+
+  width: 100%;
   margin: 0px;
   border-right: 1px rgba(150, 150, 150, 0.5) solid;
   background-color: rgba(50, 50, 50, 0.9);
-  transition: all 0.5s ease;
+
+  text-align: center;
 }
+
+#container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
 .m-fadeOut {
   visibility: hidden;
   opacity: 0;
@@ -21,14 +30,14 @@
   opacity: 1;
   transition: visibility 0s linear 0s, opacity 300ms;
 }
-#selectionBox {
-  position: relative;
+
+.selectionBox {
   display: block;
-  width: 80%;
-  margin-right: auto;
-  margin-left: auto;
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  max-width: 500px;
   padding: 10px;
-  min-height: 200px;
   background-color: white;
   border-radius: 10px;
   box-shadow: 1px 1px 1px 1px rgb(190, 190, 190);
@@ -39,6 +48,7 @@ h3 {
   text-align: center;
   font-weight: bolder;
   color: white;
+  margin: 5px;
 }
 
 #selectedCoins {
@@ -59,6 +69,19 @@ h3 {
   margin-left: 5px;
 }
 
+#selectedDate {
+  position: absolute;
+  top: 30px;
+  right: 20px;
+  z-index: 50;
+  color: whitesmoke;
+  font-family: "Roboto", sans-serif;
+}
+
+#selectedCoins:hover,
+#selectedDate:hover {
+  cursor: pointer;
+}
 /* select {
   width: 100%;
   height: 200px;
@@ -67,6 +90,8 @@ h3 {
 
 #multiselect {
   width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 #selectBox {
@@ -87,17 +112,19 @@ h3 {
 }
 
 #checkboxes {
-  border: 1px #dadada solid;
   display: flex;
   flex-wrap: wrap;
-  width: 100%;
+  justify-content: center;
 }
 
 #checkboxes label {
   display: flex;
-  border-bottom: 1px #dadada solid;
   padding: 5px;
-  width: 46.4%;
+  width: 150px;
+
+  border: 1px #dadada solid;
+  border-radius: 5px;
+  margin: 2px;
 }
 
 #checkboxes img {
@@ -125,7 +152,9 @@ h4 {
 
 #checkboxes label:hover {
   background-color: #6fb7ff;
+  color: whitesmoke;
   cursor: pointer;
+  transition-duration: 500ms;
 }
 
 button {
@@ -142,4 +171,48 @@ button {
   margin: 10px;
   margin-top: 25px;
   width: 10px;
+}
+
+#tabShowBtn:hover {
+  cursor: pointer;
+}
+#dateselect {
+  display: flex;
+  width: 100%;
+}
+
+#years,
+#months {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.date {
+  width: 80px;
+  font-weight: bold;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  border: 1px #dadada solid;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.date > span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.date:hover {
+  background-color: #6fb7ff;
+  cursor: pointer;
+  transition-duration: 500ms;
+  color: whitesmoke;
+  font-weight: bolder;
+}
+
+.select {
+  background-color: #43a1ff;
+  color: whitesmoke;
+  font-weight: bolder;
 }
