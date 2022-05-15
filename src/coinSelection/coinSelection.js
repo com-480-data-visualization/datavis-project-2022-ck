@@ -159,7 +159,7 @@ class SelectionTab {
   }
   tabVisible() {
     let tab = document.getElementById("tab");
-    if (tab.className == "m-fadeIn" || tab.className == "") {
+    if (tab.className == "m-fadeIn") {
       tab.classList.toggle("m-fadeOut");
     } else {
       tab.classList.toggle("m-fadeIn");
