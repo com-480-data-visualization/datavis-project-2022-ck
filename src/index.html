@@ -20,17 +20,38 @@
 
 <body>
     <header>
+      <div  id="tabShowBtn" >
+      <i class="fa-solid fa-bars"></i>
+    </div>
+      <div id="selectedCoins"></div>
         <h1>Cryptogram</h1>
+      <div id="selectedDate"></div>
     </header>
-    <div id="tab">
-      <h3>Which coins do you want to know?</h3>
-      <div id="selectionBox">
-        <div id="selectedCoins" id="selectedCoins"></div>
-        <button id="selectionButton">Submit<i class="fa-solid fa-arrow-right-long"></i></button>
-        <div id="multiselect">
-          <div id="checkboxes"></div>
+    
+    <div id="tab" class="m-fadeOut">
+      <div id = "container">
+        <div id="coinSelection">
+          <h3>Coins (Max 4)</h3>
+          <div class = "selectionBox">
+            <div id="multiselect">
+              <div id="checkboxes"></div>
+            </div>
+          </div>
         </div>
+        <div id = "dateSelection">
+          <h3>Year</h3>
+          <div class = "selectionBox">
+              <div id="years"></div>
+            </div>
+            <h3>Month</h3>
+          <div class = "selectionBox">
+              <div id="months"></div>
+          </div>
         </div>
+      </div>
+      <button id="selectionButton">See the result<i class="fa-solid fa-arrow-right-long"></i></button> 
+    </div>
+
     </div>
     <main id="main">
         <div id="content">
