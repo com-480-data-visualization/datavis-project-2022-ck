@@ -1,4 +1,10 @@
-console.log("price-news");
+/**
+ * Bugs:
+ * 1. We have different yAxis => different horizontal lines.
+ * 
+ * TODOs:
+ * 1. different colors for different lines.
+ */
 
 const width = window.innerWidth * 0.6;
 const height = width * 0.5;
@@ -87,7 +93,7 @@ function MultiCandlestick(
     .domain([d3.min(X), d3.max(X)]) // values between for month of january
     .range([xPadding, width - xPadding * 2]);
   if (xDomain === undefined) xDomain = [d3.min(X), d3.max(X)];
-  if (yDomain === undefined) yDomain = [d3.min(Yl) * 0.9, d3.max(Yh)];
+  if (yDomain === undefined) yDomain = [d3.min(Yl) * 0.9, d3.max(Yh)*1.1];
   if (xTicks === undefined) xTicks = weeks(d3.min(xDomain), d3.max(xDomain), 7);
 
   const yScale = yType(yDomain, yRange);
@@ -102,18 +108,17 @@ function MultiCandlestick(
     console.log(d3.select(this).attr("data-date"));
   }
 
-  function onMouseOver(i) {
-    // let coin = d3.select(this).attr("data-coin");
+  let onMouseOver = (i) => {
+    d3.selectAll(`*[class*=coin]`)
+      .transition()
+      .duration(opacityTransitionIn)
+      .ease(d3.easeLinear)
+      .style("opacity", 0);
     d3.selectAll(`.coin-${coin},.legend-${coin},.yaxis-${coin}`)
       .transition()
       .duration(opacityTransitionIn)
       .ease(d3.easeLinear)
       .style("opacity", 1.0);
-    d3.selectAll(`.coinopen-${coin}`)
-      .transition()
-      .duration(opacityTransitionIn)
-      .ease(d3.easeLinear)
-      .style("opacity", 0);
   }
 
   function onMouseOut(i) {
@@ -123,7 +128,7 @@ function MultiCandlestick(
       .duration(opacityTransitionOut)
       .ease(d3.easeLinear)
       .style("opacity", 0);
-    d3.selectAll(`.coinopen-${coin}`)
+    d3.selectAll(`*[class*=coinopen]`)
       .transition()
       .duration(opacityTransitionOut)
       .ease(d3.easeLinear)
@@ -136,7 +141,7 @@ function MultiCandlestick(
   const legendData = [{
     coin: "BTC",
     colors: ["#00008B", "#4169E1", "#ADD8E6"],
-  },];
+  }];
 
   svg
     .append("g")
@@ -153,13 +158,13 @@ function MultiCandlestick(
       g.selectAll("text").attr("opacity", 0);
       g.select(".domain").remove();
     })
-    .call((g) =>
+    .call((g) =>{
       g
-        .selectAll(".tick line")
-        .clone()
-        .attr("stroke-opacity", 0.2)
-        .attr("x2", width - marginLeft - marginRight)
-    )
+      .selectAll(".tick line")
+      .clone()
+      .attr("stroke-opacity", 0.2)
+      .attr("x2", width - marginLeft - marginRight);
+    })
     .call((g) =>
       g
         .append("text")
@@ -265,7 +270,7 @@ function MultiCandlestick(
     .attr("transform", (i) => `translate(${xScale(X[i])},0)`);
 
   g.append("line")
-    .classed("coin-" + "BTC", true)
+    .classed(`coin-${coin}`, true)
     .style("opacity", 0)
     .attr("y1", (i) => yScale(Yl[i]))
     .attr("y2", (i) => yScale(Yh[i]));
@@ -275,10 +280,10 @@ function MultiCandlestick(
     .attr("y2", (i) => yScale(Yc[i]))
     .attr("stroke-width", 5)
     .attr("stroke", (i) => colors[1 + Math.sign(Yo[i] - Yc[i])])
-    .attr("data-coin", (i) => "BTC")
+    .attr("data-coin", (i) => `${coin}`)
     .attr("data-date", (i) => X[i])
     .style("opacity", 0)
-    .classed("coin-" + "BTC", true)
+    .classed(`coin-${coin}`, true)
     .on("mouseover", onMouseOver)
     .on("mouseout", onMouseOut)
     .on("click", onClickDate);
@@ -294,13 +299,13 @@ function MultiCandlestick(
   svg
     .append("path")
     .attr("class", "line")
-    .classed("coinopen-" + "BTC", true)
+    .classed(`coinopen-${coin}`, true)
     .attr("fill", "none")
     .attr("stroke", "steelblue")
     .attr("stroke-width", 1.5)
     .attr("opacity", opacityLow)
     .attr("d", line_gen(I))
-    .attr("data-coin", "BTC")
+    .attr("data-coin", `${coin}`)
     .on("mouseover", onMouseOver)
     .on("mouseout", onMouseOut);
 
@@ -310,7 +315,7 @@ function MultiCandlestick(
     .data(I)
     .enter()
     .append("circle")
-    .classed("coinopen-" + "BTC", true)
+    .classed(`coinopen-${coin}`, true)
     .attr("fill", colors[1])
     .attr("stroke", "none")
     .attr("cx", function (i) {
@@ -320,13 +325,9 @@ function MultiCandlestick(
       return yScale(Yo[i]);
     })
     .attr("r", 3)
-    .attr("data-coin", (i) => "BTC")
+    .attr("data-coin", (i) => `${coin}`)
     .attr("data-date", (i) => X[i])
     .on("click", onClickDate);
-
-  if (title) g.append("title").text(title);
-  console.log(svg.node());
-  // return svg.node();
 }
 
 function create_price_news_svg() {
@@ -338,10 +339,10 @@ function create_price_news_svg() {
     .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
 }
 
-function plot_price(svg) {
+function plot_price(svg, coin) {
   return (data) => {
     console.log("call data");
-    MultiCandlestick(svg, data, "BTC", (v) => v, width, height);
+    MultiCandlestick(svg, data, coin, (v) => v, width, height);
   };
 }
 
@@ -370,21 +371,31 @@ function waitN(N, handler) {
 
 document.addEventListener("DOMContentLoaded", (event) => {
   console.log(d3.select("#price"));
-  let num_data = 1;
+  let num_data = 2;
   let closure = waitN(num_data, () => {
     console.log(price_news_svg.node());
     d3.select("#price").append(() => price_news_svg.node());
   });
   
   refresh_price_plot_url(
-    "../cleaned_data/BTC_USD_4242.csv",
+    "../cleaned_data/BTC_USD.csv",
     parse_price_data,
     range_filter(default_start_date, default_end_date),
     collect(30, function(data) {
-      plot_price(price_news_svg)(data);
+      plot_price(price_news_svg, "BTC")(data);
       closure();
     })
   );
+
+  refresh_price_plot_url(
+    "../cleaned_data/ETH_USD.csv",
+    parse_price_data,
+    range_filter(default_start_date, default_end_date),
+    collect(30, function(data) {
+      plot_price(price_news_svg, "ETH")(data);
+      closure();
+    })
+  )
 })
 
 
