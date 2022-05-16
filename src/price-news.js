@@ -11,7 +11,7 @@ const coin_colors = {
   default: ['#800080', '#FF00FF', '	#FF69B4']
 };
 
-const width = window.innerWidth * 0.6;
+const width = window.innerWidth * 0.7;
 const height = width * 0.5;
 
 function refresh_price_plot_url(url, conversor, filter, handler) {
@@ -113,7 +113,9 @@ function MultiCandlestick(
   const yAxis = d3.axisLeft(yScale).ticks(height / 40, yFormat);
 
   function onClickDate(d, i) {
-    alert(d3.select(this).attr("data-coin") + " " + d3.select(this).attr("data-date"));
+    const coin = d3.select(this).attr("data-coin");
+    const date = d3.select(this).attr("data-date");
+    update_daily_news(coin, date);
   }
 
   let onMouseOver = (i) => {
