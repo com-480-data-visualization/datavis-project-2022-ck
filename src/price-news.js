@@ -3,8 +3,13 @@
  * 1. We have different yAxis => different horizontal lines.
  * 
  * TODOs:
- * 1. different colors for different lines.
  */
+
+const coin_colors = {
+  BTC: ['#FFA500', '#FFD700', '#BDB76B'],
+  ETH: ["#00008B", "#4169E1", "#ADD8E6"],
+  default: ['#800080', '#FF00FF', '	#FF69B4']
+};
 
 const width = window.innerWidth * 0.6;
 const height = width * 0.5;
@@ -12,7 +17,9 @@ const height = width * 0.5;
 function refresh_price_plot_url(url, conversor, filter, handler) {
   d3.csv(url, (data) => {
     let data0 = conversor(data);
-    if (filter(data0)) handler(data0);
+    if (filter(data0)) {
+      handler(data0);
+    }
   });
 }
 
@@ -53,14 +60,15 @@ function MultiCandlestick(
   mapper,
   width,
   height,
+  currency = "",
   xDomain,
   yDomain,
   xTicks,
   xPadding = 70,
   opacityTransitionIn = 100,
-  opacityTransitionOut = 500,
+  opacityTransitionOut = 1000,
   opacityLow = 0.3,
-  legend_line_width = 50
+  legend_line_width = 50,
 ) {
   let data = datas.map(mapper);
 
@@ -73,7 +81,7 @@ function MultiCandlestick(
   const marginTop = 20; // top margin, in pixels
   const marginRight = 30; // right margin, in pixels
   const marginBottom = 30; // bottom margin, in pixels
-  const marginLeft = 40; // left margin, in pixels
+  const marginLeft = 55; // left margin, in pixels
   const xRange = [marginLeft, width - marginRight - marginLeft];
   const yRange = [height - marginTop, 0];
   const yType = d3.scaleLinear;
@@ -81,19 +89,20 @@ function MultiCandlestick(
   const yFormat = "~f"; // a format specifier for the value on the y-axis
   const stroke = "currentColor"; // stroke color for the daily rule
   const strokeLinecap = "round"; // stroke line cap for the rules
-  const colors = ["#00008B", "#4169E1", "#ADD8E6"]; //
-  const yLabel = "price ($)";
+  const colors = coin_colors[coin] || coin_color.default; //
+  const yLabel = `price (${currency})`;
 
   const weeks = (start, stop, stride) => {
-    return d3.utcDays(start, stop.setDate(stop.getDate() + 1), stride);
+    let stop2 = new Date(stop);
+    return d3.utcDays(start, stop2.setDate(stop.getDate() + 1), stride);
   };
 
   const xScale = d3
     .scaleTime()
     .domain([d3.min(X), d3.max(X)]) // values between for month of january
-    .range([xPadding, width - xPadding * 2]);
+    .range([xPadding, width - xPadding - marginRight]);
   if (xDomain === undefined) xDomain = [d3.min(X), d3.max(X)];
-  if (yDomain === undefined) yDomain = [d3.min(Yl) * 0.9, d3.max(Yh)*1.1];
+  if (yDomain === undefined) yDomain = [d3.min(Yl)*0.9, d3.max(Yh)*1.1];
   if (xTicks === undefined) xTicks = weeks(d3.min(xDomain), d3.max(xDomain), 7);
 
   const yScale = yType(yDomain, yRange);
@@ -104,8 +113,7 @@ function MultiCandlestick(
   const yAxis = d3.axisLeft(yScale).ticks(height / 40, yFormat);
 
   function onClickDate(d, i) {
-    console.log(d3.select(this));
-    console.log(d3.select(this).attr("data-date"));
+    alert(d3.select(this).attr("data-coin") + " " + d3.select(this).attr("data-date"));
   }
 
   let onMouseOver = (i) => {
@@ -138,20 +146,20 @@ function MultiCandlestick(
   const title = "hello-world";
 
   // legend
-  const legendData = [{
-    coin: "BTC",
-    colors: ["#00008B", "#4169E1", "#ADD8E6"],
-  }];
+  const coin_color = [colors];
 
   svg
     .append("g")
     .attr("transform", `translate(0,${height - marginBottom})`)
     .call(xAxis)
-    .call((g) => g.select(".domain").remove());
+    .call((g) => {
+      g.select(".domain").remove();
+      g.selectAll("text").attr("font-size", "10pt").attr("font-weight", "lighter")
+    });
 
   svg
     .append("g")
-    .attr("transform", `translate(${marginLeft},0)`)
+    .attr("transform", `translate(${marginLeft}, 0)`)
     .call(yAxis)
     .call((g) => {
       g.selectAll("text").classed(`yaxis-${coin}`, true);
@@ -163,27 +171,28 @@ function MultiCandlestick(
       .selectAll(".tick line")
       .clone()
       .attr("stroke-opacity", 0.2)
-      .attr("x2", width - marginLeft - marginRight);
+      .attr("x2", width - marginLeft - marginRight)
     })
     .call((g) =>
       g
         .append("text")
         .attr("x", -marginLeft)
-        .attr("y", marginTop)
+        .attr("y", 10)
         .attr("fill", "currentColor")
         .attr("text-anchor", "start")
         .classed(`yaxis-${coin}`, true)
         .attr("opacity", 0)
+        .attr("font-size", "8pt")
         .text(yLabel)
     );
 
   const legend = svg
     .append("g")
     .attr("transform", `translate(0, ${marginTop})`)
-    .data(legendData);
+    .data(coin_color);
 
-  legendData.forEach((data) => {
-    let colors = data.colors;
+  coin_color.forEach((data) => {
+    let colors = data;
     legend
       .append("line")
       .classed("legend-" + coin, true)
@@ -225,7 +234,7 @@ function MultiCandlestick(
       .attr("x", width - xPadding + 5)
       .attr("y", 5)
       .style("opacity", 0)
-      .style("font-size", "7pt")
+      .style("font-size", "9pt")
       .text(coin + " ↑");
 
     legend
@@ -234,7 +243,7 @@ function MultiCandlestick(
       .attr("x", width - xPadding + 5)
       .attr("y", 15)
       .style("opacity", 0)
-      .style("font-size", "7pt")
+      .style("font-size", "9pt")
       .text(coin + " =");
 
     legend
@@ -243,7 +252,7 @@ function MultiCandlestick(
       .attr("x", width - xPadding + 5)
       .attr("y", 25)
       .style("opacity", 0)
-      .style("font-size", "7pt")
+      .style("font-size", "9pt")
       .text(coin + " ↓");
 
     // right tag
@@ -273,7 +282,7 @@ function MultiCandlestick(
     .classed(`coin-${coin}`, true)
     .style("opacity", 0)
     .attr("y1", (i) => yScale(Yl[i]))
-    .attr("y2", (i) => yScale(Yh[i]));
+    .attr("y2", (i) => yScale(Yh[i]))
 
   g.append("line")
     .attr("y1", (i) => yScale(Yo[i]))
@@ -330,19 +339,20 @@ function MultiCandlestick(
     .on("click", onClickDate);
 }
 
-function create_price_news_svg() {
-  return d3
+function create_price_news_svg(title) {
+  const svg = d3
     .create("svg")
     .attr("width", width)
     .attr("height", height)
     .attr("viewBox", [0, 0, width, height])
     .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+  svg.append("title").text(title);
+  return svg;
 }
 
-function plot_price(svg, coin) {
+function plot_price(svg, coin, currency) {
   return (data) => {
-    console.log("call data");
-    MultiCandlestick(svg, data, coin, (v) => v, width, height);
+    MultiCandlestick(svg, data, coin, (v) => v, width, height, currency);
   };
 }
 
@@ -356,46 +366,39 @@ function collect(total, callback) {
   };
 }
 
-let default_start_date = new Date("2022-01-01");
-let default_end_date = new Date("2022-01-31");
-let price_news_svg = create_price_news_svg();
+function price_news_plot(coins, currency = "USD", date_start = new Date("2022-01-01"), date_end = new Date("2022-01-31")) {
+  let days = Math.round((date_end-date_start)/1000/3600/24);
+  const title = `Analysis of ${coins.join(" ")}`;
+  let price_news_svg = create_price_news_svg(title);
+  let num_data = coins.length;
+  let closure = waitN(num_data, () => {
+    d3.select("#price").append(() => price_news_svg.node());
+    document.getElementById("price-news-title").innerHTML = title;
+  });
+  
+  coins.forEach(function(coin) {
+    refresh_price_plot_url(
+      `../cleaned_data/${coin}_${currency}.csv`,
+      parse_price_data,
+      range_filter(date_start, date_end),
+      collect(days, function(data) {
+        plot_price(price_news_svg, coin, currency)(data);
+        closure();
+      })
+    );
+  })
+} 
 
 function waitN(N, handler) {
   let n = N;
   return () => {
     n -= 1;
-    console.log(n);
     if (n == 0) handler();
   }
 }
 
 document.addEventListener("DOMContentLoaded", (event) => {
-  console.log(d3.select("#price"));
-  let num_data = 2;
-  let closure = waitN(num_data, () => {
-    console.log(price_news_svg.node());
-    d3.select("#price").append(() => price_news_svg.node());
-  });
-  
-  refresh_price_plot_url(
-    "../cleaned_data/BTC_USD.csv",
-    parse_price_data,
-    range_filter(default_start_date, default_end_date),
-    collect(30, function(data) {
-      plot_price(price_news_svg, "BTC")(data);
-      closure();
-    })
-  );
-
-  refresh_price_plot_url(
-    "../cleaned_data/ETH_USD.csv",
-    parse_price_data,
-    range_filter(default_start_date, default_end_date),
-    collect(30, function(data) {
-      plot_price(price_news_svg, "ETH")(data);
-      closure();
-    })
-  )
+  price_news_plot(["BTC", "ETH"], "USD")
 })
 
 
