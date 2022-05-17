@@ -1,10 +1,22 @@
-// time line
-
+// ------------------------------time line------------------------------
 let images = []
 let coins = ['ada', 'bch', 'btc', 'dash', 'etc', 'eth', 'ltc', 'trx', 'usdt', 'xmr', 'xrp', 'xtz', 'zec']
-
+let months = {
+  "Jan": 0,
+  "Feb": 1,
+  "Mar": 2,
+  "Apr": 3,
+  "May": 4,
+  "Jun": 5,
+  "Jul": 6,
+  "Aug": 7,
+  "Sep": 8,
+  "Oct": 9,
+  "Nov": 10,
+  "Dec": 11,
+};
 for (let i = 0; i < coins.length; i++) {
-  img = new Image(30, 30);
+  img = new Image(50, 50);
   img.src = './coinIcons/' + coins[i] + '.svg';
   images.push(img)
 }
@@ -65,9 +77,8 @@ var myChart = new Chart(ctx, {
   }
 });
 
-// table
+// ------------------------------table------------------------------
 var coinTable = document.getElementById('coinTable');
-
 const sum = arr => arr.reduce((a,b) => a + b, 0);
 const average = arr =>(sum(arr) / arr.length).toFixed(2);
 
@@ -93,6 +104,9 @@ let default_year = 2022
 let default_date = new Date("2022-01-01");
 
 function updateTable(coins) { 
+  const selected_date = document.getElementsByClassName('date select');
+  const year = selected_date[0].lastChild.innerHTML;
+  const month = selected_date[1].lastChild.innerHTML;
   coins.forEach(e => {
     let newRow = coinTable.insertRow(-1);
     let newType = newRow.insertCell(0);
@@ -105,21 +119,28 @@ function updateTable(coins) {
     let newT = document.createTextNode(e);
     newType.appendChild(img, newT);
     let url = '../cleaned_data/' + e + '_USD.csv';
-    console.log(url)
     d3.csv(url).then(function(data) {
       var closeP = [];
       var volumeS = [];
+      var volumeT = [];
+      var volumeF = [];
       for (i = 0; i < data.length; i++) {
         let date = new Date(data[i].date);
-        if (date.getMonth() == default_month && date.getFullYear() == default_year) {
+        if (date.getMonth() == months[month] && date.getFullYear() == parseInt(year)) {
           closeP.push(parseFloat(data[i].close));
-          volumeS.push(parseInt(data[i].volumefrom) + parseInt(data[i].volumeto));
+          volumeF.push(parseInt(data[i].volumefrom));
+          volumeT.push(parseInt(data[i].volumeto));
         }
       }
       let newP = document.createTextNode(average(closeP));
-      let newV = document.createTextNode(sum(volumeS));
+      let newV = document.createTextNode(sum(volumeT) + sum(volumeF));
+      let pos = (volumeF > volumeT) ? 'Sell' : 'Buy';
+      // console.log(pos)
+      let newPos = document.createTextNode(pos);
+      // let newPos = (volumeF > volumeT) ? 'Buy' : 'Sell';
       newPrice.appendChild(newP);
       newVolume.appendChild(newV);
+      newPosition.appendChild(newPos);
     })
   })
 }
