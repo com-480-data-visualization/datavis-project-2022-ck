@@ -4,3 +4,52 @@
     width: fit-content;
     font-weight: lighter;
 }
+
+.daily-news {
+    width: 25vw;
+    height: 35vw;
+    border: 1px dotted black;
+    padding: 10px;
+    display: flex;
+}
+
+#daily-news-title {
+    display: flex;
+    flex-direction: row;
+    /* justify-content: center; */
+    width: 100%;
+    height: fit-content;
+}
+
+#daily-news-icon {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.hide {
+    width: 0;
+    overflow-x: hidden;
+    border: none;
+    padding: 0;
+}
+
+#price {
+    height: fit-content;
+}
+
+.lighter {
+    font-weight: lighter;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.flex-center {
+    flex-direction: column;
+    justify-content: center;
+}
+
+.text-left {
+    text-align: left;
+}

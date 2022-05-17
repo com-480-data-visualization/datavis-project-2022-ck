@@ -66,6 +66,20 @@
         </div>
         <div id="price-news">
             <div id="price"></div>
+            <div id="daily-news" class="daily-news hide">
+              <div id="daily-news-title">
+                <span id="daily-news-icon">
+                  <img id="daily-news-icon-img" src="./coinIcons/btc.svg" height="40" width="40"/>
+                </span>
+                <div id="daily-news-title-text">
+                  <h4 class="lighter text-left" id="daily-news-title-text-coin">Text here</h4>
+                  <h4 class="lighter text-left" id="daily-news-title-text-date">Date here</h4>
+                </div>
+              </div>
+            </div>
+            <div id="daily-news-cover" class="daily-news show flex-center">
+              <h4 class="lighter text-center">Click on a data point to start!</h4>
+            </div>
         </div>
         <div id="comparison">
             <canvas id="timeline" height="28"></canvas>
@@ -92,5 +106,6 @@
     <script src="coinComparison/coinComparison.js"></script>
     <script src="./news_information/news_information.js"></script>
     <script src="price-news.js"></script>
+    <script src="daily-news.js"></script>
   </body>
 </html>
