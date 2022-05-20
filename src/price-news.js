@@ -291,9 +291,9 @@ function MultiCandlestick(
     .attr("y2", (i) => yScale(Yh[i]))
     .attr("data-coin", (i) => `${coin}`)
     .attr("data-date", (i) => X[i])
-    .on("mouseover", onMouseOver)
+    // .on("mouseover", onMouseOver)
     // .on("mouseout", onMouseOut)
-    .on("click", onClickDate);
+    // .on("click", onClickDate);
 
   g.append("line")
     .attr("y1", (i) => yScale(Yo[i]))
