@@ -66,7 +66,7 @@ function MultiCandlestick(
   xTicks,
   xPadding = 70,
   opacityTransitionIn = 100,
-  opacityTransitionOut = 1000,
+  opacityTransitionOut = 500,
   opacityLow = 0.3,
   legend_line_width = 50,
 ) {
@@ -171,6 +171,8 @@ function MultiCandlestick(
     .call((g) =>{
       g
       .selectAll(".tick line")
+      .classed(`yaxis-${coin}`, true)
+      .attr("opacity", 0)
       .clone()
       .attr("stroke-opacity", 0.2)
       .attr("x2", width - marginLeft - marginRight)
@@ -264,6 +266,7 @@ function MultiCandlestick(
       .attr("y", yScale(Yo[0]))
       .style("opacity", 1)
       .style("font-size", "10pt")
+      .style("font-weight", "bold")
       .style("fill", colors[1])
       .text(coin)
       .attr("data-coin", (i) => coin)
@@ -283,8 +286,14 @@ function MultiCandlestick(
   g.append("line")
     .classed(`coin-${coin}`, true)
     .style("opacity", 0)
+    .attr("stroke-width", 2)
     .attr("y1", (i) => yScale(Yl[i]))
     .attr("y2", (i) => yScale(Yh[i]))
+    .attr("data-coin", (i) => `${coin}`)
+    .attr("data-date", (i) => X[i])
+    .on("mouseover", onMouseOver)
+    .on("mouseout", onMouseOut)
+    .on("click", onClickDate);
 
   g.append("line")
     .attr("y1", (i) => yScale(Yo[i]))
@@ -307,6 +316,18 @@ function MultiCandlestick(
     .y(function (i) {
       return yScale(Yo[i]);
     });
+  svg
+    .append("path")
+    .attr("class", "line")
+    .attr("fill", "none")
+    .attr("stroke", "white")
+    .attr("stroke-width", 20)
+    .attr("opacity", 0)
+    .attr("d", line_gen(I))
+    .attr("data-coin", `${coin}`)
+    .on("mouseover", onMouseOver)
+    .on("mouseout", onMouseOut);
+
   svg
     .append("path")
     .attr("class", "line")
