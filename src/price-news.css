@@ -10,8 +10,7 @@
     height: 35vw;
     border: 1px dotted black;
     padding: 10px;
-    display: flex;
-    flex-direction: column;
+    overflow: auto;
 }
 
 #daily-news-title {
@@ -27,11 +26,17 @@
     margin-right: 10px;
 }
 
+#daily-news-cover {
+    display: flex;
+    flex-direction: column;
+}
+
 .hide {
     width: 0;
     overflow-x: hidden;
     border: none;
     padding: 0;
+    opacity: 0;
 }
 
 #price {
@@ -79,4 +84,8 @@
 .date-switch {
     font-size: 20pt;
     margin-right: 10px;
+}
+
+#news-list {
+    height: 1000px;
 }
