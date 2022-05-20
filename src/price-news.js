@@ -292,7 +292,7 @@ function MultiCandlestick(
     .attr("data-coin", (i) => `${coin}`)
     .attr("data-date", (i) => X[i])
     .on("mouseover", onMouseOver)
-    .on("mouseout", onMouseOut)
+    // .on("mouseout", onMouseOut)
     .on("click", onClickDate);
 
   g.append("line")
@@ -305,7 +305,7 @@ function MultiCandlestick(
     .style("opacity", 0)
     .classed(`coin-${coin}`, true)
     .on("mouseover", onMouseOver)
-    .on("mouseout", onMouseOut)
+    // .on("mouseout", onMouseOut)
     .on("click", onClickDate);
 
   const line_gen = d3
@@ -321,7 +321,7 @@ function MultiCandlestick(
     .attr("class", "line")
     .attr("fill", "none")
     .attr("stroke", "white")
-    .attr("stroke-width", 20)
+    .attr("stroke-width", 10)
     .attr("opacity", 0)
     .attr("d", line_gen(I))
     .attr("data-coin", `${coin}`)
@@ -339,7 +339,7 @@ function MultiCandlestick(
     .attr("d", line_gen(I))
     .attr("data-coin", `${coin}`)
     .on("mouseover", onMouseOver)
-    .on("mouseout", onMouseOut);
+    // .on("mouseout", onMouseOut);
 
   // circles
   svg
