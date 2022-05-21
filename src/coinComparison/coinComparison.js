@@ -1,6 +1,6 @@
 // ------------------------------time line------------------------------
 let images = []
-let coins = ['ada', 'bch', 'btc', 'dash', 'etc', 'eth', 'ltc', 'trx', 'usdt', 'xlm', 'xrp', 'xtz', 'zec']
+let coins = ['ada', 'bch', 'btc', 'dash', 'etc', 'eth', 'ltc', 'trx', 'usdt', 'xrp', 'xtz', 'zec']
 let months = {
   "Jan": 0,
   "Feb": 1,
@@ -21,7 +21,7 @@ for (let i = 0; i < coins.length; i++) {
   images.push(img)
 }
 
-var ctx = document.getElementById('timeline').getContext('2d');
+var ctx = document.getElementById('timelinecanvas').getContext('2d');
 var myChart = new Chart(ctx, {
   type: 'line',
   data: {
@@ -36,7 +36,6 @@ var myChart = new Chart(ctx, {
         { x: "2020-04-12", y: 0 }, // itc-not found
         { x: "2018-07-25", y: 0 }, // trx
         { x: "2014-10-06", y: 0 }, // usdt
-        { x: "2014-07-31", y: 0 }, // xlm
         { x: "2020-09-24", y: 0 }, // xrp
         { x: "2018-06-30", y: 0 }, // xtz
         { x: "2016-10", y: 0 }, // zec - Zcash was first mined in late October 2016
@@ -78,7 +77,6 @@ var myChart = new Chart(ctx, {
 });
 
 // ------------------------------table------------------------------
-var volumes = []
 var coinTable = document.getElementById('coinTable');
 const sum = arr => arr.reduce((a,b) => a + b, 0);
 const average = arr =>(sum(arr) / arr.length).toFixed(2);
@@ -91,7 +89,7 @@ document.getElementById('selectionButton').onclick = function() {
   };
   deleteTBody();
   updateTable(selectedCoins);
-  updateCircles();
+  // updateCircles();
 }
 
 function deleteTBody() {
@@ -106,7 +104,51 @@ function updateTable(coins) {
   const selected_date = document.getElementsByClassName('date select');
   const year = selected_date[0].lastChild.innerHTML;
   const month = selected_date[1].lastChild.innerHTML;
-  coins.forEach(e => {
+  let counter = collect(coins.length, (v) => {
+    let vol = {}
+    // console.log(v.length);
+    // texts = v;
+    for (let i = 0; i < v.length; i++) {
+      values = Object.values(v[i]);
+      vol[values[0]] = values[1];
+      // coin, volume = v[i].split
+      // var vol = v[i][1];
+      // texts.push(vol);
+    }
+    var h = 595
+    var w = 595
+    var xspa = 30
+    var svg = d3.select('body').append('svg').attr('width', w).attr('height', h).attr('class','radSol');
+    // look at chp 7 of vizualizing data
+    
+    var circs = [0,2,4,6]
+    var texts = Object.values(vol)
+    
+    var rscale = d3.scale.linear()
+    
+    svg.selectAll('.circles').data(circs)
+    .enter()
+    .append('circle')
+    .attr('r', function(d){
+      return d
+    })
+    .attr('class','circles')
+    .attr('cx', function(d,i) { return 20+40 *i; })
+    .attr('cy', 50)
+    
+    
+    svg.selectAll('text')
+    .data(circs).enter().append('text')
+    .text(function(d,i) { return texts[i]; })
+    .attr('font-size', 10)
+    .attr('fill', 'black')
+    .attr('y', 150)
+    .attr('x', function(d,i){
+      return 20 +40*i;
+      })
+    .attr('text-anchor', 'middle')
+  });
+  coins.forEach(async e => {
     let newRow = coinTable.insertRow(-1);
     let newType = newRow.insertCell(0);
     let newPrice = newRow.insertCell(1);
@@ -118,7 +160,7 @@ function updateTable(coins) {
     let newT = document.createTextNode(e);
     newType.append(img, newT);
     let url = '../cleaned_data/' + e + '_USD.csv';
-    d3.csv(url).then(function(data) {
+    var coin_data = function(data) {
       var closeP = [];
       var volumeT = [];
       var volumeF = [];
@@ -130,69 +172,33 @@ function updateTable(coins) {
           volumeT.push(parseInt(data[i].volumeto));
         }
       }
-      console.log(closeP.length)
       let newP = document.createTextNode(average(closeP));
       let volumeS = sum(volumeT) + sum(volumeF);
       let newV = document.createTextNode(volumeS);
-      let pos = (volumeF > volumeT) ? 'Sell' : 'Buy';
-      // console.log(pos)
+      let pos = 'N/A';
+      if (volumeS !== 0) {
+        pos = (volumeF > volumeT) ? 'Sell' : 'Buy';
+      }
       let newPos = document.createTextNode(pos);
-      // let newPos = (volumeF > volumeT) ? 'Buy' : 'Sell';
       newPrice.appendChild(newP);
       newVolume.appendChild(newV);
       newPosition.appendChild(newPos);
-      volumes.push(volumeS);
-    })
+      counter([e, volumeS]);
+    }
+    await d3.csv(url).then(coin_data);
   })
+
 }
-
-
 // ------------------------------circles------------------------------
-function updateCircles() {
+// function updateCircles() {
   // console.log(Object.values(volumes));
-  console.log(volumes.length);
-  for (let i = 0; i < volumes.length; i++) {
-    console.log(volumes[i])
-  }
+  // console.log(volumes.length);
+  // for (let i = 0; i < volumes.length; i++) {
+  //   console.log(volumes[i])
+  // }
 //   const table = document.getElementById('coinTable');
 //   for (let i in table.rows) {
 //     let row = table.rows[i];
 //     console.log(row.cells[2]);
 //  }
-}
-var h = 595
-
-var w = 595
-
-var xspa = 30
-
-
-var svg = d3.select('body').append('svg').attr('width', w).attr('height', h).attr('class','radSol');
-// look at chp 7 of vizualizing data
-
-var circs = [0,2,4,6,8,10,12,14,16,18,20]
-var texts = [0,10,20,30,40,50,60,70,80,90,100]
-
-var rscale = d3.scale.linear()
-
-svg.selectAll('.circles').data(circs)
-.enter()
-.append('circle')
-.attr('r', function(d){
-  return d
-})
-.attr('class','circles')
-.attr('cx', function(d,i) { return 20+ 40 *i; })
-.attr('cy', 50)
-
-
-svg.selectAll('text')
-.data(circs).enter().append('text')
-.text(function(d,i) { return texts[i]; })
-.attr('font-size', 10)
-.attr('fill', 'black')
-.attr('y', 150)
-.attr('x', function(d,i){
-  return 20 +40*i;
-  })
-.attr('text-anchor', 'middle')
+// }
