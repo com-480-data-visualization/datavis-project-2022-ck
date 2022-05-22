@@ -1,0 +1,91 @@
+#price-news-title {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    font-weight: lighter;
+}
+
+.daily-news {
+    width: 25vw;
+    height: 35vw;
+    border: 1px dotted black;
+    padding: 10px;
+    overflow: auto;
+}
+
+#daily-news-title {
+    display: flex;
+    flex-direction: row;
+    /* justify-content: center; */
+    width: 100%;
+    height: fit-content;
+}
+
+#daily-news-icon {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+#daily-news-cover {
+    display: flex;
+    flex-direction: column;
+}
+
+.hide {
+    width: 0;
+    overflow-x: hidden;
+    border: none;
+    padding: 0;
+    opacity: 0;
+}
+
+#price {
+    height: fit-content;
+}
+
+.lighter {
+    font-weight: lighter;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.flex-center {
+    flex-direction: column;
+    justify-content: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.width-50 {
+    width: 50%;
+}
+
+.height-12 {
+    height: 12vw;
+}
+
+.date-div {
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    width: fit-content;
+    margin-left: 20px;
+}
+
+.date-switch {
+    font-size: 20pt;
+    margin-right: 10px;
+}
+
+#news-list {
+    height: 1000px;
+}

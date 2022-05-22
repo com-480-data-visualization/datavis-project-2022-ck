@@ -61,18 +61,48 @@
               <div id="figure"></div>
             </div>
         </div>
+        <div id="price-news-divider">
+          <h2 id="price-news-title"></h2>
+        </div>
         <div id="price-news">
             <div id="price"></div>
+            <div id="daily-news" class="daily-news hide">
+              <div id="daily-news-title">
+                <span id="daily-news-icon">
+                  <img id="daily-news-icon-img" src="./coinIcons/btc.svg" height="40" width="40"/>
+                </span>
+                <div id="daily-news-title-text">
+                  <h4 class="lighter text-left" id="daily-news-title-text-coin">Text here</h4>
+                  <h4 class="lighter text-left" id="daily-news-title-text-date">Date here</h4>
+                </div>
+                <div class="date-div">
+                  <div id="prev-date" class="date-switch">⬅️</div>
+                  <div id="next-date" class="date-switch">➡️</div>
+                </div>
+              </div>
+              <hr style="width: 100%"/>
+              <div class="flex-row height-12">
+                <div class="width-50">word cloud</div>
+                <div class="width-50">sentiment score</div>
+              </div>
+              <hr style="width: 100%"/>
+              <div id="news-list">
+                News list
+              </div>
+            </div>
+            <div id="daily-news-cover" class="daily-news show flex-center">
+              <h4 class="lighter text-center" style="font-size: 16pt">Click on a data point to start!</h4>
+            </div>
         </div>
         <div id="comparison">
             <canvas id="timeline" height="28"></canvas>
             <table id="coinTable">
                 <tr>
                     <th onclick="sortTable(0)">Coin type</th>
-                    <th onclick="sortTable(1)">Price</th>
+                    <th onclick="sortTable(1)">Price (in $)</th>
                     <th onclick="sortTable(1)">Volume</th>
-                    <th onclick="sortTable(0)">Ranking</th>
                     <th onclick="sortTable(1)">Position</th>
+                    <th onclick="sortTable(0)">Ranking</th>
                     <!-- <th onclick="sortTable(1)">Key words</th> -->
                 </tr>
         </div>
@@ -89,5 +119,6 @@
     <script src="coinComparison/coinComparison.js"></script>
     <script src="./news_information/news_information.js"></script>
     <script src="price-news.js"></script>
+    <script src="daily-news.js"></script>
   </body>
 </html>
