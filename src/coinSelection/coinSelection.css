@@ -216,3 +216,12 @@ button {
   color: whitesmoke;
   font-weight: bolder;
 }
+
+.disabled {
+  color: rgb(190, 190, 190);
+  pointer-events: none;
+}
+
+.disabled > img {
+  opacity: 50%;
+}
