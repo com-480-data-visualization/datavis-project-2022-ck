@@ -1,8 +1,36 @@
-function refresh_news_information(url, conversor, filter, handler) {
-  d3.csv(url, (data) => {
-    let data0 = conversor(data);
-    if (filter(data0)) handler(data0);
+function refresh_news_information(
+  start_date,
+  end_date,
+  getUrl,
+  conversor,
+  filter,
+  handler
+) {
+  let cnt = 0;
+  let data1 = [];
+
+  let urls = getUrl(start_date, end_date);
+  urls.forEach((url) => {
+    d3.csv(url, (data) => {
+      let data0 = conversor(data);
+      if (filter(start_date, end_date)(data0)) return data0;
+    }).then(function (data) {
+      cnt++;
+      data.forEach((d) => data1.push(d));
+      if (cnt == urls.length) handler(data1);
+    });
   });
+}
+
+function url_contain(start_date, end_data) {
+  let start_year = start_date.getFullYear();
+  let end_year = end_date.getFullYear();
+
+  let urls = [];
+  for (let year = start_year; year <= end_year; year++) {
+    urls.push(`../cleaned_data/news/news_${year}.csv`);
+  }
+  return urls;
 }
 
 function parse_news_data(data) {
@@ -31,7 +59,7 @@ function range_filter(start_date, end_date) {
   };
 }
 
-let cloud_width = 600,
+let cloud_width = 1000,
   cloud_height = 300,
   max_font_size = 40;
 
@@ -129,22 +157,14 @@ function news_info(id) {
   };
 }
 
-function collect(total, callback) {
-  let count = 0;
-  let data = [];
-  return (elem) => {
-    data.push(elem);
-    count += 1;
-    if (count == total) callback(data);
-  };
-}
-
-let start_date = new Date("2022-01-01");
-let end_date = new Date("2022-01-31");
+let start_date = new Date("2021-12-31");
+let end_date = new Date("2022-01-02");
 
 refresh_news_information(
-  "../cleaned_data/news/news_2022.csv",
+  start_date,
+  end_date,
+  url_contain,
   parse_news_data,
-  range_filter(start_date, end_date),
-  collect(10, news_info("today"))
+  range_filter,
+  news_info("today")
 );
