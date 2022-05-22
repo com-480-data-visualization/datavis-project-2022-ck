@@ -69,19 +69,12 @@ class SelectionTab {
     let yearDiv = document.getElementById("years");
     this.showYears(yearDiv);
     this.showMonths(monthDiv);
-
-    let submitBtn = document.getElementById("selectionButton");
-    submitBtn.addEventListener("click", this.selectBtn);
   }
 
   selectBtn() {
-    if (this.selectedCoins.length == 0) {
-      alert("Select at least one coin");
-    } else {
-      this.tabVisible();
-      this.showSelectedCoins();
-      this.showSelectedDate();
-    }
+    this.tabVisible();
+    this.showSelectedCoins();
+    this.showSelectedDate();
   }
   getSelectedOption(sel) {
     var opts = [];
