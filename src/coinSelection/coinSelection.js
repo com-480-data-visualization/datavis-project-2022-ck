@@ -8,7 +8,6 @@ class SelectionTab {
       "ADA",
       "BCH",
       "USDT",
-      "XMR",
       "TRX",
       "ETC",
       "DASH",
@@ -23,7 +22,6 @@ class SelectionTab {
       "Cardano",
       "Bitcoin Cash",
       "Tether",
-      "Monero",
       "Tron",
       "Ethereum Classic",
       "Dash",
@@ -45,7 +43,7 @@ class SelectionTab {
       "Nov",
       "Dec",
     ];
-    this.selectedMonth = 4;
+    this.selectedMonth = 3;
     this.selectedYear = 2022;
     this.selectedCoins = [];
 
@@ -104,8 +102,11 @@ class SelectionTab {
   disableCheck(disable, sel) {
     for (var i = 0, len = sel.children.length; i < len; i++) {
       var opt = sel.children[i];
-      if (!opt.classList.contains("select"))
+      if (!opt.classList.contains("select")) {
         opt.getElementsByTagName("input")[0].disabled = disable;
+        if (disable) opt.classList.add("disabled");
+        else opt.classList.remove("disabled");
+      }
     }
   }
   selectCoins() {
@@ -181,6 +182,10 @@ class SelectionTab {
 
         div.appendChild(month);
       });
+
+    if (this.selectedYear == 2022) {
+      this.disableMonth(true);
+    }
   }
   showYears(div) {
     Array(10)
@@ -199,6 +204,17 @@ class SelectionTab {
         div.appendChild(year);
       });
   }
+  disableMonth(disable) {
+    let sel = document.getElementById("months");
+    for (var i = 0; i < sel.children.length; i++) {
+      var opt = sel.children[i];
+      if (disable && i > 3) {
+        opt.classList.add("disabled");
+      } else {
+        opt.classList.remove("disabled");
+      }
+    }
+  }
   selectDate(type, val) {
     var sel;
     if (type == "month") {
@@ -207,6 +223,11 @@ class SelectionTab {
     } else {
       sel = document.getElementById("years");
       this.selectedYear = val + 2013;
+      if (this.selectedYear == 2022) {
+        this.disableMonth(true);
+      } else {
+        this.disableMonth(false);
+      }
     }
     var opts = [];
     for (var i = 0; i < sel.children.length; i++) {
