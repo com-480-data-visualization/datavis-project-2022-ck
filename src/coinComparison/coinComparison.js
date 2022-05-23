@@ -180,8 +180,8 @@ function updateTable(coins) {
         pos = (volumeF > volumeT) ? 'Sell' : 'Buy';
       }
       let newPos = document.createTextNode(pos);
-      newPrice.appendChild(newP);
-      newVolume.appendChild(newV);
+      newPrice.append('$', newP);
+      newVolume.append('$', newV);
       newPosition.appendChild(newPos);
       counter([e, volumeS]);
     }
