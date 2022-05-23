@@ -118,36 +118,49 @@ function updateTable(coins) {
     var h = 595
     var w = 595
     var xspa = 30
-    var svg = d3.select('body').append('svg').attr('width', w).attr('height', h).attr('class','radSol');
-    // look at chp 7 of vizualizing data
-    
-    var circs = [0,2,4,6]
-    var texts = Object.values(vol)
-    
+
+    var circleSvg = d3.select('#volumeCircle');
+    circleSvg.append('svg').attr("id", "circleSvg").attr('width', w).attr('height', h).attr('class','radSol');
+
+    var volumes = Object.values(vol)
+    var circs = volumes.map(v => v * 1e-8);
+    console.log(circs);
+
     var rscale = d3.scale.linear()
-    
-    svg.selectAll('.circles').data(circs)
+
+    const data = [ { "x": 50, "y": 80}, { "x": 1000, "y": 80}];
+    const lineGenerator = d3.line()
+    .x(d => d.x)
+    .y(d => d.y);
+
+    circleSvg.append("path")
+    .attr("d", lineGenerator(data))
+    .attr("stroke", "blue")
+    .attr("stroke-width", 12)
+    .attr("fill", "none");
+
+    circleSvg.selectAll('.circles').data(circs)
     .enter()
     .append('circle')
     .attr('r', function(d){
       return d
     })
     .attr('class','circles')
-    .attr('cx', function(d,i) { return 20+40 *i; })
-    .attr('cy', 50)
+    .attr('cx', function(d, i) { return 80+200*i; })
+    .attr('cy', 100)
+    .attr('fill', 'grey')
     
     
-    svg.selectAll('text')
+    circleSvg.selectAll('text')
     .data(circs).enter().append('text')
-    .text(function(d,i) { return texts[i]; })
+    .text(function(d,i) { return volumes[i]; })
     .attr('font-size', 10)
     .attr('fill', 'black')
-    .attr('y', 150)
-    .attr('x', function(d,i){
-      return 20 +40*i;
-      })
+    .attr('y', 100)
+    .attr('x', function(d, i){ return 80+200*i; })
     .attr('text-anchor', 'middle')
   });
+  d3.select("#circleSvg").remove();
   coins.forEach(async e => {
     let newRow = coinTable.insertRow(-1);
     let newType = newRow.insertCell(0);
