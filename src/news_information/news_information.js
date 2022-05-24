@@ -22,7 +22,7 @@ function refresh_news_information(
   });
 }
 
-function url_contain(start_date, end_data) {
+function url_contain(start_date, end_date) {
   let start_year = start_date.getFullYear();
   let end_year = end_date.getFullYear();
 
@@ -43,6 +43,7 @@ function parse_news_data(data) {
     imageurl: data.imageurl,
     categories: data.categories,
     keywords: data.keywords,
+    sentiment: data.sentiment,
   };
 }
 
@@ -67,9 +68,13 @@ function wordCloud(selector, words) {
   var fill = d3.scale.category20();
 
   //Construct the word cloud's SVG element
+  d3.select("#" + selector)
+    .selectAll("svg")
+    .selectAll("g")
+    .remove();
   var svg = d3
     .select("#" + selector)
-    .append("svg")
+    .selectAll("svg")
     .attr("width", cloud_width)
     .attr("height", cloud_height)
     .append("g");
@@ -150,21 +155,3 @@ function freqDict(data) {
   });
   return words;
 }
-
-function news_info(id) {
-  return (data) => {
-    wordCloud(id, freqDict(data));
-  };
-}
-
-let start_date = new Date("2021-12-31");
-let end_date = new Date("2022-01-02");
-
-refresh_news_information(
-  start_date,
-  end_date,
-  url_contain,
-  parse_news_data,
-  range_filter,
-  news_info("today")
-);

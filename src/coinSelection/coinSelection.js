@@ -1,19 +1,6 @@
 class SelectionTab {
   constructor() {
-    this.coins = [
-      "BTC",
-      "ETH",
-      "XRP",
-      "LTC",
-      "ADA",
-      "BCH",
-      "USDT",
-      "TRX",
-      "ETC",
-      "DASH",
-      "ZEC",
-      "XTZ",
-    ];
+    this.coins = ["BTC", "ETH", "XRP", "LTC", "ADA", "BCH", "USDT", "TRX"];
     this.coinsDescription = [
       "Bitcoin",
       "Ethereum",
@@ -23,10 +10,6 @@ class SelectionTab {
       "Bitcoin Cash",
       "Tether",
       "Tron",
-      "Ethereum Classic",
-      "Dash",
-      "Zcash",
-      "Tezos",
     ];
 
     this.months = [
@@ -43,9 +26,9 @@ class SelectionTab {
       "Nov",
       "Dec",
     ];
-    this.selectedMonth = 3;
+    this.selectedMonth = 4;
     this.selectedYear = 2022;
-    this.selectedCoins = [];
+    this.selectedCoins = ["BTC", "ETH", "XRP"];
 
     this.showSelectedCoins = this.showSelectedCoins.bind(this);
     this.selectCoins = this.selectCoins.bind(this);
@@ -69,6 +52,9 @@ class SelectionTab {
     let yearDiv = document.getElementById("years");
     this.showYears(yearDiv);
     this.showMonths(monthDiv);
+
+    this.showSelectedCoins();
+    this.showSelectedDate();
   }
 
   selectBtn() {
@@ -129,6 +115,9 @@ class SelectionTab {
       const input = document.createElement("input");
       input.type = "checkbox";
       input.id = value;
+      if (this.selectedCoins.includes(value)) {
+        input.checked = true;
+      }
       label.appendChild(input);
 
       const img = document.createElement("img");
@@ -154,8 +143,10 @@ class SelectionTab {
   tabVisible() {
     let tab = document.getElementById("tab");
     if (tab.className == "m-fadeIn") {
+      tab.classList.remove("m-fadeIn");
       tab.classList.toggle("m-fadeOut");
     } else {
+      tab.classList.remove("m-fadeOut");
       tab.classList.toggle("m-fadeIn");
     }
   }
