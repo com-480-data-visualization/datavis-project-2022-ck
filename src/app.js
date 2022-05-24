@@ -26,7 +26,6 @@ function getDateRange(year, month) {
 }
 
 whenDocumentLoaded(() => {
-  // Create instance for classes
   var st = new SelectionTab();
 
   let selectBtn = document.getElementById("selectionButton");
@@ -45,7 +44,13 @@ whenDocumentLoaded(() => {
       let dates = getDateRange(year, month);
       let start_date = dates[0];
       let end_date = dates[1];
-      //Implement the function
+      // ------------- Implement the function ------------------------
+
+      // Coin Comparison
+      deleteTBody();
+      updateTable(coins);
+
+      // Text Visualization
       var tv = new TextVisualization("news", coins, start_date, end_date);
 
       function news_info(id) {

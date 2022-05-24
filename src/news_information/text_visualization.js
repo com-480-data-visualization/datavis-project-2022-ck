@@ -74,8 +74,8 @@ class TextVisualization {
   }
 
   drawText(data) {
-    console.log(data);
     let keywords = [];
+    if (data == null) return;
     data.forEach((val) => {
       let keywords = val.keywords;
     });
