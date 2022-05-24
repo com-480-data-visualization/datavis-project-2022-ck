@@ -1,20 +1,6 @@
 class SelectionTab {
   constructor() {
-    this.coins = [
-      "BTC",
-      "ETH",
-      "XRP",
-      "LTC",
-      "ADA",
-      "BCH",
-      "USDT",
-      "XMR",
-      "TRX",
-      "ETC",
-      "DASH",
-      "ZEC",
-      "XTZ",
-    ];
+    this.coins = ["BTC", "ETH", "XRP", "LTC", "ADA", "BCH", "USDT", "TRX"];
     this.coinsDescription = [
       "Bitcoin",
       "Ethereum",
@@ -23,12 +9,7 @@ class SelectionTab {
       "Cardano",
       "Bitcoin Cash",
       "Tether",
-      "Monero",
       "Tron",
-      "Ethereum Classic",
-      "Dash",
-      "Zcash",
-      "Tezos",
     ];
 
     this.months = [
@@ -47,7 +28,7 @@ class SelectionTab {
     ];
     this.selectedMonth = 4;
     this.selectedYear = 2022;
-    this.selectedCoins = [];
+    this.selectedCoins = ["BTC", "ETH", "XRP"];
 
     this.showSelectedCoins = this.showSelectedCoins.bind(this);
     this.selectCoins = this.selectCoins.bind(this);
@@ -72,18 +53,14 @@ class SelectionTab {
     this.showYears(yearDiv);
     this.showMonths(monthDiv);
 
-    let submitBtn = document.getElementById("selectionButton");
-    submitBtn.addEventListener("click", this.selectBtn);
+    this.showSelectedCoins();
+    this.showSelectedDate();
   }
 
   selectBtn() {
-    if (this.selectedCoins.length == 0) {
-      alert("Select at least one coin");
-    } else {
-      this.tabVisible();
-      this.showSelectedCoins();
-      this.showSelectedDate();
-    }
+    this.tabVisible();
+    this.showSelectedCoins();
+    this.showSelectedDate();
   }
   getSelectedOption(sel) {
     var opts = [];
@@ -104,8 +81,11 @@ class SelectionTab {
   disableCheck(disable, sel) {
     for (var i = 0, len = sel.children.length; i < len; i++) {
       var opt = sel.children[i];
-      if (!opt.classList.contains("select"))
+      if (!opt.classList.contains("select")) {
         opt.getElementsByTagName("input")[0].disabled = disable;
+        if (disable) opt.classList.add("disabled");
+        else opt.classList.remove("disabled");
+      }
     }
   }
   selectCoins() {
@@ -135,6 +115,9 @@ class SelectionTab {
       const input = document.createElement("input");
       input.type = "checkbox";
       input.id = value;
+      if (this.selectedCoins.includes(value)) {
+        input.checked = true;
+      }
       label.appendChild(input);
 
       const img = document.createElement("img");
@@ -160,8 +143,10 @@ class SelectionTab {
   tabVisible() {
     let tab = document.getElementById("tab");
     if (tab.className == "m-fadeIn") {
+      tab.classList.remove("m-fadeIn");
       tab.classList.toggle("m-fadeOut");
     } else {
+      tab.classList.remove("m-fadeOut");
       tab.classList.toggle("m-fadeIn");
     }
   }
@@ -181,6 +166,10 @@ class SelectionTab {
 
         div.appendChild(month);
       });
+
+    if (this.selectedYear == 2022) {
+      this.disableMonth(true);
+    }
   }
   showYears(div) {
     Array(10)
@@ -199,6 +188,17 @@ class SelectionTab {
         div.appendChild(year);
       });
   }
+  disableMonth(disable) {
+    let sel = document.getElementById("months");
+    for (var i = 0; i < sel.children.length; i++) {
+      var opt = sel.children[i];
+      if (disable && i > 3) {
+        opt.classList.add("disabled");
+      } else {
+        opt.classList.remove("disabled");
+      }
+    }
+  }
   selectDate(type, val) {
     var sel;
     if (type == "month") {
@@ -207,6 +207,11 @@ class SelectionTab {
     } else {
       sel = document.getElementById("years");
       this.selectedYear = val + 2013;
+      if (this.selectedYear == 2022) {
+        this.disableMonth(true);
+      } else {
+        this.disableMonth(false);
+      }
     }
     var opts = [];
     for (var i = 0; i < sel.children.length; i++) {
