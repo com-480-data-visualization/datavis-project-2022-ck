@@ -25,6 +25,7 @@ class TextVisualization {
       .domain([0, this.coins.length])
       .range([0, 2 * Math.PI]);
 
+    this.showTextVisualization = this.showTextVisualization.bind(this);
     this.initialize();
   }
 
@@ -79,5 +80,16 @@ class TextVisualization {
     data.forEach((val) => {
       let keywords = val.keywords;
     });
+  }
+
+  showTextVisualization(){
+    refresh_news_information(
+      this.start_date,
+      this.end_date,
+      url_contain,
+      parse_news_data,
+      range_filter,
+      this.drawText
+    );
   }
 }
