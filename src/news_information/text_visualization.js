@@ -77,7 +77,7 @@ class TextVisualization {
     console.log(data);
     let keywords = [];
     data.forEach((val) => {
-        let keywords = val.keywords.
-    })
+      let keywords = val.keywords;
+    });
   }
 }
