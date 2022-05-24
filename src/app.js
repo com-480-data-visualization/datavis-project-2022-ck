@@ -45,29 +45,17 @@ whenDocumentLoaded(() => {
       let start_date = dates[0];
       let end_date = dates[1];
       // ------------- Implement the function ------------------------
-
+      // Text Visualization
+      var tv = new TextVisualization("news", coins, start_date, end_date);
+      tv.showTextVisualization();
+      
       // Coin Comparison
       deleteTBody();
       updateTable(coins);
 
-      // Text Visualization
-      var tv = new TextVisualization("news", coins, start_date, end_date);
-
-      function news_info(id) {
-        return (data) => {
-          tv.drawText(freqDict(data));
-          wordCloud(id, freqDict(data));
-        };
-      }
-
-      refresh_news_information(
-        start_date,
-        end_date,
-        url_contain,
-        parse_news_data,
-        range_filter,
-        news_info("flex")
-      );
+      // Price and News
+      price_news_plot(coins, "USD");
+      
     }
   }
 
