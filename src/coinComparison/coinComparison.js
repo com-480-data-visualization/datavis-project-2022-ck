@@ -174,7 +174,7 @@ function updateTable(coins) {
     let newT = document.createTextNode(e);
     newType.append(img, newT);
 
-    let url = '../cleaned_data/' + e + '_USD.csv';
+    let url = '../cleaned_data/coin/' + e + '_USD.csv';
     var coin_data = function(data) {
       var closeP = [];
       var volumeT = [];

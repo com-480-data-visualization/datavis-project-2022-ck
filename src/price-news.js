@@ -401,7 +401,7 @@ function price_news_plot(coins, currency = "USD", date_start = new Date("2022-01
   
   coins.forEach(function(coin) {
     refresh_price_plot_url(
-      `../cleaned_data/${coin}_${currency}.csv`,
+      `../cleaned_data/coin/${coin}_${currency}.csv`,
       parse_price_data,
       range_filter(date_start, date_end),
       collect(days, function(data) {
