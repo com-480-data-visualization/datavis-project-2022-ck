@@ -51,9 +51,10 @@ function show_daily_news(coin, date) {
     refresh_news_information(
         newDate,
         nextDate,
+        [coin],
         url_contain,
         parse_news_data,
-        range_filter,
-        news_info("word-cloud", max_word = 30)
+        range_news_filter,
+        news_info("word-cloud")
       );
 }
