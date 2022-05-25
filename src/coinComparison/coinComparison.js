@@ -182,6 +182,7 @@ function updateTable(coins) {
       for (i = 0; i < data.length; i++) {
         let date = new Date(data[i].date);
         if (date.getMonth() == months[month] && date.getFullYear() == parseInt(year)) {
+          
           closeP.push(parseFloat(data[i].close));
           volumeF.push(parseInt(data[i].volumefrom));
           volumeT.push(parseInt(data[i].volumeto));
