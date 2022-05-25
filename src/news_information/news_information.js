@@ -1,6 +1,7 @@
 function refresh_news_information(
   start_date,
   end_date,
+  coins,
   getUrl,
   conversor,
   filter,
@@ -13,7 +14,7 @@ function refresh_news_information(
   urls.forEach((url) => {
     d3.csv(url, (data) => {
       let data0 = conversor(data);
-      if (filter(start_date, end_date)(data0)) return data0;
+      if (filter(start_date, end_date, coins)(data0)) return data0;
     }).then(function (data) {
       cnt++;
       data.forEach((d) => data1.push(d));
@@ -53,10 +54,18 @@ function parse_news_data(data) {
  * @returns (data) => filter(data)
  **/
 
-function range_filter(start_date, end_date) {
+function range_news_filter(start_date, end_date, coins) {
   return (data) => {
     const date = new Date(data.date);
-    return date >= start_date && date < end_date;
+    const categories = data.categories.split("|");
+    var coin_include = false;
+    for(var i = 0; i < coins.length; i++){
+      if (categories.includes(coins[i])) {
+        coin_include = true;
+        break;
+      }
+    }
+    return date >= start_date && date < end_date && coin_include;
   };
 }
 
@@ -146,8 +155,9 @@ function wordCloud(selector, words, max_word) {
 
 // reference: http://bl.ocks.org/joews/9697914
 
-function freqDict(data, max_num = 30) {
+function freqDict(data) {
   var counter = {};
+
   data.forEach((value) => {
     let keywords = value.keywords.replace(/‘()’’',[!\.,:;\?]/g, "").split(" ");
     
@@ -172,7 +182,7 @@ function freqDict(data, max_num = 30) {
   return words;
 }
 
-function news_info(id, max_word) {
+function news_info(id) {
   return (data) => {
     wordCloud(id, data);
   };
