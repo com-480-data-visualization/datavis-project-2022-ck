@@ -1,18 +1,18 @@
 const coin_color = {
-  BTC: "#E9983D",
-  ETH: "#687DE3",
-  XRP: "#24292E",
-  LTC: "#BEBBBB",
   ADA: "#FFFFFF",
   BCH: "#98C261",
-  USDT: "#509F7D",
+  BTC: "#E9983D",
+  ETH: "#687DE3",
+  LTC: "#BEBBBB",
   TRX: "#DB2F33",
+  USDT: "#509F7D",
+  XRP: "#24292E",
 };
 
 const sum = arr => arr.reduce((a,b) => a + b, 0);
 const average = arr =>(sum(arr) / arr.length).toFixed(2);
 
-// ------------------------------time line------------------------------
+// ---------------------------initial release timeline---------------------------
 let images = [];
 const months = {
   "Jan": 0,
@@ -41,14 +41,14 @@ var myChart = new Chart(ctx, {
   data: {
     datasets: [{
       data: [
-        { x: "2017-09-27", y: 0 },
-        { x: "2017-08-01", y: 0 },
-        { x: "2009-01-03", y: 0 },
+        { x: "2017-09-27", y: 0 }, // ada
+        { x: "2017-08-01", y: 0 }, // bch
+        { x: "2009-01-03", y: 0 }, // btc
         { x: "2016-07-20", y: 0 }, // eth
-        { x: "2020-04-12", y: 0 }, // itc-not found
+        { x: "2011-10-07", y: 0 }, // ltc
         { x: "2018-07-25", y: 0 }, // trx
         { x: "2014-10-06", y: 0 }, // usdt
-        { x: "2020-09-24", y: 0 }, // xrp
+        { x: "2012-06-01", y: 0 }, // xrp
       ],
       pointStyle: images,
       borderWidth: 1
@@ -69,15 +69,14 @@ var myChart = new Chart(ctx, {
       }],
       xAxes: [{
         ticks: {
-          autoSkip:true,
-          maxTicksLimit: 20,
-          maxRotation: 60
+          maxTicksLimit: 30,
+          maxRotation: 35
         },
         type: 'time',
-        time: {
-          // unit: 'month',
-          // tooltipFormat: 'MMM'
-        },
+        // time: {
+        //   unit: 'month',
+        //   tooltipFormat: 'MMM'
+        // },
         gridLines: {
           display: false
         }
@@ -100,7 +99,7 @@ function updateTable(coins) {
   const year = selected_date[0].lastChild.innerHTML;
   const month = selected_date[1].lastChild.innerHTML;
   
-  let counter = collect(coins.length, (v) => updateCircles(v))
+  let counter = collect(coins.length, (v) => updateCircles(v, year, month))
   coins.forEach(async e => {
     let newRow = coinTable.insertRow(-1);
     let newType = newRow.insertCell(0);
@@ -141,9 +140,9 @@ function updateTable(coins) {
     await d3.csv(url).then(coin_data);
   })
 }
-
+// TO DO - clear circleSvg, add coin name to arcSvg, align cell text to center
 // ------------------------------circles------------------------------
-function updateCircles(v) {
+function updateCircles(v, year, month) {
   const width = 500;
   const start = 210;
   const interval = 300;
@@ -187,7 +186,7 @@ function updateCircles(v) {
   circleSvg.selectAll('#volume_texts')
   .data(v).enter().append('text')
   .text(function(d, _) {
-    return '$'+parseFloat(d[1]*1e-6).toFixed(2)+'M';
+    return '$'+parseFloat(d[1]*1e-9).toFixed(2)+'B';
   })
   .attr('font-size', 10)
   .attr('fill', 'black')
@@ -195,12 +194,12 @@ function updateCircles(v) {
   .attr('x', function(d, i){ return start+interval*i; })
   .attr('text-anchor', 'middle')
   
-  updateArc(v);
+  updateArc(v, year, month);
   
 }
 
 // ------------------------------arcs------------------------------
-function updateArc(v){
+function updateArc(v, year, month){
   volume_arr = []
   for (const [_, volume] of v) {
     volume_arr.push(volume);
@@ -210,11 +209,10 @@ function updateArc(v){
   
   var pie = d3.pie();
   const width = 500;
-  const outerRadius = width / 2.5;
-  const innerRadius = width / 4;
+
   var arc = d3.arc()
-    .innerRadius(innerRadius)
-    .outerRadius(outerRadius);
+    .innerRadius(width / 4)
+    .outerRadius(width / 2.5);
   var arcSvg = d3
       .select("#volumePercent")
       .attr("width", width)
@@ -222,8 +220,13 @@ function updateArc(v){
       .append("g")
   arcSvg.append('text')
     .text('Sum of Volume')
-    .attr('x', 150)
-    .attr('y', 200)
+    .attr('x', width / 2.5)
+    .attr('y', width / 2)
+    .attr('fill', '#51c5cf')
+  arcSvg.append('text')
+    .text('in ' + month + ' ' + year)
+    .attr('x', width / 2.43)
+    .attr('y', width / 1.8)
     .attr('fill', '#51c5cf')
 
   var arcs = arcSvg.selectAll("g.arc")
@@ -231,7 +234,7 @@ function updateArc(v){
     .enter()
     .append("g")
     .attr("class", "arc")
-    .attr("transform", "translate(" + outerRadius + ", " + outerRadius + ")");
+    .attr("transform", "translate(" + width / 2 + ", " + width / 2 + ")");
   arcs.append("path")
     .attr("fill", function(_, i) { return coin_color[v[i][0]];})
     .attr("d", arc);
