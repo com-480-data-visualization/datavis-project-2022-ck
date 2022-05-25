@@ -60,18 +60,24 @@ function range_filter(start_date, end_date) {
   };
 }
 
-let cloud_width = 1000,
-  cloud_height = 300,
-  max_font_size = 40;
+let cloud_width = 200,
+  cloud_height = 200,
+  max_font_size = 20,
+  min_font_size = 10,
+  multi_font_size = 2;
 
-function wordCloud(selector, words) {
+function wordCloud(selector, words, max_word) {
+  var words = freqDict(words, max_word);
+  
   var fill = d3.scale.category20();
 
   //Construct the word cloud's SVG element
+  
   d3.select("#" + selector)
     .selectAll("svg")
     .selectAll("g")
     .remove();
+
   var svg = d3
     .select("#" + selector)
     .selectAll("svg")
@@ -105,7 +111,7 @@ function wordCloud(selector, words) {
       .transition()
       .duration(1000)
       .style("font-size", function (d) {
-        return d.size + "px";
+        return (d.size) + "px";
       })
       .attr("transform", function (d) {
         return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
@@ -126,7 +132,7 @@ function wordCloud(selector, words) {
     .cloud()
     .size([cloud_width, cloud_height])
     .words(words)
-    .padding(2)
+    .padding(1)
     .rotate(function () {
       return ~~(Math.random() * 2) * 90;
     })
@@ -140,18 +146,34 @@ function wordCloud(selector, words) {
 
 // reference: http://bl.ocks.org/joews/9697914
 
-function freqDict(data) {
+function freqDict(data, max_num = 30) {
   var counter = {};
   data.forEach((value) => {
-    let sentence = value.keywords.replace(/‘()’’',[!\.,:;\?]/g, "").split(" ");
-    sentence.forEach((value) => {
-      if (!(value in counter)) counter[value] = 1;
-      else counter[value] += 1;
+    let keywords = value.keywords.replace(/‘()’’',[!\.,:;\?]/g, "").split(" ");
+    
+    let categories = value.categories.split("|");
+    keywords.forEach((value) => {
+      categories.forEach((category) => {
+        if (value in counter) {
+          if (category in counter[value]) counter[value][category] += 1;
+          else counter[value][category] = 1;
+        }
+        else counter[value] = {category: 1};
+      })
+      if ('size' in counter[value]) counter[value]['size'] += 1;
+      else counter[value]['size'] = 1;
     });
   });
   var words = [];
+
   Object.entries(counter).forEach(([key, value]) => {
-    words.push({ text: key, size: 10 + value * 10 });
+    words.push({ text: key, size: value.size * multi_font_size + min_font_size, category: value });
   });
   return words;
+}
+
+function news_info(id, max_word) {
+  return (data) => {
+    wordCloud(id, data);
+  };
 }

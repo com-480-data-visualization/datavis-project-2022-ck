@@ -3,7 +3,7 @@ function update_daily_news(coin, date) {
     setTimeout(() => {
         update_daily_news_data(coin, date);
         setTimeout(() => {
-            show_daily_news();
+            show_daily_news(coin, date);
         }, 100);
     }, 100);
 
@@ -34,12 +34,26 @@ function update_daily_news_data(coin, date) {
     };
 }
 
-function show_daily_news() {
+function show_daily_news(coin, date) {
     d3.selectAll("#daily-news")
         .style("width", "25vw");
+    
     d3.selectAll("#daily-news")
         .transition()
         .duration(200)
         .ease(d3.easeLinear)
         .style("opacity", 1);
+    
+    // show wordcloud
+    let newDate = new Date(date);
+    let nextDate = new Date(date);
+    nextDate.setDate(nextDate.getDate() + 1);
+    refresh_news_information(
+        newDate,
+        nextDate,
+        url_contain,
+        parse_news_data,
+        range_filter,
+        news_info("word-cloud", max_word = 30)
+      );
 }
