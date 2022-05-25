@@ -1,8 +1,15 @@
+#price-news-bg {
+    padding: 10px;
+    margin: 10px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
+    border: 1px solid silver;
+}
+
 #price-news-title {
-    margin-left: auto;
-    margin-right: auto;
-    width: fit-content;
+    width: 100%;
+    text-align: center;
     font-weight: lighter;
+    font-style: italic;
 }
 
 .daily-news {
@@ -10,6 +17,7 @@
     border: 1px dotted black;
     padding: 10px;
     overflow: auto;
+    width: 23vw;
 }
 
 #daily-news-title {

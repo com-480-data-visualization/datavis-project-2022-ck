@@ -391,10 +391,12 @@ function collect(total, callback) {
 
 function price_news_plot(coins, currency = "USD", date_start = new Date("2022-01-01"), date_end = new Date("2022-01-31")) {
   let days = Math.round((date_end-date_start)/1000/3600/24);
-  const title = `Analysis of ${coins.join(" ")}`;
+  const title = `Price and Sentiment Analysis of ${coins.join(", ")}`;
   let price_news_svg = create_price_news_svg(title);
   let num_data = coins.length;
   let closure = waitN(num_data, () => {
+    console.log(d3.select("#price"));
+    d3.select("#price").selectAll("svg").remove();
     d3.select("#price").append(() => price_news_svg.node());
     document.getElementById("price-news-title").innerHTML = title;
   });
