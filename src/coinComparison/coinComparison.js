@@ -1,13 +1,19 @@
+const coin_color = {
+  BTC: "#E9983D",
+  ETH: "#687DE3",
+  XRP: "#24292E",
+  LTC: "#BEBBBB",
+  ADA: "#FFFFFF",
+  BCH: "#98C261",
+  USDT: "#509F7D",
+  TRX: "#DB2F33",
+};
+
+const sum = arr => arr.reduce((a,b) => a + b, 0);
+const average = arr =>(sum(arr) / arr.length).toFixed(2);
+
 // ------------------------------time line------------------------------
-let images = []
-const coin_color = {'ada': "#FFFFFF", 
-                  'bch': "#98C261",
-                  'btc': "#E9983D",
-                  'eth': "#687DE3",
-                  'ltc': "#BEBBBB",
-                  'trx': "#DB2F33",
-                  'usdt': "#509F7D",
-                  'xrp': "#24292E"}
+let images = [];
 const months = {
   "Jan": 0,
   "Feb": 1,
@@ -22,11 +28,10 @@ const months = {
   "Nov": 10,
   "Dec": 11,
 };
-
 const coins = Object.keys(coin_color);
 for (let i = 0; i < coins.length; i++) {
   let img = new Image(50, 50);
-  img.src = './coinIcons/' + coins[i] + '.svg';
+  img.src = './coinIcons/' + coins[i].toLowerCase() + '.svg';
   images.push(img)
 }
 
@@ -83,9 +88,6 @@ var myChart = new Chart(ctx, {
 
 // ------------------------------table------------------------------
 var coinTable = document.getElementById('coinTable');
-const sum = arr => arr.reduce((a,b) => a + b, 0);
-const average = arr =>(sum(arr) / arr.length).toFixed(2);
-
 function deleteTBody() {
   const rowCount = coinTable.rows.length - 1;
   for (var i = rowCount; i > 0; i--) {
@@ -97,7 +99,7 @@ function updateTable(coins) {
   const selected_date = document.getElementsByClassName('date select');
   const year = selected_date[0].lastChild.innerHTML;
   const month = selected_date[1].lastChild.innerHTML;
-  // d3.select("#circleSvg").remove();
+  
   let counter = collect(coins.length, (v) => updateCircles(v))
   coins.forEach(async e => {
     let newRow = coinTable.insertRow(-1);
@@ -120,7 +122,6 @@ function updateTable(coins) {
       for (i = 0; i < data.length; i++) {
         let date = new Date(data[i].date);
         if (date.getMonth() == months[month] && date.getFullYear() == parseInt(year)) {
-          
           closeP.push(parseFloat(data[i].close));
           volumeF.push(parseInt(data[i].volumefrom));
           volumeT.push(parseInt(data[i].volumeto));
@@ -130,9 +131,7 @@ function updateTable(coins) {
       let volumeS = sum(volumeT) + sum(volumeF);
       let newV = document.createTextNode(volumeS);
       let pos = 'N/A';
-      if (volumeS !== 0) {
-        pos = (volumeF > volumeT) ? 'Sell' : 'Buy';
-      }
+      if (volumeS !== 0) { pos = (volumeF > volumeT) ? 'Sell' : 'Buy'; }
       let newPos = document.createTextNode(pos);
       newPrice.append('$', newP);
       newVolume.append('$', newV);
@@ -145,11 +144,6 @@ function updateTable(coins) {
 
 // ------------------------------circles------------------------------
 function updateCircles(v) {
-  d3.select("#circleSvg")
-  .selectAll("svg")
-  .selectAll(".circles")
-  .selectAll("#volume_texts")
-  .remove();
   const width = 500;
   const start = 210;
   const interval = 300;
@@ -169,7 +163,7 @@ function updateCircles(v) {
   .attr('height', 5)
   .attr('class','radSol');
   
-  const data = [ { "x": start, "y": 75}, { "x": start+interval*(v.length-1), "y": 75}];
+  const data = [{ "x": start, "y": 75}, { "x": start+interval*(v.length-1), "y": 75}];
   const lineGenerator = d3.line()
   .x(d => d.x)
   .y(d => d.y);
@@ -184,15 +178,15 @@ function updateCircles(v) {
   .data(v)
   .enter()
   .append('circle')
-  .attr('r', function(d, i){ return d[1]*1e-8 })
+  .attr('r', function(d, _) { return d[1]*1e-8 })
   .attr('class','circles')
-  .attr('cx', function(d, i) { return start+interval*i; })
+  .attr('cx', function(_, i) { return start+interval*i; })
   .attr('cy', 75)
-  .attr('fill', function(d, i) { return coin_color[d[0].toLowerCase()]; })
+  .attr('fill', function(d, _) { return coin_color[d[0]]; })
   
   circleSvg.selectAll('#volume_texts')
   .data(v).enter().append('text')
-  .text(function(d, i) {
+  .text(function(d, _) {
     return '$'+parseFloat(d[1]*1e-6).toFixed(2)+'M';
   })
   .attr('font-size', 10)
@@ -205,18 +199,19 @@ function updateCircles(v) {
   
 }
 
+// ------------------------------arcs------------------------------
 function updateArc(v){
   volume_arr = []
-  for (const [name, volume] of v) {
+  for (const [_, volume] of v) {
     volume_arr.push(volume);
   }
-  vs = sum(volume_arr)
-  volume_percent = volume_arr.map(x => (x / vs * 100).toFixed(2))
+  const vs = sum(volume_arr)
+  const volume_percent = volume_arr.map(x => (x / vs * 100).toFixed(2))
   
   var pie = d3.pie();
-  var width = 500;
-  var outerRadius = width / 2.5;
-  var innerRadius = width / 4;
+  const width = 500;
+  const outerRadius = width / 2.5;
+  const innerRadius = width / 4;
   var arc = d3.arc()
     .innerRadius(innerRadius)
     .outerRadius(outerRadius);
@@ -225,6 +220,12 @@ function updateArc(v){
       .attr("width", width)
       .attr("height", width)
       .append("g")
+  arcSvg.append('text')
+    .text('Sum of Volume')
+    .attr('x', 150)
+    .attr('y', 200)
+    .attr('fill', '#51c5cf')
+
   var arcs = arcSvg.selectAll("g.arc")
     .data(pie(volume_percent))
     .enter()
@@ -232,16 +233,11 @@ function updateArc(v){
     .attr("class", "arc")
     .attr("transform", "translate(" + outerRadius + ", " + outerRadius + ")");
   arcs.append("path")
-    .attr("fill", function(d, i) { return coin_color[v[i][0].toLowerCase()];})
+    .attr("fill", function(_, i) { return coin_color[v[i][0]];})
     .attr("d", arc);
   arcs.append("text")
     .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
     .attr("text-anchor", "middle")
     .attr('fill', '#51c5cf')
-    .text(function(d) { return d.value + '%'; });
-  arcs.append('text')
-    .text('Sum of Volume')
-    .attr('x', -50)
-    .attr('y', 10)
-    .attr('fill', '#51c5cf')
+    .text(function(d, _) { return d.value + "%"; });
 }
