@@ -79,3 +79,7 @@ button:focus {
   min-height: 500px;
   /* background-color: lightblue; */
 }
+
+a {
+  text-decoration: none; /* no underline */
+}
