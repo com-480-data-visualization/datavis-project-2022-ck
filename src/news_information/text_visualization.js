@@ -75,6 +75,7 @@ class TextVisualization {
   }
 
   drawText(data) {
+    if(data == null) return null;
     let keywords = [];
   }
 

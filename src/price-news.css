@@ -6,7 +6,6 @@
 }
 
 .daily-news {
-    width: 25vw;
     height: 35vw;
     border: 1px dotted black;
     padding: 10px;
@@ -70,7 +69,8 @@
 }
 
 .height-12 {
-    height: 12vw;
+    height: 220px;
+    margin: 5px;
 }
 
 .date-div {
@@ -88,4 +88,9 @@
 
 #news-list {
     height: 1000px;
+}
+
+#word-cloud {
+    width: 200px;
+    height: 200px;
 }
