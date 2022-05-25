@@ -59,7 +59,7 @@ function range_news_filter(start_date, end_date, coins) {
     const date = new Date(data.date);
     const categories = data.categories.split("|");
     var coin_include = false;
-    for(var i = 0; i < coins.length; i++){
+    for (var i = 0; i < coins.length; i++) {
       if (categories.includes(coins[i])) {
         coin_include = true;
         break;
@@ -77,11 +77,11 @@ let cloud_width = 200,
 
 function wordCloud(selector, words, max_word) {
   var words = freqDict(words, max_word);
-  
+
   var fill = d3.scale.category20();
 
   //Construct the word cloud's SVG element
-  
+
   d3.select("#" + selector)
     .selectAll("svg")
     .selectAll("g")
@@ -120,7 +120,7 @@ function wordCloud(selector, words, max_word) {
       .transition()
       .duration(1000)
       .style("font-size", function (d) {
-        return (d.size) + "px";
+        return d.size + "px";
       })
       .attr("transform", function (d) {
         return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
@@ -160,24 +160,27 @@ function freqDict(data) {
 
   data.forEach((value) => {
     let keywords = value.keywords.replace(/‘()’’',[!\.,:;\?]/g, "").split(" ");
-    
+
     let categories = value.categories.split("|");
     keywords.forEach((value) => {
       categories.forEach((category) => {
         if (value in counter) {
           if (category in counter[value]) counter[value][category] += 1;
           else counter[value][category] = 1;
-        }
-        else counter[value] = {category: 1};
-      })
-      if ('size' in counter[value]) counter[value]['size'] += 1;
-      else counter[value]['size'] = 1;
+        } else counter[value] = { category: 1 };
+      });
+      if ("size" in counter[value]) counter[value]["size"] += 1;
+      else counter[value]["size"] = 1;
     });
   });
   var words = [];
 
   Object.entries(counter).forEach(([key, value]) => {
-    words.push({ text: key, size: value.size * multi_font_size + min_font_size, category: value });
+    words.push({
+      text: key,
+      size: value.size * multi_font_size + min_font_size,
+      category: value,
+    });
   });
   return words;
 }

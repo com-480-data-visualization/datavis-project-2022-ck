@@ -45,17 +45,18 @@ whenDocumentLoaded(() => {
       let start_date = dates[0];
       let end_date = dates[1];
       // ------------- Implement the function ------------------------
+      // News Headline
+      var hl = new NewsHeadLine("news-head", coins, start_date, end_date);
       // Text Visualization
-      var tv = new TextVisualization("news", coins, start_date, end_date);
+      var tv = new TextVisualization("text-viz", coins, start_date, end_date);
       tv.showTextVisualization();
-      
+
       // Coin Comparison
       deleteTBody();
       updateTable(coins);
 
       // Price and News
       price_news_plot(coins, "USD");
-      
     }
   }
 
