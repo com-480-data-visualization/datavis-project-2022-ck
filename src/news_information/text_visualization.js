@@ -66,19 +66,19 @@ class TextVisualization {
   }
 
   drawText(data) {
-    if(data == null) return null;
-    freqDict(data, );
+    if (data == null) return null;
+    freqDict(data);
   }
 
-  showTextVisualization(){
-    // refresh_news_information(
-    //   this.start_date,
-    //   this.end_date,
-    //   this.coins, 
-    //   url_contain,
-    //   parse_news_data,
-    //   range_news_filter,
-    //   this.drawText
-    // );
+  showTextVisualization() {
+    refresh_news_information(
+      this.start_date,
+      this.end_date,
+      this.coins,
+      url_contain,
+      parse_news_data,
+      range_news_filter,
+      this.drawText
+    );
   }
 }

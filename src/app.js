@@ -22,6 +22,7 @@ function getDateRange(year, month) {
     end_date.setMonth(1);
   }
   end_date.setDate(1);
+  end_date.setHours(0, 0, 0);
   return [start_date, end_date];
 }
 
@@ -44,18 +45,20 @@ whenDocumentLoaded(() => {
       let dates = getDateRange(year, month);
       let start_date = dates[0];
       let end_date = dates[1];
+
       // ------------- Implement the function ------------------------
+      // News Headline
+      var hl = new NewsHeadLine("news-head", coins, start_date, end_date);
       // Text Visualization
-      var tv = new TextVisualization("news", coins, start_date, end_date);
+      var tv = new TextVisualization("text-viz", coins, start_date, end_date);
       tv.showTextVisualization();
-      
+
       // Coin Comparison
       deleteTBody();
       updateTable(coins);
 
       // Price and News
       price_news_plot(coins, "USD");
-      
     }
   }
 

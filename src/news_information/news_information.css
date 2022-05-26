@@ -1,13 +1,42 @@
-#content {
-  min-height: 500px;
-}
-
-#news {
-  min-height: 200px;
-}
-
-#flex {
+#news-head {
   display: flex;
-  min-height: 200px;
-  border-top: 1px rgb(190, 190, 190) solid;
+  flex-wrap: wrap;
+}
+
+.news-head-coin {
+  flex: 1;
+}
+
+.coin-box {
+  display: flex;
+  justify-content: center;
+}
+
+.coin-box h3 {
+  color: black;
+}
+
+.refresh-button {
+  padding: 5px;
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  background-color: white;
+}
+
+.refresh-button i {
+  color: gray;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.refresh-button:hover {
+  transform: rotate(180deg);
+  transition-duration: 1s;
+  box-shadow: none;
+}
+
+.news-box h4 {
+  color: rgb(232, 231, 231);
+  font-weight: bolder;
 }
