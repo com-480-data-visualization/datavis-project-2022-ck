@@ -3,16 +3,16 @@
   flex-wrap: wrap;
 }
 
-.news-head-coin {
+.news-head-type {
   flex: 1;
 }
 
-.coin-box {
+.header-box {
   display: flex;
   justify-content: center;
 }
 
-.coin-box h3 {
+.header-box h3 {
   color: black;
 }
 

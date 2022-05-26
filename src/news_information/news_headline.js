@@ -8,23 +8,21 @@ class NewsHeadLine {
     this.selected_news_idx = {};
 
     this.div = document.getElementById(this.selector);
-
-    this.show_news_headline();
   }
 
   show_news_headline() {
-    d3.select("#news-head").selectAll(".news-head-coin").remove();
+    d3.select("#news-head").selectAll(".news-head-type").remove();
     this.coins.forEach((coin, idx) => {
       // Add div box
       d3.select("#news-head")
         .append("div")
-        .classed("news-head-coin", true)
+        .classed("news-head-type", true)
         .attr("id", "news-head-" + coin);
 
       //Add coin type
       d3.select("#news-head-" + coin)
         .append("div")
-        .classed("coin-box", true)
+        .classed("header-box", true)
         .html(this.coin_box_template(coin));
 
       // Add news-box
