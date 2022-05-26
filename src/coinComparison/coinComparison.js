@@ -98,7 +98,8 @@ function updateTable(coins) {
   const selected_date = document.getElementsByClassName('date select');
   const year = selected_date[0].lastChild.innerHTML;
   const month = selected_date[1].lastChild.innerHTML;
-  
+
+
   let counter = collect(coins.length, (v) => updateCircles(v, year, month))
   coins.forEach(async e => {
     let newRow = coinTable.insertRow(-1);
@@ -107,6 +108,7 @@ function updateTable(coins) {
     let newVolume = newRow.insertCell(2);
     let newPosition = newRow.insertCell(3);
     // let newKeyWords = newRow.insertCell(4);
+
     let img = new Image();
     img.src = 'coinIcons/' + e.toLowerCase() +'.svg';
     
@@ -129,11 +131,6 @@ function updateTable(coins) {
             volumeT.push(parseInt(data[i].volumeto));
           }
         }
-        // if (date.getMonth() == months[month] && date.getFullYear() == parseInt(year)) {
-        //   closeP.push(parseFloat(data[i].close));
-        //   volumeF.push(parseInt(data[i].volumefrom));
-        //   volumeT.push(parseInt(data[i].volumeto));
-        // }
       }
       let newP = document.createTextNode(average(closeP));
       let volumeM = sum(volumeT) + sum(volumeF);
@@ -149,8 +146,8 @@ function updateTable(coins) {
     await d3.csv(url).then(coin_data);
   })
 }
-// TO DO - clear circleSvg, add coin name to arcSvg, align cell text to center
-// yearly volume, coin keywords
+// TO DO - clear circleSvg, add coin name to arcSvg
+// coin keywords
 // ------------------------------circles------------------------------
 function updateCircles(v, year, month) {
   const width = 500;
@@ -224,7 +221,7 @@ function updateArc(v, year, month){
   
   const vys = sum(volumeY_arr)
   const volumeY_percent = volumeY_arr.map(x => (x / vys * 100).toFixed(2))
-  
+
 // ------monthly arc------
   var arc = d3.arc()
     .innerRadius(width / 4)
@@ -235,8 +232,8 @@ function updateArc(v, year, month){
       .attr("height", width)
       .append("g")
   arcSvg.append('text')
-    .text('Sum of Volume')
-    .attr('x', width / 2.5)
+    .text('$'+(vms*1e-9).toFixed(2)+'B')
+    .attr('x', width / 2.3)
     .attr('y', width / 2)
     .attr('fill', '#51c5cf')
   arcSvg.append('text')
@@ -267,8 +264,8 @@ function updateArc(v, year, month){
       .attr("height", width)
       .append("g")
   arcSvg2.append('text')
-    .text('Sum of Volume')
-    .attr('x', width / 2.5)
+    .text('$'+(vys*1e-9).toFixed(2)+'B')
+    .attr('x', width / 2.3)
     .attr('y', width / 2)
     .attr('fill', '#51c5cf')
   arcSvg2.append('text')
