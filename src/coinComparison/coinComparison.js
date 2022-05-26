@@ -118,29 +118,39 @@ function updateTable(coins) {
       var closeP = [];
       var volumeT = [];
       var volumeF = [];
+      var volumeY = [];
       for (i = 0; i < data.length; i++) {
         let date = new Date(data[i].date);
-        if (date.getMonth() == months[month] && date.getFullYear() == parseInt(year)) {
-          closeP.push(parseFloat(data[i].close));
-          volumeF.push(parseInt(data[i].volumefrom));
-          volumeT.push(parseInt(data[i].volumeto));
+        if (date.getFullYear() == parseInt(year)) {
+          volumeY.push(parseInt(data[i].volumefrom)+parseInt(data[i].volumeto));
+          if (date.getMonth() == months[month]) {
+            closeP.push(parseFloat(data[i].close));
+            volumeF.push(parseInt(data[i].volumefrom));
+            volumeT.push(parseInt(data[i].volumeto));
+          }
         }
+        // if (date.getMonth() == months[month] && date.getFullYear() == parseInt(year)) {
+        //   closeP.push(parseFloat(data[i].close));
+        //   volumeF.push(parseInt(data[i].volumefrom));
+        //   volumeT.push(parseInt(data[i].volumeto));
+        // }
       }
       let newP = document.createTextNode(average(closeP));
-      let volumeS = sum(volumeT) + sum(volumeF);
-      let newV = document.createTextNode(volumeS);
+      let volumeM = sum(volumeT) + sum(volumeF);
+      let newV = document.createTextNode(volumeM);
       let pos = 'N/A';
-      if (volumeS !== 0) { pos = (volumeF > volumeT) ? 'Sell' : 'Buy'; }
+      if (volumeM !== 0) { pos = (volumeF > volumeT) ? 'Sell' : 'Buy'; }
       let newPos = document.createTextNode(pos);
       newPrice.append('$', newP);
       newVolume.append('$', newV);
       newPosition.appendChild(newPos);
-      counter([e, volumeS]);
+      counter([e, volumeM, sum(volumeY)]);
     }
     await d3.csv(url).then(coin_data);
   })
 }
 // TO DO - clear circleSvg, add coin name to arcSvg, align cell text to center
+// yearly volume, coin keywords
 // ------------------------------circles------------------------------
 function updateCircles(v, year, month) {
   const width = 500;
@@ -200,16 +210,22 @@ function updateCircles(v, year, month) {
 
 // ------------------------------arcs------------------------------
 function updateArc(v, year, month){
-  volume_arr = []
-  for (const [_, volume] of v) {
-    volume_arr.push(volume);
-  }
-  const vs = sum(volume_arr)
-  const volume_percent = volume_arr.map(x => (x / vs * 100).toFixed(2))
-  
   var pie = d3.pie();
   const width = 500;
 
+  let volumeM_arr = [];
+  let volumeY_arr = [];
+  for (const [_, volumeM, volumeY] of v) {
+    volumeM_arr.push(volumeM);
+    volumeY_arr.push(volumeY);
+  }
+  const vms = sum(volumeM_arr)
+  const volumeM_percent = volumeM_arr.map(x => (x / vms * 100).toFixed(2))
+  
+  const vys = sum(volumeY_arr)
+  const volumeY_percent = volumeY_arr.map(x => (x / vys * 100).toFixed(2))
+  
+// ------monthly arc------
   var arc = d3.arc()
     .innerRadius(width / 4)
     .outerRadius(width / 2.5);
@@ -230,7 +246,7 @@ function updateArc(v, year, month){
     .attr('fill', '#51c5cf')
 
   var arcs = arcSvg.selectAll("g.arc")
-    .data(pie(volume_percent))
+    .data(pie(volumeM_percent))
     .enter()
     .append("g")
     .attr("class", "arc")
@@ -239,6 +255,38 @@ function updateArc(v, year, month){
     .attr("fill", function(_, i) { return coin_color[v[i][0]];})
     .attr("d", arc);
   arcs.append("text")
+    .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+    .attr("text-anchor", "middle")
+    .attr('fill', '#51c5cf')
+    .text(function(d, _) { return d.value + "%"; });
+
+// ------yearly arc------
+  var arcSvg2 = d3
+      .select("#volumeYear")
+      .attr("width", width)
+      .attr("height", width)
+      .append("g")
+  arcSvg2.append('text')
+    .text('Sum of Volume')
+    .attr('x', width / 2.5)
+    .attr('y', width / 2)
+    .attr('fill', '#51c5cf')
+  arcSvg2.append('text')
+    .text('in ' +  year)
+    .attr('x', width / 2.2)
+    .attr('y', width / 1.8)
+    .attr('fill', '#51c5cf')
+
+  var arcs2 = arcSvg2.selectAll("g.arc")
+    .data(pie(volumeY_percent))
+    .enter()
+    .append("g")
+    .attr("class", "arc")
+    .attr("transform", "translate(" + width / 2 + ", " + width / 2 + ")");
+  arcs2.append("path")
+    .attr("fill", function(_, i) { return coin_color[v[i][0]];})
+    .attr("d", arc);
+  arcs2.append("text")
     .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
     .attr("text-anchor", "middle")
     .attr('fill', '#51c5cf')
