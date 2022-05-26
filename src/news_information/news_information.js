@@ -1,3 +1,8 @@
+/**
+ * @param {Date} start_date
+ * @param {Date} end_date
+ * @param {Array[String]} coins : ex) ['BTC', 'ETH', ...]
+ **/
 function refresh_news_information(
   start_date,
   end_date,
