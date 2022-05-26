@@ -4,17 +4,30 @@ class NewsHeadLine {
     this.coins = coins;
     this.start_date = start_date;
     this.end_date = end_date;
+    this.news_data = {};
+    this.selected_news_idx = {};
 
     this.div = document.getElementById(this.selector);
 
-    this.updateHeadline = this.updateHeadline.bind(this);
-
-    this.updateHeadline();
+    this.show_news_headline();
   }
 
-  updateHeadline() {
-    this.div.innerHTML = "";
+  show_news_headline() {
+    d3.select("#news-head").selectAll(".news-head-coin").remove();
     this.coins.forEach((coin, idx) => {
+      // Add div box
+      d3.select("#news-head")
+        .append("div")
+        .classed("news-head-coin", true)
+        .attr("id", "news-head-" + coin);
+
+      //Add coin type
+      d3.select("#news-head-" + coin)
+        .append("div")
+        .classed("coin-box", true)
+        .html(this.coin_box_template(coin));
+
+      // Add news-box
       refresh_news_information(
         this.start_date,
         this.end_date,
@@ -22,62 +35,85 @@ class NewsHeadLine {
         url_contain,
         parse_news_data,
         range_news_filter,
-        this.showHeadlines(coin)
+        this.save_news(coin)
       );
     });
   }
 
-  showHeadlines(coin) {
+  save_news(coin) {
     return (data) => {
-      let data0 = data[data.length - 1];
+      this.news_data[coin] = data;
+      this.selected_news_idx[coin] = -1;
 
-      let new_div = document.createElement("div");
-      new_div.className = "news_headline";
-
-      let flex_div1 = document.createElement("div");
-      flex_div1.id = "flex_div_1";
-
-      let coin_info_div = document.createElement("div");
-      coin_info_div.id = "header";
-
-      let coin_icon = document.createElement("img");
-      coin_icon.id = "coin";
-      coin_icon.src = "./coinIcons/" + coin.toLowerCase() + ".svg";
-
-      let coin_name = document.createElement("p");
-      coin_name.textContent = coin;
-
-      let date = document.createElement("p");
-      let d = new Date(data0.date);
-      date.textContent = `${d.getFullYear()}/${d.getMonth()}/${d.getDate()}`;
-
-      coin_info_div.appendChild(coin_icon);
-      coin_info_div.appendChild(coin_name);
-      coin_info_div.appendChild(date);
-
-      flex_div1.appendChild(coin_info_div);
-
-      let img = document.createElement("img");
-      img.id = "news_image";
-      img.src = data0.imageurl;
-      flex_div1.appendChild(img);
-
-      let flex_div2 = document.createElement("div");
-      flex_div2.id = "flex_div_2";
-
-      let title = document.createElement("a");
-      title.innerText = data0.title;
-      title.href = data0.url;
-      flex_div2.appendChild(title);
-
-      let body = document.createElement("p");
-      body.innerText = data0.body;
-      flex_div2.appendChild(body);
-
-      new_div.appendChild(flex_div1);
-      new_div.appendChild(flex_div2);
-
-      this.div.appendChild(new_div);
+      this.update_news_box(coin);
     };
+  }
+
+  update_news_box(coin) {
+    let news_data = this.news_data[coin];
+    var idx = Math.floor(Math.random() * news_data.length);
+    while (idx == this.selected_news_idx) {
+      idx = Math.floor(Math.random() * news_data.length);
+    }
+    console.log(Math.random(), idx);
+    this.selected_news_idx[coin] = idx;
+
+    let news = news_data[idx];
+
+    d3.select("#news-head-" + coin)
+      .select(".news-box")
+      .remove();
+    d3.select("#news-head-" + coin)
+      .append("div")
+      .classed("news-box", true)
+      .style("background-image", `url(${news.imageurl})`)
+      .html(
+        this.news_box_template(
+          coin,
+          news.date,
+          news.title,
+          news.body,
+          news.url,
+          news.imageurl
+        )
+      );
+
+    // Add event listener for refresh button
+    document.getElementById("refresh-" + coin).onclick = (e) => {
+      e.preventDefault();
+      this.update_news_box(coin);
+    };
+  }
+
+  coin_box_template(coin) {
+    const src = "./coinIcons/" + coin.toLowerCase() + ".svg";
+    return `
+    <img src = ${src}></img>
+    <h3>${coin}</h3>
+    `;
+  }
+
+  news_box_template(coin, date, title, body, url, imageurl) {
+    date = date.toDateString();
+
+    title = title.replace(/[^\x00-\x7F]/g, "");
+    const body2 =
+      body
+        .replace(/[^\x00-\x7F]/g, "")
+        .split(" ")
+        .slice(0, 30)
+        .join(" ") + " ...";
+    return `
+    <a href="${url}" target="_blank">
+      <div class="foreground" style="padding: 10px">
+        <button class="refresh-button" id="refresh-${coin}"><i class="fa fa-refresh"></i></button>
+        
+        <h4>${date}</h4>
+        <h3 class="text-left" style="font-style: italic;">${title}</h3>
+        <hr/>
+        <p class="news-box-text">${body2}</p>
+      </div>
+    </a>
+    `;
   }
 }

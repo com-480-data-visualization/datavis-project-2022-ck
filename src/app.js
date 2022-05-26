@@ -22,6 +22,7 @@ function getDateRange(year, month) {
     end_date.setMonth(1);
   }
   end_date.setDate(1);
+  end_date.setHours(0, 0, 0);
   return [start_date, end_date];
 }
 
@@ -44,6 +45,7 @@ whenDocumentLoaded(() => {
       let dates = getDateRange(year, month);
       let start_date = dates[0];
       let end_date = dates[1];
+
       // ------------- Implement the function ------------------------
       // News Headline
       var hl = new NewsHeadLine("news-head", coins, start_date, end_date);
