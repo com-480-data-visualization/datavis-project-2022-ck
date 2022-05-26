@@ -55,7 +55,6 @@ class NewsHeadLine {
     while (idx == this.selected_news_idx) {
       idx = Math.floor(Math.random() * news_data.length);
     }
-    console.log(Math.random(), idx);
     this.selected_news_idx[coin] = idx;
 
     let news = news_data[idx];
