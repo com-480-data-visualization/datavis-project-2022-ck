@@ -48,7 +48,7 @@ whenDocumentLoaded(() => {
 
       // ------------- Implement the function ------------------------
       // News Headline
-      var hl = new NewsHeadLine("news-head", coins, start_date, end_date);
+      //var hl = new NewsHeadLine("news-head", coins, start_date, end_date);
       // Text Visualization
       var tv = new TextVisualization("text-viz", coins, start_date, end_date);
       tv.showTextVisualization();
