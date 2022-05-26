@@ -44,7 +44,7 @@ header > h1 {
 }
 
 #price-news {
-  margin-top: 20px;
+  padding: 20px;
   display: flex;
   flex-direction: row;
 }
@@ -78,4 +78,8 @@ button:focus {
   margin-top: 20px;
   min-height: 500px;
   /* background-color: lightblue; */
+}
+
+a {
+  text-decoration: none; /* no underline */
 }

@@ -9,16 +9,7 @@ class TextVisualization {
     this.height = 500;
     this.radius = this.width / 2;
 
-    this.colors = {
-      BTC: "#E9983D",
-      ETH: "#687DE3",
-      XRP: "#24292E",
-      LTC: "#BEBBBB",
-      ADA: "#FFFFFF",
-      BCH: "#98C261",
-      USDT: "#509F7D",
-      TRX: "#DB2F33",
-    };
+    this.colors = coin_color;
 
     this.scaleAngle = d3
       .scaleLinear()

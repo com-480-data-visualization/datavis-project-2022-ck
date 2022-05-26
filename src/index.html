@@ -62,40 +62,44 @@
               <svg></svg>
             </div>
         </div>
-        <div id="price-news-divider">
-          <h2 id="price-news-title"></h2>
-        </div>
-        <div id="price-news">
-            <div id="price"></div>
-            <div id="daily-news" class="daily-news hide">
-              <div id="daily-news-title">
-                <span id="daily-news-icon">
-                  <img id="daily-news-icon-img" src="./coinIcons/btc.svg" height="40" width="40"/>
-                </span>
-                <div id="daily-news-title-text">
-                  <h4 class="lighter text-left" id="daily-news-title-text-coin">Text here</h4>
-                  <h4 class="lighter text-left" id="daily-news-title-text-date">Date here</h4>
+        <div id="price-news-bg">
+          <div id="price-news-divider">
+            <h2 id="price-news-title"></h2>
+          </div>
+          <div id="price-news">
+              <div id="price"></div>
+              <div id="daily-news" class="daily-news hide">
+                <div id="daily-news-title">
+                  <span id="daily-news-icon">
+                    <img id="daily-news-icon-img" src="./coinIcons/btc.svg" height="40" width="40"/>
+                  </span>
+                  <div id="daily-news-title-text">
+                    <h4 class="lighter text-left" id="daily-news-title-text-coin">Text here</h4>
+                    <h4 class="lighter text-left" id="daily-news-title-text-date">Date here</h4>
+                  </div>
+                  <div class="date-div">
+                    <div id="prev-date" class="date-switch">⬅️</div>
+                    <div id="next-date" class="date-switch">➡️</div>
+                  </div>
                 </div>
-                <div class="date-div">
-                  <div id="prev-date" class="date-switch">⬅️</div>
-                  <div id="next-date" class="date-switch">➡️</div>
+                <div class="daily-news-content">
+                  <hr style="width: 95%; margin-left:0;"/>
+                  <div class="flex-row height-12">
+                    <div class="width-50" id="word-cloud">
+                      <svg></svg>
+                    </div>
+                    <div class="width-50" id="sentiment-score">Sentiment Score</div>
+                  </div>
+                  <hr style="width: 95%; margin-left:0;"/>
+                  <h4 class="lighter" style="margin-top: 5px; margin-bottom: 5px;">Today's News: <span id="news-count">0</span></h4>
+                  <div id="news-list">
+                  </div>
                 </div>
               </div>
-              <hr style="width: 100%"/>
-              <div class="flex-row height-12">
-                <div class="width-50" id="word-cloud">Word Cloud
-                  <svg></svg>
-                </div>
-                <div class="width-50">Sentiment Score</div>
+              <div id="daily-news-cover" class="daily-news show flex-center">
+                <h4 class="lighter text-center" style="font-size: 16pt">Click on a data point to start!</h4>
               </div>
-              <hr style="width: 100%"/>
-              <div id="news-list">
-                News list
-              </div>
-            </div>
-            <div id="daily-news-cover" class="daily-news show flex-center">
-              <h4 class="lighter text-center" style="font-size: 16pt">Click on a data point to start!</h4>
-            </div>
+          </div>
         </div>
         <div id="comparison">
             <canvas id="timelinecanvas" height="28"></canvas>
@@ -105,11 +109,12 @@
                   <th onclick="sortTable(1)">Price</th>
                   <th onclick="sortTable(1)">Volume (1 mo)</th>
                   <th onclick="sortTable(1)">Position</th>
-                  <th onclick="sortTable(0)">Ranking</th>
+                  <!-- <th onclick="sortTable(0)">Ranking</th> -->
                   <!-- <th onclick="sortTable(1)">Key words</th> -->
               </tr>
             </table>
-            <svg id="volumeCircle" width="100%" height="100%"></svg>
+            <svg id="volumeCircle" width="100%"></svg>
+            <svg id="volumePercent" width="100%"></svg>
         </div>
     </main>
 
