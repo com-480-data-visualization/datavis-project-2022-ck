@@ -162,6 +162,7 @@ function wordCloud(selector, words, max_word) {
 
 function freqDict(data) {
   var counter = {};
+  var category_counter = {};
 
   data.forEach((value) => {
     let keywords = value.keywords.replace(/‘()’’',[!\.,:;\?]/g, "").split(" ");
@@ -169,13 +170,27 @@ function freqDict(data) {
     let categories = value.categories.split("|");
     keywords.forEach((value) => {
       categories.forEach((category) => {
+        if (category in category_counter) category_counter[category] += 1;
+        else category_counter[category] = 1;
+
         if (value in counter) {
           if (category in counter[value]) counter[value][category] += 1;
           else counter[value][category] = 1;
-        } else counter[value] = { category: 1 };
+        } else {
+          counter[value] = {};
+          counter[value][category] = 1;
+        }
       });
       if ("size" in counter[value]) counter[value]["size"] += 1;
       else counter[value]["size"] = 1;
+    });
+  });
+
+  Object.entries(counter).forEach(([keyword, value]) => {
+    Object.entries(value).forEach(([coin, cnt]) => {
+      if (coin != "size") {
+        counter[keyword][coin] = (cnt / category_counter[coin]) * 100;
+      }
     });
   });
   var words = [];

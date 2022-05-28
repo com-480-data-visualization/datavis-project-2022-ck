@@ -41,15 +41,13 @@ class TextVisualization {
       .attr("transform", `translate(${this.width / 2}, ${this.height / 2})`);
 
     this.drawCircle();
-    this.drawText();
   }
-
   drawCircle() {
     this.coins.forEach((val, idx) => {
       var arc = d3
         .arc()
-        .innerRadius(0.75)
-        .outerRadius(0.85)
+        .innerRadius(0)
+        .outerRadius(5)
         .startAngle(this.scaleAngle(idx))
         .endAngle(this.scaleAngle(idx + 1));
 
@@ -59,16 +57,8 @@ class TextVisualization {
         .attr("class", "arc")
         .attr("d", arc)
         .attr("transform", `scale(${this.width / 2}, ${this.height / 2})`)
-        .attr("fill", this.colors[val]);
-
-      this.svg
-        .append("text")
-        .attr("dy", -10)
-        .append("textPath")
-        .attr("xlink:href", "#arc_" + val)
-        .style("text-anchor", "middle")
-        .attr("startOffset", "25%")
-        .text(val);
+        .attr("fill", this.colors[val])
+        .style("opacity", 0.8);
     });
   }
 
@@ -80,6 +70,12 @@ class TextVisualization {
     const selectedCoins = this.coins;
     const color = this.colors;
     return (data) => {
+      function ratio_of(L, c) {
+        let sum = 0;
+        Object.keys(L).forEach((key) => (sum += L[key]));
+        return L[c] / sum;
+      }
+
       var words = freqDict(data);
       words.sort((a, b) => b.count - a.count);
       words = words.slice(0, max_num);
@@ -112,7 +108,7 @@ class TextVisualization {
         .attr("id", function (d) {
           return "wordcloud_" + d.text;
         })
-        .style("opacity", 0.6);
+        .style("opacity", 0.8);
 
       // Add Text
       cloud
@@ -124,7 +120,8 @@ class TextVisualization {
         })
         .style("font-size", function (d) {
           return d.size + "px";
-        });
+        })
+        .style("fill", "white");
 
       // Add horizontal bar
       words.forEach((word) => {
@@ -150,13 +147,62 @@ class TextVisualization {
         svg
           .selectAll(id)
           .on("mouseover", (d, i) => {
-            d3.select(id).transition().duration("50").style("opacity", 1);
-            d3.select(id).select("text").style("background-color", "white");
+            d3.select(id)
+              .transition()
+              .duration("50")
+              .style("opacity", 1)
+              .style("cursor", "pointer");
+            d3.select(id).select("text").style("background", "white");
           })
           .on("mouseout", (d, i) => {
             d3.select(id).transition().duration("50").style("opacity", 0.6);
           });
       });
+
+      // prevent overlap
+
+      function getPosition(element) {
+        let position = {};
+        let string = element.attr("transform");
+        let translate = string
+          .substring(string.indexOf("(") + 1, string.indexOf(")"))
+          .split(",");
+
+        let pos = element.node().getBoundingClientRect();
+        position["left"] = parseFloat(translate[0]);
+        position["top"] = parseFloat(translate[1]);
+        position["right"] = position["left"] + pos.width;
+        position["bottom"] = position["top"] + pos.height;
+        return position;
+      }
+      for (var i = 0; i < 5; i++) {
+        words.forEach((word, idx) => {
+          var self = d3.select("#wordcloud_" + word.text);
+          var a;
+          for (var j = 0; j < idx; j++) {
+            var that = d3.select("#wordcloud_" + words[j].text);
+            var b = getPosition(that);
+            a = getPosition(self);
+            while (
+              !(
+                b.left > a.right ||
+                b.right < a.left ||
+                b.top > a.bottom ||
+                b.bottom < a.top
+              )
+            ) {
+              // move text
+              a = getPosition(self);
+              let dx = Math.random() * 10 - 5;
+              let dy = Math.random() * 10 - 5;
+              self.attr(
+                "transform",
+                `translate(${a.left + dx}, ${a.top + dy})`
+              );
+            }
+          }
+        });
+      }
     };
   }
 
