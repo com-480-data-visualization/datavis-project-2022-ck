@@ -185,6 +185,7 @@ function freqDict(data) {
       text: key,
       size: value.size * multi_font_size + min_font_size,
       category: value,
+      count: value.size,
     });
   });
   return words;
