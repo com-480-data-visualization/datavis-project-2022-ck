@@ -40,3 +40,8 @@
   color: rgb(232, 231, 231);
   font-weight: bolder;
 }
+
+#text-viz {
+  display: flex;
+  justify-content: center;
+}
