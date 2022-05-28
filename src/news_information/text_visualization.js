@@ -151,7 +151,7 @@ class TextVisualization {
     var textWidth = [];
     cloud
       .append("text")
-      .style("font-family", "Impact")
+      .style("font-family", "Roboto")
       .attr("text-anchor", "middle")
       .text(function (d) {
         return d.text;
@@ -208,13 +208,13 @@ class TextVisualization {
       .split(",");
 
     let pos = element.node().getBoundingClientRect();
-
+    let margin = 2;
     position["x"] = parseFloat(translate[0]);
     position["y"] = parseFloat(translate[1]);
-    position["left"] = position.x - pos.width / 2;
-    position["top"] = position.y - pos.height / 2;
-    position["right"] = position.x + pos.width / 2;
-    position["bottom"] = position.y + pos.height / 2;
+    position["left"] = position.x - pos.width / 2 - margin;
+    position["top"] = position.y - pos.height / 2 - margin;
+    position["right"] = position.x + pos.width / 2 + margin;
+    position["bottom"] = position.y + pos.height / 2 + margin;
     return position;
   }
 
@@ -243,7 +243,7 @@ class TextVisualization {
   move_text(element, iteration) {
     var pos = this.get_position(element);
 
-    const number_of_spiral = 1000;
+    const number_of_spiral = 500;
     const thetaMax = number_of_spiral * 2 * Math.PI;
     const radius = this.width / 2;
     const awayStep = radius / thetaMax;
