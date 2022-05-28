@@ -64,20 +64,11 @@ class TextVisualization {
 
   drawText() {
     var svg = this.svg;
-    const width = this.width;
-    const height = this.height;
-    const max_num = 50;
-    const selectedCoins = this.coins;
-    const color = this.colors;
     return (data) => {
-      function ratio_of(L, c) {
-        let sum = 0;
-        Object.keys(L).forEach((key) => (sum += L[key]));
-        return L[c] / sum;
-      }
-
       var words = freqDict(data);
       words.sort((a, b) => b.count - a.count);
+
+      const max_num = 50;
       words = words.slice(0, max_num);
 
       let font_size = d3
@@ -97,51 +88,13 @@ class TextVisualization {
         };
       });
 
-      var cloud = svg
-        .selectAll("g")
-        .data(words)
-        .enter()
-        .append("g")
-        .attr("transform", function (d) {
-          return "translate(" + d.x + "," + d.y + ")";
-        })
-        .attr("id", function (d) {
-          return "wordcloud_" + d.text;
-        })
-        .style("opacity", 0.8);
+      if (this.coins.length == 1) {
+        this.draw_text_one(words);
+      } else {
+        this.draw_text_multi(words);
+      }
 
-      // Add Text
-      cloud
-        .append("text")
-        .style("font-family", "Impact")
-        .attr("text-anchor", "middle")
-        .text(function (d) {
-          return d.text;
-        })
-        .style("font-size", function (d) {
-          return d.size + "px";
-        })
-        .style("fill", "white");
-
-      // Add horizontal bar
-      words.forEach((word) => {
-        const stack_data = d3.stack().keys(selectedCoins)([word.ratio]);
-        let word_g = svg.selectAll("#wordcloud_" + word.text);
-        let width = word_g.select("text").node().getBoundingClientRect().width;
-        word_g
-          .append("g")
-          .selectAll("g")
-          .data(stack_data)
-          .enter()
-          .append("rect")
-          .attr("fill", (d) => color[d.key])
-          .attr("x", (d) => d[0][0] * width - width / 2)
-          .attr("y", 0)
-          .attr("width", (d) => (d[0][1] - d[0][0]) * width)
-          .attr("height", 5);
-      });
-
-      // Do not Overlap
+      // Mouse Hovering
       words.forEach((word) => {
         let id = "#wordcloud_" + word.text;
         svg
@@ -155,57 +108,139 @@ class TextVisualization {
             d3.select(id).select("text").style("background", "white");
           })
           .on("mouseout", (d, i) => {
-            d3.select(id).transition().duration("50").style("opacity", 0.6);
+            d3.select(id).transition().duration("50").style("opacity", 0.8);
           });
       });
-
-      // prevent overlap
-
-      function getPosition(element) {
-        let position = {};
-        let string = element.attr("transform");
-        let translate = string
-          .substring(string.indexOf("(") + 1, string.indexOf(")"))
-          .split(",");
-
-        let pos = element.node().getBoundingClientRect();
-        position["left"] = parseFloat(translate[0]);
-        position["top"] = parseFloat(translate[1]);
-        position["right"] = position["left"] + pos.width;
-        position["bottom"] = position["top"] + pos.height;
-        return position;
-      }
-      for (var i = 0; i < 5; i++) {
-        words.forEach((word, idx) => {
-          var self = d3.select("#wordcloud_" + word.text);
-          var a;
-          for (var j = 0; j < idx; j++) {
-            var that = d3.select("#wordcloud_" + words[j].text);
-            var b = getPosition(that);
-            a = getPosition(self);
-            while (
-              !(
-                b.left > a.right ||
-                b.right < a.left ||
-                b.top > a.bottom ||
-                b.bottom < a.top
-              )
-            ) {
-              // move text
-              a = getPosition(self);
-              let dx = Math.random() * 10 - 5;
-              let dy = Math.random() * 10 - 5;
-              self.attr(
-                "transform",
-                `translate(${a.left + dx}, ${a.top + dy})`
-              );
-            }
-          }
-        });
-      }
     };
   }
 
+  draw_text_multi(words) {
+    var cloud = this.svg
+      .selectAll("g")
+      .data(words)
+      .enter()
+      .append("g")
+      .attr("transform", function (d) {
+        return "translate(" + d.x + "," + d.y + ")";
+      })
+      .attr("id", function (d) {
+        return "wordcloud_" + d.text;
+      })
+      .style("opacity", 0.8);
+
+    // Add Text
+    cloud
+      .append("text")
+      .style("font-family", "Impact")
+      .attr("text-anchor", "middle")
+      .text(function (d) {
+        return d.text;
+      })
+      .style("font-size", function (d) {
+        return d.size + "px";
+      })
+      .style("fill", "white");
+
+    // Add horizontal bar
+    words.forEach((word) => {
+      const stack_data = d3.stack().keys(this.coins)([word.ratio]);
+      let word_g = this.svg.selectAll("#wordcloud_" + word.text);
+      let width = word_g.select("text").node().getBoundingClientRect().width;
+      word_g
+        .append("g")
+        .selectAll("g")
+        .data(stack_data)
+        .enter()
+        .append("rect")
+        .attr("fill", (d) => this.colors[d.key])
+        .attr("x", (d) => d[0][0] * width - width / 2)
+        .attr("y", 0)
+        .attr("width", (d) => (d[0][1] - d[0][0]) * width)
+        .attr("height", 5);
+    });
+
+    // Prevent Overlap
+    function getPosition(element) {
+      let position = {};
+      let string = element.attr("transform");
+      let translate = string
+        .substring(string.indexOf("(") + 1, string.indexOf(")"))
+        .split(",");
+
+      let pos = element.node().getBoundingClientRect();
+      position["left"] = parseFloat(translate[0]);
+      position["top"] = parseFloat(translate[1]);
+      position["right"] = position["left"] + pos.width;
+      position["bottom"] = position["top"] + pos.height;
+      return position;
+    }
+    for (var i = 0; i < 10; i++) {
+      words.forEach((word, idx) => {
+        var self = d3.select("#wordcloud_" + word.text);
+        var a;
+        for (var j = 0; j < idx; j++) {
+          var that = d3.select("#wordcloud_" + words[j].text);
+          var b = getPosition(that);
+          a = getPosition(self);
+          while (
+            !(
+              b.left > a.right ||
+              b.right < a.left ||
+              b.top > a.bottom ||
+              b.bottom < a.top
+            )
+          ) {
+            // move text
+            a = getPosition(self);
+            let dx = Math.random() * 10 - 5;
+            let dy = Math.random() * 10 - 5;
+            self.attr("transform", `translate(${a.left + dx}, ${a.top + dy})`);
+          }
+        }
+      });
+    }
+  }
+
+  draw_text_one(words) {
+    let svg = this.svg;
+    function draw(words) {
+      var cloud = svg.append("g").selectAll("text").data(words);
+
+      cloud
+        .enter()
+        .append("text")
+        .style("font-family", "Impact")
+        .style("fill", "white")
+        .attr("text-anchor", "middle")
+        .attr("id", function (d) {
+          return "wordcloud_" + d.text;
+        })
+        .text(function (d) {
+          return d.text;
+        })
+        .style("font-size", function (d) {
+          return d.size + "px";
+        })
+        .attr("transform", function (d) {
+          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+        })
+        .style("opacity", 0.8);
+    }
+    var layout = d3.layout
+      .cloud()
+      .size([this.width, this.height])
+      .words(words)
+      .padding(2)
+      .rotate(function () {
+        return 0;
+      })
+      .font("Impact")
+      .fontSize(function (d) {
+        return d.size;
+      })
+      .on("end", draw);
+    layout.start();
+  }
   compute_position(category) {
     let data = {};
     var sum = 0;
