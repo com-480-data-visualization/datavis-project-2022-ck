@@ -22,6 +22,7 @@ class TextVisualization {
       let y = -(this.height / 2) * Math.cos(this.scaleAngle(idx + 0.5));
       this.vectors[coin] = { x: x, y: y };
     });
+    console.log(this.vectors);
     this.showTextVisualization = this.showTextVisualization.bind(this);
     this.initialize();
   }
@@ -58,7 +59,18 @@ class TextVisualization {
         .attr("d", arc)
         .attr("transform", `scale(${this.width / 2}, ${this.height / 2})`)
         .attr("fill", this.colors[val])
-        .style("opacity", 0.8);
+        .style("opacity", 0.7);
+
+      this.svg
+        .append("text")
+        .text(val)
+        .style("fill", this.colors[val])
+        .style("font-family", "Impact")
+        .style("font-size", 50)
+        .attr(
+          "transform",
+          `translate(${this.vectors[val].x - 40}, ${this.vectors[val].y - 10})`
+        );
     });
   }
 
