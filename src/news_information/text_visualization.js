@@ -148,6 +148,7 @@ class TextVisualization {
       .style("opacity", 0.8);
 
     // Add Text
+    var textWidth = [];
     cloud
       .append("text")
       .style("font-family", "Impact")
@@ -158,10 +159,17 @@ class TextVisualization {
       .style("font-size", function (d) {
         return d.size + "px";
       })
-      .style("fill", "white");
+      .style("fill", "white")
+      .attr("dx", function (d) {
+        return -this.getComputedTextLength() / 2;
+      })
+      .each(function (d) {
+        var thisWidth = this.getComputedTextLength();
+        textWidth.push(thisWidth);
+      });
 
     // Add horizontal bar
-    words.forEach((word) => {
+    words.forEach((word, idx) => {
       const stack_data = d3.stack().keys(this.coins)([word.ratio]);
       let word_g = this.svg.selectAll("#wordcloud_" + word.text);
       let width = word_g.select("text").node().getBoundingClientRect().width;
@@ -175,49 +183,83 @@ class TextVisualization {
         .attr("x", (d) => d[0][0] * width - width / 2)
         .attr("y", 0)
         .attr("width", (d) => (d[0][1] - d[0][0]) * width)
-        .attr("height", 5);
+        .attr("height", 5)
+        .attr("transform", `translate(${-textWidth[idx] / 2}, 0)`);
     });
 
     // Prevent Overlap
-    function getPosition(element) {
-      let position = {};
-      let string = element.attr("transform");
-      let translate = string
-        .substring(string.indexOf("(") + 1, string.indexOf(")"))
-        .split(",");
 
-      let pos = element.node().getBoundingClientRect();
-      position["left"] = parseFloat(translate[0]);
-      position["top"] = parseFloat(translate[1]);
-      position["right"] = position["left"] + pos.width;
-      position["bottom"] = position["top"] + pos.height;
-      return position;
+    words.forEach((word, idx) => {
+      var self = d3.select("#wordcloud_" + word.text);
+      console.log(word.text);
+      var iteration = 0;
+      while (this.collide(self, words.slice(0, idx))) {
+        this.move_text(self, iteration);
+        iteration += 1;
+      }
+    });
+  }
+
+  get_position(element) {
+    let position = {};
+    let string = element.attr("transform");
+    let translate = string
+      .substring(string.indexOf("(") + 1, string.indexOf(")"))
+      .split(",");
+
+    let pos = element.node().getBoundingClientRect();
+
+    position["x"] = parseFloat(translate[0]);
+    position["y"] = parseFloat(translate[1]);
+    position["left"] = position.x - pos.width / 2;
+    position["top"] = position.y - pos.height / 2;
+    position["right"] = position.x + pos.width / 2;
+    position["bottom"] = position.y + pos.height / 2;
+    return position;
+  }
+
+  collide(self, words) {
+    var a = this.get_position(self);
+    for (var i = 0; i < words.length; i++) {
+      var word = words[i];
+      var that = d3.select("#wordcloud_" + word.text);
+      var b = this.get_position(that);
+      if (
+        !(
+          b.left > a.right ||
+          b.right < a.left ||
+          b.top > a.bottom ||
+          b.bottom < a.top
+        )
+      ) {
+        return true;
+      }
     }
-    for (var i = 0; i < 10; i++) {
-      words.forEach((word, idx) => {
-        var self = d3.select("#wordcloud_" + word.text);
-        var a;
-        for (var j = 0; j < idx; j++) {
-          var that = d3.select("#wordcloud_" + words[j].text);
-          var b = getPosition(that);
-          a = getPosition(self);
-          while (
-            !(
-              b.left > a.right ||
-              b.right < a.left ||
-              b.top > a.bottom ||
-              b.bottom < a.top
-            )
-          ) {
-            // move text
-            a = getPosition(self);
-            let dx = Math.random() * 10 - 5;
-            let dy = Math.random() * 10 - 5;
-            self.attr("transform", `translate(${a.left + dx}, ${a.top + dy})`);
-          }
-        }
-      });
+    return false;
+  }
+
+  /* ref https://github.com/Syzygy2048/RadCloud/blob/master/app/src/main/java/io/github/syzygy2048/radcloud/SpiralGenerator.java */
+
+  move_text(element, iteration) {
+    var pos = this.get_position(element);
+
+    const number_of_spiral = 1000;
+    const thetaMax = number_of_spiral * 2 * Math.PI;
+    const radius = this.width / 2;
+    const awayStep = radius / thetaMax;
+    const chord = 3;
+    const theta = chord / awayStep;
+    var deltaTheta = theta;
+    var away = awayStep * theta;
+
+    for (var i = iteration; i > 0; i--) {
+      away = awayStep * deltaTheta;
+      deltaTheta += chord / away;
     }
+    var around = deltaTheta + 1;
+    var x = pos.x + Math.cos(around) * away;
+    var y = pos.y + Math.cos(around) * away;
+    element.attr("transform", `translate(${x},${y})`);
   }
 
   draw_text_one(words) {
