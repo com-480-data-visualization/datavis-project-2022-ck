@@ -64,20 +64,23 @@ class TextVisualization {
       if (this.vectors[val].x > 1) dx = -1;
       else if (this.vectors[val].x < -1) dx = 1;
 
-      let dy = 0;
-
+      let vectors = this.vectors[val];
       this.svg
         .append("text")
         .text(val)
         .style("fill", this.colors[val])
         .style("font-family", "Impact")
         .style("font-size", 50)
-        .attr(
-          "transform",
-          `translate(${this.vectors[val].x + dx * 80 - 40}, ${
-            this.vectors[val].y - 5
-          })`
-        );
+        .attr("dx", function (d) {
+          return vectors.x * 0.9 - this.getComputedTextLength() / 2;
+        })
+        .attr("dy", vectors.y * 0.9 + 25);
+      // .attr(
+      //   "transform",
+      //   `translate(${this.vectors[val].x + dx * 80 - 40}, ${
+      //     this.vectors[val].y - 5
+      //   })`
+      // );
     });
   }
 
