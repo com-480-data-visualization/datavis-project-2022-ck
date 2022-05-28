@@ -64,20 +64,17 @@ class TextVisualization {
       if (this.vectors[val].x > 1) dx = -1;
       else if (this.vectors[val].x < -1) dx = 1;
 
-      let dy = 0;
-
+      let vectors = this.vectors[val];
       this.svg
         .append("text")
         .text(val)
         .style("fill", this.colors[val])
         .style("font-family", "Impact")
         .style("font-size", 50)
-        .attr(
-          "transform",
-          `translate(${this.vectors[val].x + dx * 80 - 40}, ${
-            this.vectors[val].y - 5
-          })`
-        );
+        .attr("dx", function (d) {
+          return vectors.x * 0.9 - this.getComputedTextLength() / 2;
+        })
+        .attr("dy", vectors.y * 0.9 + 25);
     });
   }
 
@@ -148,9 +145,10 @@ class TextVisualization {
       .style("opacity", 0.8);
 
     // Add Text
+    var textWidth = [];
     cloud
       .append("text")
-      .style("font-family", "Impact")
+      .style("font-family", "Roboto")
       .attr("text-anchor", "middle")
       .text(function (d) {
         return d.text;
@@ -161,10 +159,10 @@ class TextVisualization {
       .style("fill", "white");
 
     // Add horizontal bar
-    words.forEach((word) => {
+    words.forEach((word, idx) => {
       const stack_data = d3.stack().keys(this.coins)([word.ratio]);
       let word_g = this.svg.selectAll("#wordcloud_" + word.text);
-      let width = word_g.select("text").node().getBoundingClientRect().width;
+      let width = word_g.node().getBoundingClientRect().width;
       word_g
         .append("g")
         .selectAll("g")
@@ -176,48 +174,89 @@ class TextVisualization {
         .attr("y", 0)
         .attr("width", (d) => (d[0][1] - d[0][0]) * width)
         .attr("height", 5);
+
+      let height = word_g.node().getBoundingClientRect().height;
+      word_g
+        .select("text")
+        .attr("dx", -width / 2)
+        .attr("dy", height / 2);
+      word_g
+        .select("g")
+        .attr("transform", `translate(${-width / 2}, ${height / 2})`);
     });
 
     // Prevent Overlap
-    function getPosition(element) {
-      let position = {};
-      let string = element.attr("transform");
-      let translate = string
-        .substring(string.indexOf("(") + 1, string.indexOf(")"))
-        .split(",");
 
-      let pos = element.node().getBoundingClientRect();
-      position["left"] = parseFloat(translate[0]);
-      position["top"] = parseFloat(translate[1]);
-      position["right"] = position["left"] + pos.width;
-      position["bottom"] = position["top"] + pos.height;
-      return position;
+    words.forEach((word, idx) => {
+      var self = d3.select("#wordcloud_" + word.text);
+      var iteration = 0;
+      while (this.collide(self, words.slice(0, idx))) {
+        this.move_text(self, iteration);
+        iteration += 1;
+      }
+    });
+  }
+
+  get_position(element) {
+    let position = {};
+    let string = element.attr("transform");
+    let translate = string
+      .substring(string.indexOf("(") + 1, string.indexOf(")"))
+      .split(",");
+
+    let pos = element.node().getBoundingClientRect();
+    let margin = 2;
+    position["x"] = parseFloat(translate[0]);
+    position["y"] = parseFloat(translate[1]);
+    position["left"] = position.x - pos.width / 2 - margin;
+    position["top"] = position.y - pos.height / 2 - margin;
+    position["right"] = position.x + pos.width / 2 + margin;
+    position["bottom"] = position.y + pos.height / 2 + margin;
+    return position;
+  }
+
+  collide(self, words) {
+    var a = this.get_position(self);
+    for (var i = 0; i < words.length; i++) {
+      var word = words[i];
+      var that = d3.select("#wordcloud_" + word.text);
+      var b = this.get_position(that);
+      if (
+        !(
+          b.left > a.right ||
+          b.right < a.left ||
+          b.top > a.bottom ||
+          b.bottom < a.top
+        )
+      ) {
+        return true;
+      }
     }
-    for (var i = 0; i < 10; i++) {
-      words.forEach((word, idx) => {
-        var self = d3.select("#wordcloud_" + word.text);
-        var a;
-        for (var j = 0; j < idx; j++) {
-          var that = d3.select("#wordcloud_" + words[j].text);
-          var b = getPosition(that);
-          a = getPosition(self);
-          while (
-            !(
-              b.left > a.right ||
-              b.right < a.left ||
-              b.top > a.bottom ||
-              b.bottom < a.top
-            )
-          ) {
-            // move text
-            a = getPosition(self);
-            let dx = Math.random() * 10 - 5;
-            let dy = Math.random() * 10 - 5;
-            self.attr("transform", `translate(${a.left + dx}, ${a.top + dy})`);
-          }
-        }
-      });
+    return false;
+  }
+
+  /* ref https://github.com/Syzygy2048/RadCloud/blob/master/app/src/main/java/io/github/syzygy2048/radcloud/SpiralGenerator.java */
+
+  move_text(element, iteration) {
+    var pos = this.get_position(element);
+
+    const number_of_spiral = 500;
+    const thetaMax = number_of_spiral * 2 * Math.PI;
+    const radius = this.width / 2;
+    const awayStep = radius / thetaMax;
+    const chord = 3;
+    const theta = chord / awayStep;
+    var deltaTheta = theta;
+    var away = awayStep * theta;
+
+    for (var i = iteration; i > 0; i--) {
+      away = awayStep * deltaTheta;
+      deltaTheta += chord / away;
     }
+    var around = deltaTheta + 1;
+    var x = pos.x + Math.cos(around) * away;
+    var y = pos.y + Math.cos(around) * away;
+    element.attr("transform", `translate(${x},${y})`);
   }
 
   draw_text_one(words) {
