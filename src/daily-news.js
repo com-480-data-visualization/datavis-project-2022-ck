@@ -90,7 +90,6 @@ function price_news_get_news_handler(data) {
 
   update_sentiment_score(sentiment_score_avg);
 
-//   d3.select("#sentiment-score").html("TODO: " + sentiment_score_avg.toFixed(2));
   d3.select("#news-count").html(length);
 
   data.forEach((d) => news_handler(d));
@@ -129,8 +128,6 @@ function update_sentiment_score(new_score) {
     newGauge.update(new_score);
 }
 
-/* reference: http://bl.ocks.org/msqr/3202712 */
-
 var gauge = function(container, width, margin) {
     var that = {};
 
@@ -152,9 +149,7 @@ var gauge = function(container, width, margin) {
             else return gradientColor2(x*2-1);
         }
         );
-        console.log(colors);
-        // var colors = ['rgb(255,0,0)', 'rgb(255,255,0)'];
-        
+
         var pies = d3.layout.pie()
             .value(d => d)
             .sort(null)
