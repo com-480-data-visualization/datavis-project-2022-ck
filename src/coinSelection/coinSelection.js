@@ -26,7 +26,7 @@ class SelectionTab {
       "Nov",
       "Dec",
     ];
-    this.selectedMonth = 3;
+    this.selectedMonth = 1;
     this.selectedYear = 2022;
     this.selectedCoins = ["BTC", "ETH", "XRP"];
 

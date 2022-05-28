@@ -8,12 +8,15 @@ function whenDocumentLoaded(action) {
 
 function getDateRange(year, month) {
   month -= 1;
+  console.log(month);
   let start_date = new Date();
+  start_date.setDate(1);
   start_date.setFullYear(year);
   start_date.setMonth(month);
-  start_date.setDate(1);
 
-  let end_date = new Date();
+  let end_date = new Date(); /* Feb only has 28/29 days. You will have a bug if you choose Jan => 1.29 => 2.29 not exists => 3.1*/
+  end_date.setDate(1);
+
   if (month < 12) {
     end_date.setFullYear(year);
     end_date.setMonth(month + 1);
@@ -21,7 +24,6 @@ function getDateRange(year, month) {
     end_date.setFullYear(year + 1);
     end_date.setMonth(1);
   }
-  end_date.setDate(1);
   end_date.setHours(0, 0, 0);
   return [start_date, end_date];
 }
@@ -59,7 +61,8 @@ whenDocumentLoaded(() => {
       updateTable(coins);
 
       // Price and News
-      price_news_plot(coins, "USD");
+      console.log(start_date, end_date);
+      price_news_plot(coins, "USD", start_date, end_date);
     }
   }
 
