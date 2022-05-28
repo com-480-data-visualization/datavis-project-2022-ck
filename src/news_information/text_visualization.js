@@ -75,12 +75,6 @@ class TextVisualization {
           return vectors.x * 0.9 - this.getComputedTextLength() / 2;
         })
         .attr("dy", vectors.y * 0.9 + 25);
-      // .attr(
-      //   "transform",
-      //   `translate(${this.vectors[val].x + dx * 80 - 40}, ${
-      //     this.vectors[val].y - 5
-      //   })`
-      // );
     });
   }
 
@@ -162,20 +156,13 @@ class TextVisualization {
       .style("font-size", function (d) {
         return d.size + "px";
       })
-      .style("fill", "white")
-      .attr("dx", function (d) {
-        return -this.getComputedTextLength() / 2;
-      })
-      .each(function (d) {
-        var thisWidth = this.getComputedTextLength();
-        textWidth.push(thisWidth);
-      });
+      .style("fill", "white");
 
     // Add horizontal bar
     words.forEach((word, idx) => {
       const stack_data = d3.stack().keys(this.coins)([word.ratio]);
       let word_g = this.svg.selectAll("#wordcloud_" + word.text);
-      let width = word_g.select("text").node().getBoundingClientRect().width;
+      let width = word_g.node().getBoundingClientRect().width;
       word_g
         .append("g")
         .selectAll("g")
@@ -186,15 +173,22 @@ class TextVisualization {
         .attr("x", (d) => d[0][0] * width - width / 2)
         .attr("y", 0)
         .attr("width", (d) => (d[0][1] - d[0][0]) * width)
-        .attr("height", 5)
-        .attr("transform", `translate(${-textWidth[idx] / 2}, 0)`);
+        .attr("height", 5);
+
+      let height = word_g.node().getBoundingClientRect().height;
+      word_g
+        .select("text")
+        .attr("dx", -width / 2)
+        .attr("dy", height / 2);
+      word_g
+        .select("g")
+        .attr("transform", `translate(${-width / 2}, ${height / 2})`);
     });
 
     // Prevent Overlap
 
     words.forEach((word, idx) => {
       var self = d3.select("#wordcloud_" + word.text);
-      console.log(word.text);
       var iteration = 0;
       while (this.collide(self, words.slice(0, idx))) {
         this.move_text(self, iteration);
