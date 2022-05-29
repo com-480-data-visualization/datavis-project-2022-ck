@@ -204,7 +204,8 @@ function updateCircles(v, year, month) {
     .enter()
     .append("circle")
     .attr("r", function (d, _) {
-      return d[1] * 1e-8;
+      console.log(d[1] * 1e-9)
+      return d[1] * 1e-9;
     })
     .attr("class", "circles")
     .attr("cx", function (_, i) {
