@@ -113,8 +113,7 @@ function updateTable(coins) {
     let newType = newRow.insertCell(0);
     let newPrice = newRow.insertCell(1);
     let newVolume = newRow.insertCell(2);
-    let newNV = newRow.insertCell(3);
-    let newPosition = newRow.insertCell(4);
+    let newPosition = newRow.insertCell(3);
     // let newKeyWords = newRow.insertCell(4);
 
     let img = new Image();
@@ -144,7 +143,6 @@ function updateTable(coins) {
       }
       let newP = document.createTextNode(average(closeP));
       let volumeM = sum(volumeT) + sum(volumeF);
-      let NV = sum(volumeF) - sum(volumeT);
       let newV = document.createTextNode(volumeM);
       let pos = "N/A";
       if (volumeM !== 0) {
@@ -153,8 +151,6 @@ function updateTable(coins) {
       let newPos = document.createTextNode(pos);
       newPrice.append("$", newP);
       newVolume.append("$", newV);
-      if (NV > 0) newNV.append("$", NV)
-      else newNV.append("-$", Math.abs(NV));
       newPosition.appendChild(newPos);
       counter([e, volumeM, sum(volumeY)]);
     };
@@ -168,16 +164,6 @@ function updateCircles(v, year, month) {
   const width = 500;
   const start = 350;
   const interval = 300;
-  const data = [
-    { x: start, y: 75 },
-    { x: start + interval * (v.length - 1), y: 75 },
-  ];
-  const lineGenerator = d3
-    .line()
-    .x((d) => d.x)
-    .y((d) => d.y);
-
-
   var circleSvg = d3.select("#volumeCircle");
 
   circleSvg
@@ -185,7 +171,7 @@ function updateCircles(v, year, month) {
     .text("Monthly Volume")
     .attr("x", 50)
     .attr("y", 80)
-    .attr("stroke", "black")
+    .attr("stroke", "#51c5cf")
     .attr("stroke-width", 1);
 
   circleSvg.selectAll("svg").remove();
@@ -196,6 +182,14 @@ function updateCircles(v, year, month) {
     .attr("height", 5)
     .attr("class", "radSol");
 
+  const data = [
+    { x: start, y: 75 },
+    { x: start + interval * (v.length - 1), y: 75 },
+  ];
+  const lineGenerator = d3
+    .line()
+    .x((d) => d.x)
+    .y((d) => d.y);
 
   circleSvg
     .append("path")
@@ -272,13 +266,13 @@ function updateArc(v, year, month) {
     .text("$" + (vms * 1e-9).toFixed(2) + "B")
     .attr("x", width / 2.3)
     .attr("y", width / 2)
-    .attr("fill", "black");
+    .attr("fill", "#51c5cf");
   arcSvg
     .append("text")
     .text("in " + month + " " + year)
     .attr("x", width / 2.43)
     .attr("y", width / 1.8)
-    .attr("fill", "black");
+    .attr("fill", "#51c5cf");
 
   var arcs = arcSvg
     .selectAll("g.arc")
@@ -299,7 +293,7 @@ function updateArc(v, year, month) {
       return "translate(" + arc.centroid(d) + ")";
     })
     .attr("text-anchor", "middle")
-    .attr("fill", "white")
+    .attr("fill", "#51c5cf")
     .text(function (d, _) {
       return d.value + "%";
     });
@@ -315,13 +309,13 @@ function updateArc(v, year, month) {
     .text("$" + (vys * 1e-9).toFixed(2) + "B")
     .attr("x", width / 2.3)
     .attr("y", width / 2)
-    .attr("fill", "black");
+    .attr("fill", "#51c5cf");
   arcSvg2
     .append("text")
     .text("in " + year)
     .attr("x", width / 2.2)
     .attr("y", width / 1.8)
-    .attr("fill", "black");
+    .attr("fill", "#51c5cf");
 
   var arcs2 = arcSvg2
     .selectAll("g.arc")
@@ -342,8 +336,7 @@ function updateArc(v, year, month) {
       return "translate(" + arc.centroid(d) + ")";
     })
     .attr("text-anchor", "middle")
-    .attr("fill", "white")
-    .style("font-weight", "bold")
+    .attr("fill", "#51c5cf")
     .text(function (d, _) {
       return d.value + "%";
     });
@@ -371,6 +364,7 @@ function sortTable(n) {
     rows = table.rows;
     /*Loop through all table rows (except the
     first, which contains table headers):*/
+    console.log(rows)
     for (i = 1; i < (rows.length - 1); i++) {
       //start by saying there should be no switching:
       shouldSwitch = false;
@@ -381,9 +375,6 @@ function sortTable(n) {
       //check if the two rows should switch place:
       p1 = x.innerHTML.substring(1)
       p2 = y.innerHTML.substring(1)
-      if (p1[0] == '$') p1 = '-' + p1.substring(1)
-      if (p2[0] == '$') p2 = '-' + p2.substring(1)
-      
       if (dir == "asc") {
         if (Number(p1) > Number(p2)) {
           // If so, mark as a switch and break the loop:
