@@ -87,7 +87,13 @@ let cloud_width = window.innerWidth*0.11,
   multi_font_size = 2;
 
 function wordCloud(selector, words, max_word) {
-  var words = freqDict(words, max_word);
+  if (words.length == 0) {
+    words.push({
+      categories: "",
+      keywords: "no news today no news today no news today no news today"
+    })
+  }
+  words = freqDict(words, max_word);
 
   var fill = d3.scale.category20();
 
