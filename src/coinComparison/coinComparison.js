@@ -50,6 +50,8 @@ var myChart = new Chart(ctx, {
           { x: "2018-07-25", y: 0 }, // trx
           { x: "2014-10-06", y: 0 }, // usdt
           { x: "2012-06-01", y: 0 }, // xrp
+          { x: "2019-01-01", y: 0 }, // end
+          { x: "2009-01-01", y: 0 }, // begin
         ],
         pointStyle: images,
         borderWidth: 1,
