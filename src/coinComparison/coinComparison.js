@@ -102,7 +102,6 @@ function deleteTBody() {
   }
 }
 
-
 function updateTable(coins) {
   const selected_date = document.getElementsByClassName("date select");
   const year = selected_date[0].lastChild.innerHTML;
@@ -351,7 +350,15 @@ function updateArc(v, year, month) {
 }
 
 function sortTable(n) {
-  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  var table,
+    rows,
+    switching,
+    i,
+    x,
+    y,
+    shouldSwitch,
+    dir,
+    switchcount = 0;
   table = document.getElementById("coinTable");
   switching = true;
   // Set the sorting direction to ascending:
@@ -397,7 +404,7 @@ function sortTable(n) {
       rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
       switching = true;
       // Each time a switch is done, increase this count by 1:
-      switchcount ++;
+      switchcount++;
     } else {
       /* If no switching has been done AND the direction is "asc",
       set the direction to "desc" and run the while loop again. */
