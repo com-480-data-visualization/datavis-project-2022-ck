@@ -9,13 +9,9 @@ function whenDocumentLoaded(action) {
 function getDateRange(year, month) {
   month -= 1;
   console.log(month);
-  let start_date = new Date();
-  start_date.setDate(1);
-  start_date.setFullYear(year);
-  start_date.setMonth(month);
+  let start_date = new Date(year, month, 1, 0, 0, 0, 0);
 
-  let end_date = new Date(); /* Feb only has 28/29 days. You will have a bug if you choose Jan => 1.29 => 2.29 not exists => 3.1*/
-  end_date.setDate(1);
+  let end_date = new Date(year, month, 1, 0, 0, 0, 0); /* Feb only has 28/29 days. You will have a bug if you choose Jan => 1.29 => 2.29 not exists => 3.1*/
 
   if (month < 12) {
     end_date.setFullYear(year);
