@@ -8,7 +8,6 @@ function whenDocumentLoaded(action) {
 
 function getDateRange(year, month) {
   month -= 1;
-  console.log(month);
   let start_date = new Date(year, month, 1, 0, 0, 0, 0);
 
   let end_date = new Date(year, month, 1, 0, 0, 0, 0); /* Feb only has 28/29 days. You will have a bug if you choose Jan => 1.29 => 2.29 not exists => 3.1*/
@@ -57,7 +56,6 @@ whenDocumentLoaded(() => {
       updateTable(coins);
 
       // Price and News
-      console.log(start_date, end_date);
       price_news_plot(coins, "USD", start_date, end_date);
     }
   }
