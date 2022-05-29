@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="./coinComparison/coinComparison.css" />
     <link rel="stylesheet" href="./news_information/news_information.css" />
     <link rel="stylesheet" href="price-news.css" />
-    
+
     <title>Cryptogram</title>
 </head>
 
@@ -102,20 +102,26 @@
         </div>
         <div id="comparison">
             <canvas id="timelinecanvas" height="30"></canvas>
-            <table id="coinTable">
-              <tr>
-                  <th onclick="sortTable(0)">Coin type</th>
-                  <th onclick="sortTable(1)">Price</th>
-                  <th onclick="sortTable(1)">Volume (1 mo)</th>
-                  <th onclick="sortTable(1)">Position</th>
-                  <!-- <th onclick="sortTable(0)">Ranking</th> -->
-                  <!-- <th onclick="sortTable(1)">Key words</th> -->
-              </tr>
-            </table>
-            <svg id="volumeCircle" width="100%"></svg>
-            <h2 style="color:#51c5cf">% of selected crypto total volume</h2>
-            <svg id="volumePercent" width="100%"></svg>
-            <svg id="volumeYear" width="100%"></svg>
+            <div id="ptable">
+              <p id="tablep">Click header to sort columns</p>
+              <table id="coinTable" margin-top=0>
+                <tr>
+                    <th>Coin type</th>
+                    <!-- <th scope="col"><a class="sort-by" onclick="sortTable(1)">Price</a></th> -->
+                    <th onclick="sortTable(1)">Price</th>
+                    <th onclick="sortTable(2)">Volume (1 mo)</th>
+                    <th>Position</th>
+                    <!-- <th onclick="sortTable(0)">Ranking</th> -->
+                    <!-- <th onclick="sortTable(1)">Key words</th> -->
+                </tr>
+              </table>
+              <svg id="volumeCircle" width="100%"></svg>
+              <h2 style="color:#51c5cf">% of selected crypto total volume</h2>
+              <svg id="volumePercent" width="100%"></svg>
+              <svg id="volumeYear" width="100%"></svg>
+              <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+            </div>
+
         </div>
     </main>
 

@@ -1,7 +1,11 @@
 table {
     border-collapse: collapse;
     width: 80%;
-    margin: 3%;
+    margin: auto;
+}
+
+#tablep {
+    margin: 3% auto 0 10%;
 }
 
 td, th {
@@ -20,11 +24,46 @@ th {
     color: white;
 }
 
-#volumeCircle, #volumePercent, #volumeYear {
-    margin: 3%;
+ #volumePercent, #volumeYear {
+    margin: 0 5%;
 }
 
+#timelinecanvas {
+    margin: auto;
+}
 
-/* #timelinecanvas {
-    margin: 5%;
-} */
+a:link,
+a:visited,
+a:hover,
+a:active {
+	color: #000;
+	text-decoration: none;
+}
+th a,
+td a { 
+	display: block;
+	width: 100%;
+}
+th a.sort-by { 
+	padding-right: 18px;
+	position: relative;
+}
+a.sort-by:before,
+a.sort-by:after {
+	border: 4px solid transparent;
+	content: "";
+	display: block;
+	height: 0;
+	right: 5px;
+	top: 50%;
+	position: absolute;
+	width: 0;
+}
+a.sort-by:before {
+	border-bottom-color: #666;
+	margin-top: -9px;
+}
+a.sort-by:after {
+	border-top-color: #666;
+	margin-top: 1px;
+}
