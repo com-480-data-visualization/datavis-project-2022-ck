@@ -102,7 +102,6 @@ function deleteTBody() {
   }
 }
 
-
 function updateTable(coins) {
   const selected_date = document.getElementsByClassName("date select");
   const year = selected_date[0].lastChild.innerHTML;
@@ -344,7 +343,15 @@ function updateArc(v, year, month) {
 }
 
 function sortTable(n) {
-  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  var table,
+    rows,
+    switching,
+    i,
+    x,
+    y,
+    shouldSwitch,
+    dir,
+    switchcount = 0;
   table = document.getElementById("coinTable");
   switching = true;
   // Set the sorting direction to ascending:
@@ -357,8 +364,8 @@ function sortTable(n) {
     rows = table.rows;
     /*Loop through all table rows (except the
     first, which contains table headers):*/
-    console.log(rows)
-    for (i = 1; i < (rows.length - 1); i++) {
+    console.log(rows);
+    for (i = 1; i < rows.length - 1; i++) {
       //start by saying there should be no switching:
       shouldSwitch = false;
       /*Get the two elements you want to compare,
@@ -366,8 +373,8 @@ function sortTable(n) {
       x = rows[i].getElementsByTagName("td")[n];
       y = rows[i + 1].getElementsByTagName("td")[n];
       //check if the two rows should switch place:
-      p1 = x.innerHTML.substring(1)
-      p2 = y.innerHTML.substring(1)
+      p1 = x.innerHTML.substring(1);
+      p2 = y.innerHTML.substring(1);
       if (dir == "asc") {
         if (Number(p1) > Number(p2)) {
           // If so, mark as a switch and break the loop:
@@ -388,7 +395,7 @@ function sortTable(n) {
       rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
       switching = true;
       // Each time a switch is done, increase this count by 1:
-      switchcount ++;
+      switchcount++;
     } else {
       /* If no switching has been done AND the direction is "asc",
       set the direction to "desc" and run the while loop again. */
