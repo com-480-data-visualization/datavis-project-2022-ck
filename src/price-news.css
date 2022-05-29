@@ -83,12 +83,12 @@
 }
 
 .width-50 {
-  width: 50%;
+  width: 48%;
 }
 
 .height-12 {
-  height: 220px;
-  margin: 5px;
+  height: 12vw;
+  margin: 5px 0 5px 0;
 }
 
 .date-div {
@@ -108,9 +108,15 @@
 #news-list {
 }
 
-#word-cloud {
+/* #word-cloud {
   width: 200px;
   height: 200px;
+} */
+
+#sentiment-score {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .news-box {

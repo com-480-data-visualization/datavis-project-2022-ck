@@ -74,8 +74,14 @@ function range_news_filter(start_date, end_date, coins) {
   };
 }
 
-let cloud_width = 200,
-  cloud_height = 200,
+// let cloud_width = 200,
+//   cloud_height = 200,
+//   max_font_size = 20,
+//   min_font_size = 10,
+//   multi_font_size = 2;
+
+let cloud_width = window.innerWidth*0.11,
+  cloud_height = cloud_width,
   max_font_size = 20,
   min_font_size = 10,
   multi_font_size = 2;

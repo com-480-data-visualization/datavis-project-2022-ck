@@ -128,14 +128,15 @@ function update_sentiment_score(new_score) {
     newGauge.update(new_score);
 }
 
-var gauge = function(container, width, margin) {
+var gauge = function(container, realWidth) {
     var that = {};
-
+    var width = 200;
+    var margin = 10;
     /* value: -1 ~ 1 */
     function update(value) {
         var text = `Sentiment score: ${value.toFixed(2)}`;
         var data = Array.from({length: 360}, (x, i) => i/360);
-    
+        
         // Settings
         var height = width*0.75
         var anglesRange = 0.5 * Math.PI
@@ -165,9 +166,10 @@ var gauge = function(container, width, margin) {
         // Feel free to change or delete any of the code you see in this editor!
         d3.select(container).selectAll("svg").remove();
         var svg = d3.select(container).append("svg")
-            .attr("width", width+2*margin)
-            .attr("height", height+2*margin)
+            .attr("width", realWidth)
+            .attr("height", realWidth * 0.75)
             .attr("class", "half-donut")
+            .attr("viewBox", "0 0 220 170")
         var g = svg.append("g")
             .attr("transform", translation(width / 2 + margin, height + margin))
         
@@ -183,7 +185,8 @@ var gauge = function(container, width, margin) {
             .attr("dy", `${-height + 20}`)
             .attr("class", "label")
             .attr("text-anchor", "middle")
-            .attr("font-weight", "lighter");
+            .attr("font-weight", "lighter")
+            .attr("font-size", `${(width >= 200?16:9)}`);
         
         g.append("text")
             .text( d => "-1")
@@ -191,15 +194,17 @@ var gauge = function(container, width, margin) {
             .attr("dx", `${-width/2 + thickness + margin*2}`)
             .attr("class", "label")
             .attr("text-anchor", "middle")
-            .attr("font-weight", "lighter");
+            .attr("font-weight", "lighter")
+            .attr("font-size", `${(width >= 200?16:9)}`);
                     
         g.append("text")
-        .text( d => "1")
-        .attr("dy", `${-margin*0.5}`)
-        .attr("dx", `${width/2 - thickness - margin*2}`)
-        .attr("class", "label")
-        .attr("text-anchor", "middle")
-        .attr("font-weight", "lighter");
+            .text( d => "1")
+            .attr("dy", `${-margin*0.5}`)
+            .attr("dx", `${width/2 - thickness - margin*2}`)
+            .attr("class", "label")
+            .attr("text-anchor", "middle")
+            .attr("font-weight", "lighter")
+            .attr("font-size", `${(width >= 200?16:9)}`);
 
         var needle = svg
             .append("g")
@@ -227,4 +232,4 @@ var gauge = function(container, width, margin) {
 };
 
 // d3.select("#sentiment-score").selectAll("div").remove();
-let newGauge = gauge("#sentiment-score", window.innerWidth*0.12, 10);
+let newGauge = gauge("#sentiment-score", window.innerWidth*0.12);
