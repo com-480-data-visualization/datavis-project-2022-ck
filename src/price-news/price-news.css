@@ -1,0 +1,157 @@
+#price-news-bg {
+  padding: 10px;
+  margin: 10px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+  border: 1px solid silver;
+}
+
+#price-news-title {
+  width: 100%;
+  text-align: center;
+  font-weight: lighter;
+  font-style: italic;
+}
+
+.daily-news {
+  border: 1px dotted black;
+  padding: 10px;
+  overflow: auto;
+  width: 25vw;
+}
+
+.daily-news-content {
+  height: 30vw;
+  overflow: auto;
+  width: 25vw;
+}
+
+#daily-news-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  height: fit-content;
+  margin-bottom: 5px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+}
+
+#daily-news-icon {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+#daily-news-cover {
+  display: flex;
+  flex-direction: column;
+}
+
+.hide {
+  width: 0;
+  overflow-x: hidden;
+  border: none;
+  opacity: 0;
+}
+
+#price {
+  height: fit-content;
+  border: 1px solid rgb(232, 231, 231);
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.lighter {
+  font-weight: lighter;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.flex-center {
+  flex-direction: column;
+  justify-content: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.width-50 {
+  width: 48%;
+}
+
+.height-12 {
+  height: 12vw;
+  margin: 5px 0 5px 0;
+}
+
+.date-div {
+  display: flex;
+  flex-direction: row;
+  padding: 5px;
+  width: fit-content;
+  margin-left: 20px;
+  float: right;
+}
+
+.date-switch {
+  font-size: 20pt;
+  margin-right: 10px;
+}
+
+#news-list {
+}
+
+/* #word-cloud {
+  width: 200px;
+  height: 200px;
+} */
+
+#sentiment-score {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.news-box {
+  color: silver;
+  width: 98%;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgb(232, 231, 231);
+  border-radius: 10px;
+  margin-bottom: 5px;
+  backdrop-filter: brightness(0.2);
+}
+
+.news-box h3,
+.news-box p,
+.news-box hr {
+  color: rgb(232, 231, 231);
+  font-weight: lighter;
+}
+
+.news-box-text {
+  padding: 10pt;
+  line-height: 18pt;
+}
+
+/* reference: https://css-tricks.com/almanac/properties/b/backdrop-filter/ */
+.background {
+  filter: blur(4px);
+  background-size: contain;
+  position: relative;
+}
+
+.foreground {
+  backdrop-filter: brightness(0.3);
+}
+
+p {
+  margin-block: 0;
+}
