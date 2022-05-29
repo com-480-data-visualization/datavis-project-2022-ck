@@ -103,16 +103,13 @@
         <div id="comparison">
             <canvas id="timelinecanvas" height="30"></canvas>
             <div id="ptable">
-              <p id="tablep">Click header to sort columns</p>
+              <p id="tablep" style="font-size: 10px;">Click header to sort numerical columns</p>
               <table id="coinTable" margin-top=0>
                 <tr>
                     <th>Coin type</th>
-                    <!-- <th scope="col"><a class="sort-by" onclick="sortTable(1)">Price</a></th> -->
                     <th onclick="sortTable(1)">Price</th>
                     <th onclick="sortTable(2)">Volume (1 mo)</th>
                     <th>Position</th>
-                    <!-- <th onclick="sortTable(0)">Ranking</th> -->
-                    <!-- <th onclick="sortTable(1)">Key words</th> -->
                 </tr>
               </table>
               <svg id="volumeCircle" width="100%"></svg>
