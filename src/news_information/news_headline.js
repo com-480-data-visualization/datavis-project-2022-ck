@@ -98,7 +98,7 @@ class NewsHeadLine {
       body
         .replace(/[^\x00-\x7F]/g, "")
         .split(" ")
-        .slice(0, 30)
+        .slice(0, 50)
         .join(" ") + " ...";
     return `
     <a href="${url}" target="_blank">
