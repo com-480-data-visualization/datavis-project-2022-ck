@@ -147,7 +147,7 @@ class TextVisualization {
     // Add Text
     cloud
       .append("text")
-      .style("font-family", "Roboto")
+      .style("font-family", '"Roboto Condensed", sans-serif')
       .style("font-weight", "bold")
       .attr("text-anchor", "middle")
       .text(function (d) {
@@ -180,15 +180,16 @@ class TextVisualization {
 
     // Prevent Overlap
 
+    var startTime = new Date();
     var keepCalling = true;
-    setTimeout(function () {
-      keepCalling = false;
-    }, 1000);
     words.forEach((word, idx) => {
       var self = d3.select("#wordcloud_" + word.text);
       var iteration = 0;
       while (keepCalling && this.collide(self, words.slice(0, idx))) {
-        console.log(keepCalling);
+        if (new Date().getTime() - startTime.getTime() > 5000) {
+          keepCalling = false;
+        }
+
         this.move_text(self, iteration);
         iteration += 1;
       }
@@ -221,7 +222,6 @@ class TextVisualization {
       a.top < -this.height / 2 ||
       a.bottom > this.height / 2
     ) {
-      console.log(a, this.width, this.height);
       return true;
     }
     for (var i = 0; i < words.length; i++) {

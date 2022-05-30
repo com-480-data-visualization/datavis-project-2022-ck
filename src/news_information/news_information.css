@@ -1,15 +1,23 @@
 #news-head {
   display: flex;
   flex-wrap: wrap;
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-bottom: 15px;
 }
 
 .news-head-type {
   flex: 1;
 }
 
+.news-head-type:not(:last-child) {
+  margin-right: 15px;
+}
+
 .header-box {
   display: flex;
   justify-content: center;
+  margin-bottom: 5px;
 }
 
 .header-box h3 {
