@@ -23,8 +23,8 @@ th {
     color: white;
 }
 
- #volumePercent, #volumeYear {
-    margin: 0 5%;
+#volumeCircle {
+    margin: 0 10%;
 }
 
 #timelinecanvas {

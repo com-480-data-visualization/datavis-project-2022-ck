@@ -161,8 +161,7 @@ function updateTable(coins) {
     await d3.csv(url).then(coin_data);
   });
 }
-// TO DO - clear circleSvg, add coin name to arcSvg
-// coin keywords
+
 // ------------------------------circles------------------------------
 function updateCircles(v, year, month) {
   const width = 500;
@@ -177,25 +176,18 @@ function updateCircles(v, year, month) {
     .x((d) => d.x)
     .y((d) => d.y);
 
-
-  var circleSvg = d3.select("#volumeCircle");
-
-  circleSvg
-    .append("text")
-    .text("Monthly Volume")
-    .attr("x", 50)
-    .attr("y", 80)
-    .attr("stroke", "black")
-    .attr("stroke-width", 1);
-
-  circleSvg.selectAll("svg").remove();
-  circleSvg
-    .append("svg")
-    .attr("id", "circleSvg")
-    .attr("width", width)
-    .attr("height", 5)
-    .attr("class", "radSol");
-
+  var circleSvg = d3
+    .select("#volumeCircle")
+    .attr("width", width * 2)
+    .attr("height", width / 3)
+    .append("g");
+  
+  circleSvg.append("svg")
+    .append("circle")
+    .attr("cx", 0)
+    .attr("cy", 0)
+    .attr("r", 10000)
+    .style("fill", "#f2f2f2");
 
   circleSvg
     .append("path")
@@ -203,28 +195,30 @@ function updateCircles(v, year, month) {
     .attr("stroke", "grey")
     .attr("stroke-width", 1)
     .attr("fill", "none");
-
+    
   circleSvg
-    .selectAll(".circles")
+    .append("text")
+    .text("Monthly Volume")
+    .attr("x", 50)
+    .attr("y", 80)
+    .attr("stroke", "black")
+    .attr("stroke-width", 0.5);
+  
+
+  var circles = circleSvg
+    .selectAll("g.circles")
     .data(v)
     .enter()
-    .append("circle")
-    .attr("r", function (d, _) {
-      return d[1] * 1e-9;
-    })
+    .append("g")
     .attr("class", "circles")
-    .attr("cx", function (_, i) {
-      return start + interval * i;
-    })
+  circles
+    .append("circle")
+    .attr("r", function (d, _) { return d[1] * 1e-9; })
+    .attr("cx", function (_, i) { return start + interval * i; })
     .attr("cy", 75)
-    .attr("fill", function (d, _) {
-      return coin_color[d[0]];
-    });
+    .attr("fill", function (d, _) { return coin_color[d[0]]; });
 
-  circleSvg
-    .selectAll("#volume_texts")
-    .data(v)
-    .enter()
+  circles
     .append("text")
     .text(function (d, _) {
       return "$" + parseFloat(d[1] * 1e-9).toFixed(2) + "B";
@@ -267,6 +261,20 @@ function updateArc(v, year, month) {
     .attr("width", width)
     .attr("height", width)
     .append("g");
+  arcSvg.append("svg")
+    .append("circle")
+    .attr("cx", 0)
+    .attr("cy", 0)
+    .attr("r", 10000)
+    .style("fill", "#f2f2f2");
+  arcSvg
+    .append("text")
+    .text("Percentage of selected crypto total volume")
+    .attr("x", 70)
+    .attr("y", 20)
+    .attr("stroke", "black")
+    .attr("stroke-width", 0.5)
+    .attr("font-size", "20px");
   arcSvg
     .append("text")
     .text("$" + (vms * 1e-9).toFixed(2) + "B")
@@ -299,6 +307,8 @@ function updateArc(v, year, month) {
       return "translate(" + arc.centroid(d) + ")";
     })
     .attr("text-anchor", "middle")
+    .attr("stroke", "white")
+    .attr("stroke-width", 0.8)
     .attr("fill", "white")
     .text(function (d, _) {
       return d.value + "%";
@@ -310,6 +320,14 @@ function updateArc(v, year, month) {
     .attr("width", width)
     .attr("height", width)
     .append("g");
+  
+  arcSvg2.append("svg")
+    .append("circle")
+    .attr("cx", 0)
+    .attr("cy", 0)
+    .attr("r", 10000)
+    .style("fill", "#f2f2f2");
+
   arcSvg2
     .append("text")
     .text("$" + (vys * 1e-9).toFixed(2) + "B")
@@ -342,6 +360,8 @@ function updateArc(v, year, month) {
       return "translate(" + arc.centroid(d) + ")";
     })
     .attr("text-anchor", "middle")
+    .attr("stroke", "white")
+    .attr("stroke-width", 0.8)
     .attr("fill", "white")
     .style("font-weight", "bold")
     .text(function (d, _) {
