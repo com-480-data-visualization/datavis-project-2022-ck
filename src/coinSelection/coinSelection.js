@@ -1,17 +1,6 @@
 class SelectionTab {
   constructor() {
     this.coins = ["BTC", "ETH", "XRP", "LTC", "ADA", "BCH", "USDT", "TRX"];
-    this.coinsDescription = [
-      "Bitcoin",
-      "Ethereum",
-      "Ripple",
-      "Litecoin",
-      "Cardano",
-      "Bitcoin Cash",
-      "Tether",
-      "Tron",
-    ];
-
     this.months = [
       "Jan",
       "Feb",
@@ -28,8 +17,8 @@ class SelectionTab {
     ];
     this.selectedMonth = 1;
     this.selectedYear = 2022;
-    this.selectedCoins = ["BTC", "ETH", "XRP"];
-
+    this.selectedCoins = this.coins.slice(0, 3);
+    // console.log()
     this.showSelectedCoins = this.showSelectedCoins.bind(this);
     this.selectCoins = this.selectCoins.bind(this);
     this.showSelectedDate = this.showSelectedDate.bind(this);
@@ -108,7 +97,7 @@ class SelectionTab {
     });
   }
   showMultiSelection(checkboxes) {
-    this.coins.forEach((value, index) => {
+    this.coins.forEach((value, _) => {
       const label = document.createElement("label");
       label.className = value;
 
@@ -132,7 +121,7 @@ class SelectionTab {
       div.appendChild(h4);
 
       const p = document.createElement("p");
-      p.textContent = this.coinsDescription[index];
+      p.textContent = coin_name[value];
       div.appendChild(p);
 
       label.appendChild(div);
