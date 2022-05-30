@@ -55,16 +55,20 @@
     </div>
     <main id="main">
         <div id="recent-news">
-            <div id="news-head">
+          
+            <div id="recent-news-monthly">
+              <div class="title"><h1>Monthly Coin News</h1></div>
+              <div id="news-head"></div>
             </div>
             <div id="text-viz">
+              <div class="title"><h1>News Keywords World Cloud</h1></div>
+              <div id="text-viz-svg">
               <svg></svg>
+            </div>
             </div>
         </div>
         <div id="price-news-bg">
-          <div id="price-news-divider">
-            <h2 id="price-news-title"></h2>
-          </div>
+          <div class="title"><h1>Price and Sentiment Analysis</h1></div>
           <div id="price-news">
               <div id="price"></div>
               <div id="daily-news" class="daily-news hide">
@@ -101,8 +105,13 @@
           </div>
         </div>
         <div id="comparison">
-            <canvas id="timelinecanvas" height="30"></canvas>
+          <div class="title"><h1>Coin Informations</h1></div>
+            <div id="timeline">
+              <h2>Timeline</h2>
+              <canvas id="timelinecanvas" height="30"></canvas>
+            </div>
             <div id="ptable">
+              <h2>Price Information</h2>
               <p id="tablep" style="font-size: 10px;">Click header to sort numerical columns</p>
               <table id="coinTable" margin-top=0>
                 <tr>
@@ -113,10 +122,19 @@
                   <th>Position</th>
                 </tr>
               </table>
-              <svg id="volumeCircle" width="100%"></svg>
-              <div style="margin-left: 10%;">
-                <svg id="volumePercent" width="100%"></svg>
-                <svg id="volumeYear" width="100%"></svg>
+              </div>
+              <div id="metric-coin">
+                <h2>Metric by coins</h2>
+                <svg id="volume_circle_monthly" width="100%"></svg>
+                <svg id="volume_circle_daily" width="100%"></svg>
+              </div>
+                <div id="volume-charts">
+                <h2>% of Crypto Volume</h2>
+                <svg id="labels"></svg>
+                <div class="pie-chart">
+                  <svg id="volumePercent" width="100%"></svg>
+                  <svg id="volumeYear" width="100%"></svg>
+                </div>
               </div>
               <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
             </div>

@@ -18,7 +18,7 @@ const coin_name = {
   TRX: "TRON",
   USDT: "Tether",
   XRP: "Ripple",
-}
+};
 
 const sum = (arr) => arr.reduce((a, b) => a + b, 0);
 const average = (arr) => (sum(arr) / arr.length).toFixed(2);
@@ -118,7 +118,12 @@ function updateTable(coins) {
   const year = selected_date[0].lastChild.innerHTML;
   const month = selected_date[1].lastChild.innerHTML;
 
-  let counter = collect(coins.length, (v) => updateCircles(v, year, month));
+  let counter = collect(coins.length, (v) => {
+    updateCircles(v, "monthly", "Monthly Transaction Volume", "B");
+    updateArc(v, "yearly");
+    updateCircles(v, "daily", "Average Daily Price", "default");
+  });
+
   coins.forEach(async (e) => {
     let newRow = coinTable.insertRow(-1);
     let newType = newRow.insertCell(0);
@@ -164,41 +169,56 @@ function updateTable(coins) {
       let newPos = document.createTextNode(pos);
       newPrice.append("$", newP);
       newVolume.append("$", newV);
-      if (NV > 0) newNV.append("$", NV)
+      if (NV > 0) newNV.append("$", NV);
       else newNV.append("-$", Math.abs(NV));
       newPosition.appendChild(newPos);
-      counter([e, volumeM, sum(volumeY)]);
+      counter({
+        coin: e,
+        monthly: volumeM * 1e-9,
+        yearly: sum(volumeY),
+        daily: average(closeP),
+      });
     };
     await d3.csv(url).then(coin_data);
   });
 }
 
 // ------------------------------circles------------------------------
-function updateCircles(v, year, month) {
-  const width = 500;
+function updateCircles(v, id, title_text, unit) {
+  const width = window.innerWidth;
   const start = 350;
-  const interval = 300;
+  const interval = (width - 350) / v.length;
   const data = [
-    { x: start, y: 75 },
-    { x: start + interval * (v.length - 1), y: 75 },
+    { x: start, y: 100 },
+    { x: start + interval * (v.length - 1), y: 100 },
   ];
   const lineGenerator = d3
     .line()
     .x((d) => d.x)
     .y((d) => d.y);
 
+  let units = { B: 1, K: 1e-3, default: 1 };
+
+  const vals = v.map((val) => {
+    return parseFloat(val[id]);
+  });
+  if (d3.max(vals) * units.K > 1 && unit != "B") {
+    unit = "K";
+  }
+  const sizeLinear = d3
+    .scaleLinear()
+    .domain([0, d3.max(vals) * units[unit]])
+    .range([0, 50]);
+  const fontLinear = d3.scaleLinear().domain([0, 100]).range([10, 30]);
+
+  d3.selectAll("#volume_circle_" + id)
+    .select("g")
+    .remove();
   var circleSvg = d3
-    .select("#volumeCircle")
-    .attr("width", width * 2)
-    .attr("height", width / 3)
+    .selectAll("#volume_circle_" + id)
+    .attr("width", width)
+    .attr("height", 250)
     .append("g");
-  
-  circleSvg.append("svg")
-    .append("circle")
-    .attr("cx", 0)
-    .attr("cy", 0)
-    .attr("r", 10000)
-    .style("fill", "#f2f2f2");
 
   circleSvg
     .append("path")
@@ -206,63 +226,134 @@ function updateCircles(v, year, month) {
     .attr("stroke", "grey")
     .attr("stroke-width", 1)
     .attr("fill", "none");
-    
+
   circleSvg
     .append("text")
-    .text("Monthly Volume")
-    .attr("x", 50)
-    .attr("y", 80)
+    .text(title_text)
+    .attr("x", 40)
+    .attr("y", 40)
     .attr("stroke", "black")
     .attr("stroke-width", 0.5);
-  
 
   var circles = circleSvg
     .selectAll("g.circles")
     .data(v)
     .enter()
     .append("g")
-    .attr("class", "circles")
+    .attr("class", "circles");
+
   circles
     .append("circle")
-    .attr("r", function (d, _) { return d[1] * 1e-9; })
-    .attr("cx", function (_, i) { return start + interval * i; })
-    .attr("cy", 75)
-    .attr("fill", function (d, _) { return coin_color[d[0]]; });
+    .attr("r", function (d, _) {
+      return sizeLinear(d[id] * units[unit] * 2);
+    })
+    .attr("cx", function (_, i) {
+      return start + interval * i;
+    })
+    .attr("cy", 100)
+    .attr("fill", function (d, _) {
+      return coin_color[d.coin];
+    });
 
   circles
     .append("text")
     .text(function (d, _) {
-      return "$" + parseFloat(d[1] * 1e-9).toFixed(2) + "B";
+      if (unit == "default") {
+        return `$${d[id]}`;
+      }
+      return "$" + (d[id] * units[unit]).toFixed(2) + unit;
     })
-    .attr("font-size", 10)
-    .attr("fill", "black")
-    .attr("y", 75)
+    .attr("font-size", function (d, _) {
+      let radius = d[id] * 2 * units[unit];
+      return fontLinear(sizeLinear(radius));
+    })
+    .attr("font-weight", "bold")
+    .attr("fill", function (d) {
+      const radius = sizeLinear(d[id] * units[unit] * 2);
+      if (radius > 10 && (d.coin == "ADA" || d.coin == "XRP")) {
+        return "white";
+      }
+      return "black";
+    })
+    .attr("y", function (d, i) {
+      const radius = sizeLinear(d[id] * units[unit] * 2);
+      if (radius > 10) {
+        return 105;
+      } else {
+        return radius + 120;
+      }
+    })
     .attr("x", function (d, i) {
       return start + interval * i;
     })
     .attr("text-anchor", "middle");
 
-  updateArc(v, year, month);
+  circles
+    .append("text")
+    .text(function (d, _) {
+      return d.coin;
+    })
+    .attr("font-size", 15)
+    .attr("fill", function (d, i) {
+      return coin_color[d.coin];
+    })
+    .attr("y", 70)
+    .attr("x", function (d, i) {
+      return start + interval * i + sizeLinear(d[id] * units[unit] * 2) + 30;
+    })
+    .attr("font-weight", "bold")
+    .attr("text-anchor", "middle");
 }
 
 // ------------------------------arcs------------------------------
-function updateArc(v, year, month) {
+function updateArc(v) {
+  d3.select("#labels").selectAll("g").remove();
+  v.forEach((val, idx) => {
+    let coin = val.coin;
+    var div = d3
+      .select("#labels")
+      .append("g")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("width", 20)
+      .attr("height", 50)
+      .attr("transform", `translate(${idx * 100}, 0)`);
+    div
+      .append("rect")
+      .attr("fill", coin_color[coin])
+      .attr("x", 0)
+      .attr("y", 2)
+      .attr("width", 20)
+      .attr("height", 20);
+    div
+      .append("text")
+      .text(coin)
+      .attr("fill", "black")
+      .attr("x", 25)
+      .attr("y", 20)
+      .attr("font-size", 20);
+  });
+
   var pie = d3.pie();
   const width = 500;
 
   let volumeM_arr = [];
   let volumeY_arr = [];
-  for (const [_, volumeM, volumeY] of v) {
-    volumeM_arr.push(volumeM);
-    volumeY_arr.push(volumeY);
-  }
+
+  v.forEach((val) => {
+    volumeM_arr.push(parseFloat(val.monthly));
+    volumeY_arr.push(parseFloat(val.yearly));
+  });
+
   const vms = sum(volumeM_arr);
   const volumeM_percent = volumeM_arr.map((x) => ((x / vms) * 100).toFixed(2));
-
   const vys = sum(volumeY_arr);
   const volumeY_percent = volumeY_arr.map((x) => ((x / vys) * 100).toFixed(2));
 
   // ------monthly arc------
+  const selected_date = document.getElementsByClassName("date select");
+  const year = selected_date[0].lastChild.innerHTML;
+  const month = selected_date[1].lastChild.innerHTML;
   var arc = d3
     .arc()
     .innerRadius(width / 4)
@@ -272,7 +363,8 @@ function updateArc(v, year, month) {
     .attr("width", width)
     .attr("height", width)
     .append("g");
-  arcSvg.append("svg")
+  arcSvg
+    .append("svg")
     .append("circle")
     .attr("cx", 0)
     .attr("cy", 0)
@@ -280,23 +372,31 @@ function updateArc(v, year, month) {
     .style("fill", "#f2f2f2");
   arcSvg
     .append("text")
-    .text("Percentage of selected crypto total volume")
-    .attr("x", 70)
+    .text("Monthly")
+    .attr("x", "50%")
     .attr("y", 20)
+    .attr("text-anchor", "middle")
     .attr("stroke", "black")
     .attr("stroke-width", 0.5)
     .attr("font-size", "20px");
+
   arcSvg
     .append("text")
-    .text("$" + (vms * 1e-9).toFixed(2) + "B")
-    .attr("x", width / 2.3)
-    .attr("y", width / 2)
+    .text(month + " " + year)
+    .attr("x", width / 2 - 10)
+    .attr("y", width / 2 - 10)
+    .attr("dx", function (d) {
+      let text = this.getComputedTextLength();
+      return -text / 2;
+    })
+    .attr("font-size", 20)
+    .attr("font-weight", "bold")
     .attr("fill", "black");
   arcSvg
     .append("text")
-    .text("in " + month + " " + year)
-    .attr("x", width / 2.43)
-    .attr("y", width / 1.8)
+    .text("$" + vms.toFixed(2) + "")
+    .attr("x", width / 2.3)
+    .attr("y", width / 2 + 20)
     .attr("fill", "black");
 
   var arcs = arcSvg
@@ -309,7 +409,7 @@ function updateArc(v, year, month) {
   arcs
     .append("path")
     .attr("fill", function (_, i) {
-      return coin_color[v[i][0]];
+      return coin_color[v[i].coin];
     })
     .attr("d", arc);
   arcs
@@ -318,8 +418,6 @@ function updateArc(v, year, month) {
       return "translate(" + arc.centroid(d) + ")";
     })
     .attr("text-anchor", "middle")
-    .attr("stroke", "white")
-    .attr("stroke-width", 0.8)
     .attr("fill", "white")
     .text(function (d, _) {
       return d.value + "%";
@@ -331,8 +429,9 @@ function updateArc(v, year, month) {
     .attr("width", width)
     .attr("height", width)
     .append("g");
-  
-  arcSvg2.append("svg")
+
+  arcSvg2
+    .append("svg")
     .append("circle")
     .attr("cx", 0)
     .attr("cy", 0)
@@ -341,16 +440,32 @@ function updateArc(v, year, month) {
 
   arcSvg2
     .append("text")
-    .text("$" + (vys * 1e-9).toFixed(2) + "B")
-    .attr("x", width / 2.3)
-    .attr("y", width / 2)
+    .text(year)
+    .attr("x", width / 2 - 10)
+    .attr("y", width / 2 - 10)
+    .attr("dx", function (d) {
+      let text = this.getComputedTextLength();
+      return -text / 2;
+    })
+    .attr("font-size", 20)
+    .attr("font-weight", "bold")
     .attr("fill", "black");
   arcSvg2
     .append("text")
-    .text("in " + year)
-    .attr("x", width / 2.2)
-    .attr("y", width / 1.8)
+    .text("$" + (vys * 1e-9).toFixed(2) + "B")
+    .attr("x", width / 2.3)
+    .attr("y", width / 2 + 20)
     .attr("fill", "black");
+
+  arcSvg2
+    .append("text")
+    .text("Yearly")
+    .attr("x", "50%")
+    .attr("y", 20)
+    .attr("text-anchor", "middle")
+    .attr("stroke", "black")
+    .attr("stroke-width", 0.5)
+    .attr("font-size", "20px");
 
   var arcs2 = arcSvg2
     .selectAll("g.arc")
@@ -362,7 +477,7 @@ function updateArc(v, year, month) {
   arcs2
     .append("path")
     .attr("fill", function (_, i) {
-      return coin_color[v[i][0]];
+      return coin_color[v[i].coin];
     })
     .attr("d", arc);
   arcs2
@@ -371,10 +486,7 @@ function updateArc(v, year, month) {
       return "translate(" + arc.centroid(d) + ")";
     })
     .attr("text-anchor", "middle")
-    .attr("stroke", "white")
-    .attr("stroke-width", 0.8)
     .attr("fill", "white")
-    .style("font-weight", "bold")
     .text(function (d, _) {
       return d.value + "%";
     });
@@ -402,7 +514,7 @@ function sortTable(n) {
     rows = table.rows;
     /*Loop through all table rows (except the
     first, which contains table headers):*/
-    for (i = 1; i < (rows.length - 1); i++) {
+    for (i = 1; i < rows.length - 1; i++) {
       //start by saying there should be no switching:
       shouldSwitch = false;
       /*Get the two elements you want to compare,
@@ -410,11 +522,11 @@ function sortTable(n) {
       x = rows[i].getElementsByTagName("td")[n];
       y = rows[i + 1].getElementsByTagName("td")[n];
       //check if the two rows should switch place:
-      p1 = x.innerHTML.substring(1)
-      p2 = y.innerHTML.substring(1)
-      if (p1[0] == '$') p1 = '-' + p1.substring(1)
-      if (p2[0] == '$') p2 = '-' + p2.substring(1)
-      
+      p1 = x.innerHTML.substring(1);
+      p2 = y.innerHTML.substring(1);
+      if (p1[0] == "$") p1 = "-" + p1.substring(1);
+      if (p2[0] == "$") p2 = "-" + p2.substring(1);
+
       if (dir == "asc") {
         if (Number(p1) > Number(p2)) {
           // If so, mark as a switch and break the loop:

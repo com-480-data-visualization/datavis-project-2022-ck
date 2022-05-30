@@ -1,14 +1,14 @@
 /**
  * Bugs:
  * 1. We have different yAxis => different horizontal lines.
- * 
+ *
  * TODOs:
  */
 
- const coin_colors = {
-  BTC: ['#FFA500', '#FFD700', '#BDB76B'],
+const coin_colors = {
+  BTC: ["#FFA500", "#FFD700", "#BDB76B"],
   ETH: ["#00008B", "#4169E1", "#ADD8E6"],
-  default: ['#800080', '#FF00FF', '	#FF69B4']
+  default: ["#800080", "#FF00FF", "	#FF69B4"],
 };
 
 const width = window.innerWidth * 0.7;
@@ -68,7 +68,7 @@ function MultiCandlestick(
   opacityTransitionIn = 100,
   opacityTransitionOut = 500,
   opacityLow = 0.3,
-  legend_line_width = 50,
+  legend_line_width = 50
 ) {
   let data = datas.map(mapper);
 
@@ -102,7 +102,7 @@ function MultiCandlestick(
     .domain([d3.min(X), d3.max(X)]) // values between for month of january
     .range([xPadding, width - xPadding - marginRight]);
   if (xDomain === undefined) xDomain = [d3.min(X), d3.max(X)];
-  if (yDomain === undefined) yDomain = [d3.min(Yl)*0.9, d3.max(Yh)*1.1];
+  if (yDomain === undefined) yDomain = [d3.min(Yl) * 0.9, d3.max(Yh) * 1.1];
   if (xTicks === undefined) xTicks = weeks(d3.min(xDomain), d3.max(xDomain), 7);
 
   const yScale = yType(yDomain, yRange);
@@ -129,7 +129,7 @@ function MultiCandlestick(
       .duration(opacityTransitionIn)
       .ease(d3.easeLinear)
       .style("opacity", 1.0);
-  }
+  };
 
   function onMouseOut(i) {
     let coin = d3.select(this).attr("data-coin");
@@ -156,7 +156,9 @@ function MultiCandlestick(
     .call(xAxis)
     .call((g) => {
       g.select(".domain").remove();
-      g.selectAll("text").attr("font-size", "10pt").attr("font-weight", "lighter")
+      g.selectAll("text")
+        .attr("font-size", "10pt")
+        .attr("font-weight", "lighter");
     });
 
   svg
@@ -168,14 +170,13 @@ function MultiCandlestick(
       g.selectAll("text").attr("opacity", 0);
       g.select(".domain").remove();
     })
-    .call((g) =>{
-      g
-      .selectAll(".tick line")
-      .classed(`yaxis-${coin}`, true)
-      .attr("opacity", 0)
-      .clone()
-      .attr("stroke-opacity", 0.2)
-      .attr("x2", width - marginLeft - marginRight)
+    .call((g) => {
+      g.selectAll(".tick line")
+        .classed(`yaxis-${coin}`, true)
+        .attr("opacity", 0)
+        .clone()
+        .attr("stroke-opacity", 0.2)
+        .attr("x2", width - marginLeft - marginRight);
     })
     .call((g) =>
       g
@@ -290,10 +291,10 @@ function MultiCandlestick(
     .attr("y1", (i) => yScale(Yl[i]))
     .attr("y2", (i) => yScale(Yh[i]))
     .attr("data-coin", (i) => `${coin}`)
-    .attr("data-date", (i) => X[i])
-    // .on("mouseover", onMouseOver)
-    // .on("mouseout", onMouseOut)
-    // .on("click", onClickDate);
+    .attr("data-date", (i) => X[i]);
+  // .on("mouseover", onMouseOver)
+  // .on("mouseout", onMouseOut)
+  // .on("click", onClickDate);
 
   g.append("line")
     .attr("y1", (i) => yScale(Yo[i]))
@@ -338,8 +339,8 @@ function MultiCandlestick(
     .attr("opacity", opacityLow)
     .attr("d", line_gen(I))
     .attr("data-coin", `${coin}`)
-    .on("mouseover", onMouseOver)
-    // .on("mouseout", onMouseOut);
+    .on("mouseover", onMouseOver);
+  // .on("mouseout", onMouseOut);
 
   // circles
   svg
@@ -389,37 +390,40 @@ function collect(total, callback) {
   };
 }
 
-function price_news_plot(coins, currency = "USD", date_start = new Date("2022-01-01"), date_end = new Date("2022-01-31")) {
-  let days = Math.round((date_end-date_start)/1000/3600/24);
+function price_news_plot(
+  coins,
+  currency = "USD",
+  date_start = new Date("2022-01-01"),
+  date_end = new Date("2022-01-31")
+) {
+  let days = Math.round((date_end - date_start) / 1000 / 3600 / 24);
   const title = `Price and Sentiment Analysis of ${coins.join(", ")}`;
   let price_news_svg = create_price_news_svg(title);
   let num_data = coins.length;
   let closure = waitN(num_data, () => {
     d3.select("#price").selectAll("svg").remove();
     d3.select("#price").append(() => price_news_svg.node());
-    document.getElementById("price-news-title").innerHTML = title;
   });
-  
-  coins.forEach(function(coin) {
+
+  coins.forEach(function (coin) {
     refresh_price_plot_url(
       `../cleaned_data/coin/${coin}_${currency}.csv`,
       parse_price_data,
       range_filter(date_start, date_end),
-      collect(days, function(data) {
+      collect(days, function (data) {
         plot_price(price_news_svg, coin, currency)(data);
         closure();
       })
     );
-  })
-} 
+  });
+}
 
 function waitN(N, handler) {
   let n = N;
   return () => {
     n -= 1;
     if (n == 0) handler();
-  }
+  };
 }
-
 
 /* reference: https://observablehq.com/@d3/candlestick-chart */

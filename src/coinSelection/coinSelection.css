@@ -225,3 +225,13 @@ button {
 .disabled > img {
   opacity: 50%;
 }
+
+#volume-charts {
+  position: relative;
+}
+#labels {
+  position: absolute;
+  top: 5px;
+  left: 300px;
+  width: 100%;
+}

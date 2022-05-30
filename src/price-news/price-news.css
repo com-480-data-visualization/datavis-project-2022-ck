@@ -1,9 +1,9 @@
-#price-news-bg {
+/* #price-news-bg {
   padding: 10px;
   margin: 10px;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
   border: 1px solid silver;
-}
+} */
 
 #price-news-title {
   width: 100%;
@@ -17,13 +17,14 @@
   border-radius: 20px;
   padding: 10px;
   overflow: auto;
-  width: 25vw;
+  width: 500px;
+  background-color: white;
 }
 
 .daily-news-content {
   height: 30vw;
   overflow: auto;
-  width: 25vw;
+  width: 100%;
 }
 
 #daily-news-title {
@@ -33,7 +34,7 @@
   width: 100%;
   height: fit-content;
   margin-bottom: 5px;
-  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+  /* box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); */
   border-radius: 5px;
 }
 
@@ -59,6 +60,8 @@
   border: 1px solid rgb(232, 231, 231);
   border-radius: 20px;
   padding: 20px;
+  background-color: white;
+  margin-right: 10px;
 }
 
 .lighter {
@@ -155,4 +158,9 @@
 
 p {
   margin-block: 0;
+}
+
+.date-switch:hover {
+  cursor: pointer;
+  background-color: aliceblue;
 }
