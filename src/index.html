@@ -55,16 +55,20 @@
     </div>
     <main id="main">
         <div id="recent-news">
-            <div id="news-head">
+          
+            <div id="recent-news-monthly">
+              <div class="title"><h1>Monthly Coin News</h1></div>
+              <div id="news-head"></div>
             </div>
             <div id="text-viz">
+              <div class="title"><h1>News Keywords World Cloud</h1></div>
+              <div id="text-viz-svg">
               <svg></svg>
+            </div>
             </div>
         </div>
         <div id="price-news-bg">
-          <div id="price-news-divider">
-            <h2 id="price-news-title"></h2>
-          </div>
+          <div class="title"><h1>Price and Sentiment Analysis</h1></div>
           <div id="price-news">
               <div id="price"></div>
               <div id="daily-news" class="daily-news hide">
@@ -101,6 +105,7 @@
           </div>
         </div>
         <div id="comparison">
+          <div class="title"><h1>Monthly Coin Informations</h1></div>
             <canvas id="timelinecanvas" height="30"></canvas>
             <div id="ptable">
               <p id="tablep" style="font-size: 10px;">Click header to sort numerical columns</p>
@@ -114,10 +119,9 @@
                 </tr>
               </table>
               <svg id="volumeCircle" width="100%"></svg>
-              <div style="margin-left: 10%;">
-                <svg id="volumePercent" width="100%"></svg>
-                <svg id="volumeYear" width="100%"></svg>
-              </div>
+              <h3 style="color: black">% of selected crypto total volume</h3>
+              <svg id="volumePercent" width="100%"></svg>
+              <svg id="volumeYear" width="100%"></svg>
               <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
             </div>
 

@@ -49,7 +49,7 @@
   font-weight: bolder;
 }
 
-#text-viz {
+#text-viz-svg {
   display: flex;
   justify-content: center;
 }

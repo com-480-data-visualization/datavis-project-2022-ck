@@ -83,3 +83,45 @@ button:focus {
 a {
   text-decoration: none; /* no underline */
 }
+
+.title > h1 {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translate(-50%, -5px);
+
+  background-color: whitesmoke;
+  font-family: "Rockwell";
+  text-align: center;
+  font-weight: lighter;
+  font-style: normal;
+  font-size: 25px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  text-shadow: 1px 1px gray;
+}
+
+.title {
+  position: relative;
+  border-bottom: 1px black solid;
+  margin: 30px;
+}
+
+.title:after,
+.title:before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: black;
+}
+
+.title:after {
+  left: 0;
+}
+.title:before {
+  right: 0;
+}

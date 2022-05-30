@@ -1,18 +1,14 @@
 function update_daily_news(coin, date) {
   hide_daily_news();
-  setTimeout(() => {
-    update_daily_news_data(coin, date);
-    setTimeout(() => {
-      show_daily_news(coin, date);
-    }, 100);
-  }, 100);
+  update_daily_news_data(coin, date);
+  show_daily_news(coin, date);
 }
 
 function hide_daily_news() {
   d3.selectAll("#daily-news-cover").classed("hide", true);
   d3.selectAll("#daily-news")
     .transition()
-    .duration(100)
+    .duration(1000)
     .ease(d3.easeLinear)
     .style("opacity", 0);
 }
@@ -50,11 +46,11 @@ function update_daily_news_data(coin, date) {
 }
 
 function show_daily_news(coin, date) {
-  d3.selectAll("#daily-news").style("width", "25vw");
+  d3.selectAll("#daily-news").classed("hide", false);
 
   d3.selectAll("#daily-news")
     .transition()
-    .duration(200)
+    .duration(1000)
     .ease(d3.easeLinear)
     .style("opacity", 1);
 
@@ -86,7 +82,6 @@ function price_news_get_news_handler(data) {
     .map((a) => a.sentiment - 0)
     .reduce((a, b) => a + b, 0.0);
   const sentiment_score_avg = sentiment_score_sum / data.length;
-  console.log("sentiment avg: " + sentiment_score_avg);
 
   update_sentiment_score(sentiment_score_avg);
 
@@ -125,111 +120,139 @@ function news_handler(news) {
 // sentiment-score
 
 function update_sentiment_score(new_score) {
-    newGauge.update(new_score);
+  newGauge.update(new_score);
 }
 
-var gauge = function(container, realWidth) {
-    var that = {};
-    var width = 200;
-    var margin = 10;
-    /* value: -1 ~ 1 */
-    function update(value) {
-        var text = `Sentiment score: ${value.toFixed(2)}`;
-        var data = Array.from({length: 360}, (x, i) => i/360);
-        
-        // Settings
-        var height = width*0.75
-        var anglesRange = 0.5 * Math.PI
-        var radis = Math.min(width, 2 * height) / 2
-        var thickness = width*0.15;
-        // Utility
-        var gradientColor1 = d3.interpolateHslLong("#12c2e9", "#c471ed");
-        var gradientColor2 = d3.interpolateHslLong("#c471ed", "#f64f59");
-        var colors = data.map(x => {
-            if (x<0.5) return gradientColor1(x*2)
-            else return gradientColor2(x*2-1);
-        }
+var gauge = function (container, realWidth) {
+  var that = {};
+  var width = 200;
+  var margin = 10;
+  /* value: -1 ~ 1 */
+  function update(value) {
+    var text = `Sentiment score: ${value.toFixed(2)}`;
+    var data = Array.from({ length: 360 }, (x, i) => i / 360);
+
+    // Settings
+    var height = width * 0.75;
+    var anglesRange = 0.5 * Math.PI;
+    var radis = Math.min(width, 2 * height) / 2;
+    var thickness = width * 0.15;
+    // Utility
+    var gradientColor1 = d3.interpolateHslLong("#12c2e9", "#c471ed");
+    var gradientColor2 = d3.interpolateHslLong("#c471ed", "#f64f59");
+    var colors = data.map((x) => {
+      if (x < 0.5) return gradientColor1(x * 2);
+      else return gradientColor2(x * 2 - 1);
+    });
+
+    var pies = d3.layout
+      .pie()
+      .value((d) => d)
+      .sort(null)
+      .startAngle(anglesRange * -1)
+      .endAngle(anglesRange);
+
+    var arc = d3
+      .arc()
+      .outerRadius(radis)
+      .innerRadius(radis - thickness);
+
+    var translation = (x, y) => `translate(${x}, ${y})`;
+
+    // Feel free to change or delete any of the code you see in this editor!
+    d3.select(container).selectAll("svg").remove();
+    var svg = d3
+      .select(container)
+      .append("svg")
+      .attr("width", realWidth)
+      .attr("height", realWidth * 0.75)
+      .attr("class", "half-donut")
+      .attr("viewBox", "0 0 220 170");
+    var g = svg
+      .append("g")
+      .attr("transform", translation(width / 2 + margin, height + margin));
+
+    g.selectAll("path")
+      .data(pies(data))
+      .enter()
+      .append("path")
+      .attr("fill", (d, i) => colors[i])
+      .attr("d", arc);
+
+    g.append("text")
+      .text((d) => text)
+      .attr("dy", `${-height + 20}`)
+      .attr("class", "label")
+      .attr("text-anchor", "middle")
+      .attr("font-weight", "lighter")
+      .attr("font-size", `${width >= 200 ? 16 : 9}`);
+
+    g.append("text")
+      .text((d) => "-1")
+      .attr("dy", `${-margin * 0.5}`)
+      .attr("dx", `${-width / 2 + thickness + margin * 2}`)
+      .attr("class", "label")
+      .attr("text-anchor", "middle")
+      .attr("font-weight", "lighbolderter")
+      .attr("font-size", `${width >= 200 ? 16 : 9}`);
+
+    g.append("text")
+      .text((d) => "1")
+      .attr("dy", `${-margin * 0.5}`)
+      .attr("dx", `${width / 2 - thickness - margin * 2}`)
+      .attr("class", "label")
+      .attr("text-anchor", "middle")
+      .attr("font-weight", "bolder")
+      .attr("font-size", `${width >= 200 ? 16 : 9}`);
+
+    var needle = svg
+      .append("g")
+      .attr("class", "needle")
+      .attr("transform", `translate(${margin},${width * 0.15 + margin})`)
+      .append("path")
+      .attr("class", "tri")
+      .attr(
+        "d",
+        "M" +
+          (width / 2 + 2) +
+          " " +
+          (120 + 10) +
+          " L" +
+          width / 2 +
+          " 0 L" +
+          (width / 2 - 3) +
+          " " +
+          (120 + 10) +
+          " C" +
+          (width / 2 - 3) +
+          " " +
+          (120 + 20) +
+          " " +
+          (width / 2 + 3) +
+          " " +
+          (120 + 20) +
+          " " +
+          (width / 2 + 3) +
+          " " +
+          (120 + 10) +
+          " Z"
+      )
+      .attr("transform", `rotate(-90, ${width / 2}, ${width * 0.15})`);
+
+    function turnNeedle(newValue) {
+      needle.transition().duration(1000).attrTween("transform", tween);
+      function tween(d, i, a) {
+        return d3.interpolateString(
+          `rotate(-90, ${width / 2}, ${height * 0.75})`,
+          `rotate(${90 * newValue}, ${width / 2}, ${height * 0.75})`
         );
-
-        var pies = d3.layout.pie()
-            .value(d => d)
-            .sort(null)
-            .startAngle( anglesRange * -1)
-            .endAngle( anglesRange)
-        
-            var arc = d3.arc()
-            .outerRadius(radis)
-            .innerRadius(radis - thickness)
-        
-        var translation = (x, y) => `translate(${x}, ${y})`
-        
-        // Feel free to change or delete any of the code you see in this editor!
-        d3.select(container).selectAll("svg").remove();
-        var svg = d3.select(container).append("svg")
-            .attr("width", realWidth)
-            .attr("height", realWidth * 0.75)
-            .attr("class", "half-donut")
-            .attr("viewBox", "0 0 220 170")
-        var g = svg.append("g")
-            .attr("transform", translation(width / 2 + margin, height + margin))
-        
-        g.selectAll("path")
-            .data(pies(data))
-            .enter()
-            .append("path")
-            .attr("fill", (d, i) => colors[i])
-            .attr("d", arc)
-        
-        g.append("text")
-            .text( d => text)
-            .attr("dy", `${-height + 20}`)
-            .attr("class", "label")
-            .attr("text-anchor", "middle")
-            .attr("font-weight", "lighter")
-            .attr("font-size", `${(width >= 200?16:9)}`);
-        
-        g.append("text")
-            .text( d => "-1")
-            .attr("dy", `${-margin*0.5}`)
-            .attr("dx", `${-width/2 + thickness + margin*2}`)
-            .attr("class", "label")
-            .attr("text-anchor", "middle")
-            .attr("font-weight", "lighter")
-            .attr("font-size", `${(width >= 200?16:9)}`);
-                    
-        g.append("text")
-            .text( d => "1")
-            .attr("dy", `${-margin*0.5}`)
-            .attr("dx", `${width/2 - thickness - margin*2}`)
-            .attr("class", "label")
-            .attr("text-anchor", "middle")
-            .attr("font-weight", "lighter")
-            .attr("font-size", `${(width >= 200?16:9)}`);
-
-        var needle = svg
-            .append("g")
-            .attr("class", "needle")
-            .attr("transform", `translate(${margin},${width*0.15 + margin})`)
-            .append("path")
-            .attr("class", "tri")
-            .attr("d", "M" + (width/2 + 2) + " " + (120 + 10) + " L" + width/2 + " 0 L" + (width/2 - 3) + " " + (120 + 10) + " C" + (width/2 - 3) + " " + (120 + 20) + " " + (width/2 + 3) + " " + (120 + 20) + " " + (width/2 + 3) + " " + (120 + 10) + " Z")
-            .attr("transform", `rotate(-90, ${width/2}, ${width*0.15})`);
-
-        function turnNeedle(newValue)
-            {
-                needle
-                .transition()
-                .duration(1000)
-                .attrTween("transform", tween);
-                function tween(d, i, a) {
-                    return d3.interpolateString(`rotate(-90, ${width/2}, ${height*0.75})`, `rotate(${90*newValue}, ${width/2}, ${height*0.75})`);
-                }
-            }
-        turnNeedle(value);
+      }
     }
-    that.update = update;
-    return that;
+    turnNeedle(value);
+  }
+  that.update = update;
+  return that;
 };
 
 // d3.select("#sentiment-score").selectAll("div").remove();
-let newGauge = gauge("#sentiment-score", window.innerWidth*0.12);
+let newGauge = gauge("#sentiment-score", window.innerWidth * 0.12);
