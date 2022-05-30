@@ -145,10 +145,10 @@ class TextVisualization {
       .style("opacity", 0.8);
 
     // Add Text
-    var textWidth = [];
     cloud
       .append("text")
       .style("font-family", "Roboto")
+      .style("font-weight", "bold")
       .attr("text-anchor", "middle")
       .text(function (d) {
         return d.text;
@@ -162,7 +162,9 @@ class TextVisualization {
     words.forEach((word, idx) => {
       const stack_data = d3.stack().keys(this.coins)([word.ratio]);
       let word_g = this.svg.selectAll("#wordcloud_" + word.text);
-      let width = word_g.node().getBoundingClientRect().width;
+
+      var rect = word_g.node().getBoundingClientRect();
+      var width = rect.width;
       word_g
         .append("g")
         .selectAll("g")
@@ -171,26 +173,22 @@ class TextVisualization {
         .append("rect")
         .attr("fill", (d) => this.colors[d.key])
         .attr("x", (d) => d[0][0] * width - width / 2)
-        .attr("y", 0)
+        .attr("y", (d) => 5)
         .attr("width", (d) => (d[0][1] - d[0][0]) * width)
         .attr("height", 5);
-
-      let height = word_g.node().getBoundingClientRect().height;
-      word_g
-        .select("text")
-        .attr("dx", -width / 2)
-        .attr("dy", height / 2);
-      word_g
-        .select("g")
-        .attr("transform", `translate(${-width / 2}, ${height / 2})`);
     });
 
     // Prevent Overlap
 
+    var keepCalling = true;
+    setTimeout(function () {
+      keepCalling = false;
+    }, 1000);
     words.forEach((word, idx) => {
       var self = d3.select("#wordcloud_" + word.text);
       var iteration = 0;
-      while (this.collide(self, words.slice(0, idx))) {
+      while (keepCalling && this.collide(self, words.slice(0, idx))) {
+        console.log(keepCalling);
         this.move_text(self, iteration);
         iteration += 1;
       }
@@ -205,18 +203,27 @@ class TextVisualization {
       .split(",");
 
     let pos = element.node().getBoundingClientRect();
-    let margin = 2;
+
     position["x"] = parseFloat(translate[0]);
     position["y"] = parseFloat(translate[1]);
-    position["left"] = position.x - pos.width / 2 - margin;
-    position["top"] = position.y - pos.height / 2 - margin;
-    position["right"] = position.x + pos.width / 2 + margin;
-    position["bottom"] = position.y + pos.height / 2 + margin;
+    position["left"] = position.x - pos.width / 2;
+    position["top"] = position.y - pos.height / 2;
+    position["right"] = position.x + pos.width / 2;
+    position["bottom"] = position.y + pos.height / 2;
     return position;
   }
 
   collide(self, words) {
     var a = this.get_position(self);
+    if (
+      a.left < -this.width / 2 ||
+      a.right > this.width / 2 ||
+      a.top < -this.height / 2 ||
+      a.bottom > this.height / 2
+    ) {
+      console.log(a, this.width, this.height);
+      return true;
+    }
     for (var i = 0; i < words.length; i++) {
       var word = words[i];
       var that = d3.select("#wordcloud_" + word.text);
