@@ -9,6 +9,17 @@ const coin_color = {
   XRP: "#24292E",
 };
 
+const coin_name = {
+  ADA: "Cardano",
+  BCH: "Bitcoin Cash",
+  BTC: "Bitcoin",
+  ETH: "Ethereum",
+  LTC: "Litecoin",
+  TRX: "TRON",
+  USDT: "Tether",
+  XRP: "Ripple",
+}
+
 const sum = (arr) => arr.reduce((a, b) => a + b, 0);
 const average = (arr) => (sum(arr) / arr.length).toFixed(2);
 
