@@ -193,7 +193,7 @@ var gauge = function (container, realWidth) {
       .attr("dx", `${-width / 2 + thickness + margin * 2}`)
       .attr("class", "label")
       .attr("text-anchor", "middle")
-      .attr("font-weight", "lighbolderter")
+      .attr("font-weight", "lighter")
       .attr("font-size", `${width >= 200 ? 16 : 9}`);
 
     g.append("text")
@@ -202,7 +202,7 @@ var gauge = function (container, realWidth) {
       .attr("dx", `${width / 2 - thickness - margin * 2}`)
       .attr("class", "label")
       .attr("text-anchor", "middle")
-      .attr("font-weight", "bolder")
+      .attr("font-weight", "lighter")
       .attr("font-size", `${width >= 200 ? 16 : 9}`);
 
     var needle = svg

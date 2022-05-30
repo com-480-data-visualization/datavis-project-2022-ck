@@ -105,9 +105,13 @@
           </div>
         </div>
         <div id="comparison">
-          <div class="title"><h1>Monthly Coin Informations</h1></div>
-            <canvas id="timelinecanvas" height="30"></canvas>
+          <div class="title"><h1>Coin Informations</h1></div>
+            <div id="timeline">
+              <h2>Timeline</h2>
+              <canvas id="timelinecanvas" height="30"></canvas>
+            </div>
             <div id="ptable">
+              <h2>Price Information</h2>
               <p id="tablep" style="font-size: 10px;">Click header to sort numerical columns</p>
               <table id="coinTable" margin-top=0>
                 <tr>
@@ -118,10 +122,20 @@
                   <th>Position</th>
                 </tr>
               </table>
-              <svg id="volumeCircle" width="100%"></svg>
-              <h3 style="color: black">% of selected crypto total volume</h3>
-              <svg id="volumePercent" width="100%"></svg>
-              <svg id="volumeYear" width="100%"></svg>
+              </div>
+              <div id="metric-coin">
+                <h2>Metric by coins</h2>
+                <svg id="volume_circle_monthly" width="100%"></svg>
+                <svg id="volume_circle_daily" width="100%"></svg>
+              </div>
+                <div id="volume-charts">
+                <h2>% of Crypto Volume</h2>
+                <svg id="labels"></svg>
+                <div class="pie-chart">
+                  <svg id="volumePercent" width="100%"></svg>
+                  <svg id="volumeYear" width="100%"></svg>
+                </div>
+              </div>
               <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
             </div>
 

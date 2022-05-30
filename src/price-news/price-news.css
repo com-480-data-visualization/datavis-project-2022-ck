@@ -159,3 +159,8 @@
 p {
   margin-block: 0;
 }
+
+.date-switch:hover {
+  cursor: pointer;
+  background-color: aliceblue;
+}
