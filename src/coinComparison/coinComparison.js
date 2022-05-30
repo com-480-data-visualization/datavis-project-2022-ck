@@ -148,7 +148,7 @@ function updateTable(coins) {
       let newV = document.createTextNode(volumeM);
       let pos = "N/A";
       if (volumeM !== 0) {
-        pos = volumeF > volumeT ? "Sell" : "Buy";
+        pos = NV > 0 ? "Buy" : "Sell";
       }
       let newPos = document.createTextNode(pos);
       newPrice.append("$", newP);
