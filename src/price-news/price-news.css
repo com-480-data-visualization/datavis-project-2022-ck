@@ -13,7 +13,8 @@
 }
 
 .daily-news {
-  border: 1px dotted black;
+  border: 1px solid rgb(232, 231, 231);
+  border-radius: 20px;
   padding: 10px;
   overflow: auto;
   width: 25vw;

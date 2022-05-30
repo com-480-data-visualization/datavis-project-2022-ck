@@ -188,7 +188,6 @@ class TextVisualization {
       var self = d3.select("#wordcloud_" + word.text);
       var iteration = 0;
       while (keepCalling && this.collide(self, words.slice(0, idx))) {
-        console.log(keepCalling);
         this.move_text(self, iteration);
         iteration += 1;
       }

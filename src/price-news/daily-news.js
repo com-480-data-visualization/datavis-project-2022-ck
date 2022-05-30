@@ -86,7 +86,6 @@ function price_news_get_news_handler(data) {
     .map((a) => a.sentiment - 0)
     .reduce((a, b) => a + b, 0.0);
   const sentiment_score_avg = sentiment_score_sum / data.length;
-  console.log("sentiment avg: " + sentiment_score_avg);
 
   update_sentiment_score(sentiment_score_avg);
 
