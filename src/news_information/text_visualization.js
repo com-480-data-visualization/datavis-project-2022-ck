@@ -220,7 +220,6 @@ class TextVisualization {
       a.top < -this.height / 2 ||
       a.bottom > this.height / 2
     ) {
-      console.log(a, this.width, this.height);
       return true;
     }
     for (var i = 0; i < words.length; i++) {

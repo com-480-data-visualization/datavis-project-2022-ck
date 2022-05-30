@@ -83,10 +83,12 @@ class NewsHeadLine {
   }
 
   coin_box_template(coin) {
+    console.log(coin)
     const src = "./coinIcons/" + coin.toLowerCase() + ".svg";
     return `
     <img src = ${src}></img>
-    <h3>${coin}</h3>
+    <h3>${coin_name[coin]}</h3>
+    <h3>(${coin})</h3>
     `;
   }
 
