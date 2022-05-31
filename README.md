@@ -24,6 +24,8 @@ Online webpage: [GitHub Page Link](https://com-480-data-visualization.github.io/
 
 ## Milestone 3 (3th June, 5pm)
 
+[video persentation](https://github.com/com-480-data-visualization/datavis-project-2022-ck/blob/main/video%20presentation.mp4)
+
 **80% of the final grade**
 
 ## Late policy
