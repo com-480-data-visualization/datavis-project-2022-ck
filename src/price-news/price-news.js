@@ -5,10 +5,16 @@
  * TODOs:
  */
 
-const coin_colors = {
-  BTC: ["#FFA500", "#FFD700", "#BDB76B"],
-  ETH: ["#00008B", "#4169E1", "#ADD8E6"],
-  default: ["#800080", "#FF00FF", "	#FF69B4"],
+ const coin_colors = {
+  ADA: ["#335b8f", "#111E2F", "#0e1926"],
+  BCH: ['#b7eb73', '#98C261', '#45592b'],
+  BTC: ['#f7ae5c', '#e9983d', '#6b4315'],
+  ETH: ["#90a2f5", "#687DE3", "#202a5c"],
+  LTC: ["#d9d7d7", "#BEBBBB", "#5c5b5b"],
+  TRX: ["#e65a5d", "#DB2F33", "#7d282a"],
+  USDT: ["#77d9af", "#509F7D", "#1a4a35"],
+  XRP: ["#7f91a3", "#24292E", "#070e14"],
+  default: ['#800080', '#FF00FF', '	#FF69B4']
 };
 
 const width = window.innerWidth * 0.7;
