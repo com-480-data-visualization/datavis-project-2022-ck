@@ -24,10 +24,15 @@ Online webpage: [GitHub Page Link](https://com-480-data-visualization.github.io/
 
 ## Milestone 3 (3th June, 5pm)
 
-- [video persentation](https://drive.google.com/file/d/1ss0vL217fcNur0PUUcSDBrG_LIZANLON/view?usp=sharing)
-- [Process Book](https://github.com/com-480-data-visualization/datavis-project-2022-ck/blob/main/process-book.pdf)
-
 **80% of the final grade**
+
+- [Screencast](https://drive.google.com/file/d/1ss0vL217fcNur0PUUcSDBrG_LIZANLON/view?usp=sharing)
+- [Process Book](https://github.com/com-480-data-visualization/datavis-project-2022-ck/blob/main/process-book.pdf)
+- [Online Website](https://com-480-data-visualization.github.io/datavis-project-2022-ck/src/index.html)
+
+### Set up of project
+
+All files are static. You can deploy with a static server software (e.g. Nginx) or using GitHub Pages.
 
 ## Late policy
 
