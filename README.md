@@ -26,7 +26,7 @@ Online webpage: [GitHub Page Link](https://com-480-data-visualization.github.io/
 
 **80% of the final grade**
 
-- [Screencast]https://drive.google.com/file/d/1iX6Fgah3KzLC8GawGrBH92Zaa-UE-BAM/view?usp=sharing)
+- [Screencast](https://drive.google.com/file/d/1iX6Fgah3KzLC8GawGrBH92Zaa-UE-BAM/view?usp=sharing)
 - [Process Book](https://github.com/com-480-data-visualization/datavis-project-2022-ck/blob/main/process-book.pdf)
 - [Online Website](https://com-480-data-visualization.github.io/datavis-project-2022-ck/src/index.html)
 
